@@ -1,5 +1,5 @@
 # Campfire
-
+SE/CMPE 165
 ## Group Members
 * Peter Curtis
 * Tyler Jones
