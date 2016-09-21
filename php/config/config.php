@@ -1,7 +1,7 @@
 <?php
     $db_host = 'localhost';
     $db_user = 'root';
-    $db_password = '';
+    $db_password = 'schoolBase6';
     $db_name = 'campfire';
 	
 	try{
