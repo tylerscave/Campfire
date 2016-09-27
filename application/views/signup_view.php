@@ -10,7 +10,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Home | Campfire</title>
+	<title>Sign Up | Campfire</title>
 	<link rel="shortcut icon" type="image/x-icon" href="<?php echo base_url("img/favicon.ico"); ?>">
 	<!--link local CSS files  :  note that javascript is linked at the bottom of page-->
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url("assets/css/bootstrap.css"); ?>">
@@ -34,17 +34,18 @@
 			</div>
 			<div class="collapse navbar-collapse" id="navbar1">
 				<ul class="nav navbar-nav navbar-right">
+					<li><a href="<?php echo base_url(); ?>index.php/about">About</a></li>
 					<?php if ($this->session->userdata('login')){ ?>
 					<li><p class="navbar-text">Hello <?php echo $this->session->userdata('uname'); ?></p></li>
 					<li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Account <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="#">Action</a></li>
-							<li><a href="#">Another action</a></li>
+							<li><a href="<?php echo base_url(); ?>index.php/editProfile">Edit Profile</a></li>
+							<li><a href="<?php echo base_url(); ?>index.php/myGroups">My Groups</a></li>
+							<li><a href="<?php echo base_url(); ?>index.php/myEvents">My Events</a></li>
 							<li class="divider"></li>
-							<li><a href="#">Settings</a></li>
+							<li><a href="<?php echo base_url(); ?>index.php/home/logout">Log Out</a></li>
 						</ul>
 					</li>
-					<li><a href="<?php echo base_url(); ?>index.php/home/logout">Log Out</a></li>
 					<?php } else { ?>
 					<li><a href="<?php echo base_url(); ?>index.php/login">Login</a></li>
 					<li><a href="<?php echo base_url(); ?>index.php/signup">Signup</a></li>

@@ -36,7 +36,7 @@ class Login extends CI_Controller {
 				// set session data if user exists
 				$sess_data = array('login' => TRUE, 'uname' => $uresult[0]->user_fname, 'uid' => $uresult[0]->user_id);
 				$this->session->set_userdata($sess_data);
-				redirect("profile/index");
+				redirect("home/index");
 			} else {
 				$this->session->set_flashdata('msg', '<div class="alert alert-danger text-center">Wrong Email-ID or Password!</div>');
 				redirect('login/index');

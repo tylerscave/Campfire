@@ -1,12 +1,12 @@
 <?php
 /**
  *COPYRIGHT (C) 2016 Campfire. All Rights Reserved.
- * Profile.php is the controller for profile_view.php
+ * MyGroups.php is the controller for myGroups_view.php
  * Solves SE165 Semester Project Fall 2016
  * @author Peter Curtis, Tyler Jones, Troy Nguyen, Marshall Cargle, 
  *     Luis Otero, Jorge Aguiniga, Stephen Piazza, Jatinder Verma
 */
-class Profile extends CI_Controller {
+class MyGroups extends CI_Controller {
 
 	// constructor used for needed initialization
 	public function __construct() {
@@ -24,6 +24,6 @@ class Profile extends CI_Controller {
 		$data['uemail'] = $details[0]->user_email;
 
 		// load and populate the profile_view
-		$this->load->view('profile_view', $data);
+		$this->load->view('myGroups_view', $data);
 	}
 }
