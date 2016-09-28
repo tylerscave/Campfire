@@ -70,7 +70,9 @@ CREATE TABLE `event` (
 CREATE TABLE `location` (
   `location_id` bigint(20) NOT NULL,
   `city` varchar(255) NOT NULL,
-  `zipcode` varchar(10) NOT NULL
+  `state` varchar(255) NOT NULL,
+  `zipcode` varchar(10) NOT NULL,
+  `geolocation` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
