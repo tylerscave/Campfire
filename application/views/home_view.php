@@ -54,21 +54,13 @@
 			</div>
 		</div>
 	</nav>
+
 	<div class="container">
-		<div class="row">
-			<div class="col-md-4">
-				<h4>Notification</h4>
-				<p>This is the Home Page.</p>
-				<p>Home Stuff.</p>
-			</div>
-			<div class="col-md-8">
-				<h2>Welcome To Campfire!!!</h2>
-				<p>The purpose of this web app is to do</br>
-				super cool stuff with groups and events</p>
-				<p>GET TO WORK!!!</p>
-			</div>
-		</div>
-	</div>
+     <input id="pac-input" class="controls" type="text" placeholder="City, State or Zip">
+     <div id="map"></div>
+     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-6CzpsxPQPdiOV_3M0QhATgjyTqO7JQE&&callback=initMap" async defer></script>
+	</div> <!-- /container -->
+
 	<footer class="container-fluid text-center">
 		<p><p>&copy; SJSU CMPE165 Fall 2016 Project. All rights reserved.</p>
 	</footer>
@@ -77,6 +69,6 @@
 	<script type="text/javascript" src="<?php echo base_url("assets/js/bootstrap.min.js"); ?>"></script>
 	<script type="text/javascript" src="<?php echo base_url("assets/js/custom.js"); ?>"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> 
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </body>
 </html>
