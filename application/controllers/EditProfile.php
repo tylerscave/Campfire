@@ -43,7 +43,7 @@ class EditProfile extends CI_Controller {
 		} else if ($this->form_validation->run() == FALSE) {
 	
 			// if it fails just load the view again
-			$this->load->view('editProfile_View');
+			$this->load->view('editProfile_view');
  			
  		} else {
 			//prepare to update user details into user table

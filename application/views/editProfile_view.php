@@ -7,7 +7,7 @@
 		<div class="row">
 			<div class="col-md-4 col-md-offset-4 well">
 				<?php $attributes = array("name" => "editprofileform");
-				echo form_open("editprofile/index", $attributes);?>
+				echo form_open("editProfile/index", $attributes);?>
 				<legend>EditProfile</legend>
 			
 				<div class="form-group">

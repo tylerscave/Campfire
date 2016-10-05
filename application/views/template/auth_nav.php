@@ -18,9 +18,9 @@
 					          <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                  <li <?php if(isActive("editprofile")) echo "class='active' "; ?>><a href="<?php echo base_url(); ?>index.php/editprofile">Edit Profile</a></li>
-                  <li <?php if(isActive("mygroups")) echo "class='active' "; ?>><a href="<?php echo base_url(); ?>index.php/mygroups">My Groups</a></li>
-                  <li <?php if(isActive("myevents")) echo "class='active' "; ?>><a href="<?php echo base_url(); ?>index.php/myevents">My Events</a></li>
+                  <li <?php if(isActive("editProfile")) echo "class='active' "; ?>><a href="<?php echo base_url(); ?>index.php/editProfile">Edit Profile</a></li>
+                  <li <?php if(isActive("myGroups")) echo "class='active' "; ?>><a href="<?php echo base_url(); ?>index.php/myGroups">My Groups</a></li>
+                  <li <?php if(isActive("myEvents")) echo "class='active' "; ?>><a href="<?php echo base_url(); ?>index.php/myEvents">My Events</a></li>
                   <li class="divider"></li>
                   <li><a href="<?php echo base_url(); ?>index.php/home/logout">Log Out</a></li>
                 </ul>
