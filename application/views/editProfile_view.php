@@ -23,7 +23,7 @@
 				<div class="form-group">
 					<label for="name">Zip Code</label>
 					<input class="form-control" name="zip" placeholder="Zip Code" type="text" value="<?php echo set_value('zip'); ?>" />
-					<span class="text-danger"><?php echo form_error('lname'); ?></span>
+					<span class="text-danger"><?php echo form_error('zip'); ?></span>
 				</div>
 				<div class="form-group">
 					<label for="email">Email</label>

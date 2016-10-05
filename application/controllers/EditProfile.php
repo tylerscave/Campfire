@@ -11,11 +11,13 @@ class EditProfile extends CI_Controller {
 	// constructor used for needed initialization
 	public function __construct() {
 		parent::__construct();
+
 		$this->load->helper(array('form','url'));
 		$this->load->helper('security');
 		$this->load->library(array('session', 'form_validation'));
 		$this->load->database();
 		$this->load->model('user_model');
+		
 
 	}
 
@@ -24,8 +26,8 @@ class EditProfile extends CI_Controller {
 		$userData = $this->user_model->get_user_by_id($user_id);
 		
 		// set form validation rules
-		$this->form_validation->set_rules('fname', 'First Name', 'trim|required|alpha|min_length[3]|max_length[30]|xss_clean');
-		$this->form_validation->set_rules('lname', 'Last Name', 'trim|required|alpha|min_length[3]|max_length[30]|xss_clean');
+		$this->form_validation->set_rules('fname', 'First Name', 'trim|required|regex_match[#^[a-zA-Z\'-]+$#]|min_length[2]|max_length[30]|xss_clean');
+		$this->form_validation->set_rules('lname', 'Last Name', 'trim|required|regex_match[#^[a-zA-Z\'-]+$#]|min_length[2]|max_length[30]|xss_clean');
 		$this->form_validation->set_rules('zip', 'Zip Code', 'trim|required|numeric|min_length[5]|max_length[10]|xss_clean');
 		$this->form_validation->set_rules('email', 'Email ID', 'trim|required|valid_email');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|matches[cpassword]');
