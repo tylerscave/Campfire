@@ -18,9 +18,9 @@
 					          <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                  <li <?php if(lookForActive("profile/index")) echo "class='active' "; ?>><a href="<?php echo base_url(); ?>index.php/editprofile">Edit Profile</a></li>
-                  <li <?php if(lookForActive("profile/edit")) echo "class='active' "; ?>><a href="<?php echo base_url(); ?>index.php/mygroups">My Groups</a></li>
-                  <li <?php if(lookForActive("profile/edit")) echo "class='active' "; ?>><a href="<?php echo base_url(); ?>index.php/myevents">My Events</a></li>
+                  <li <?php if(isActive("editprofile")) echo "class='active' "; ?>><a href="<?php echo base_url(); ?>index.php/editprofile">Edit Profile</a></li>
+                  <li <?php if(isActive("mygroups")) echo "class='active' "; ?>><a href="<?php echo base_url(); ?>index.php/mygroups">My Groups</a></li>
+                  <li <?php if(isActive("myevents")) echo "class='active' "; ?>><a href="<?php echo base_url(); ?>index.php/myevents">My Events</a></li>
                   <li class="divider"></li>
                   <li><a href="<?php echo base_url(); ?>index.php/home/logout">Log Out</a></li>
                 </ul>
@@ -33,7 +33,7 @@
 
 <?php
 //Find which page is currently on, then make it active on navbar
-function lookForActive($arg) {
+function isActive($arg) {
   //$ci is used instead of $this because of "Using $this when not in object context" error
   $ci =& get_instance();
   if($arg === $ci->uri->segment(1))
