@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
+-- version 4.5.2
 -- http://www.phpmyadmin.net
 --
--- Host: 127.0.0.1
--- Generation Time: Oct 05, 2016 at 04:04 AM
--- Server version: 10.1.16-MariaDB
--- PHP Version: 5.6.24
+-- Host: localhost
+-- Generation Time: Oct 06, 2016 at 12:19 AM
+-- Server version: 10.1.9-MariaDB
+-- PHP Version: 5.6.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -178,15 +178,9 @@ CREATE TABLE `user` (
   `user_fname` varchar(255) NOT NULL,
   `user_lname` varchar(255) NOT NULL,
   `user_email` varchar(255) NOT NULL,
-  `user_password` varchar(255) NOT NULL
+  `user_password` varchar(255) NOT NULL,
+  `user_eNotifications` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `user`
---
-
-INSERT INTO `user` (`user_id`, `user_fname`, `user_lname`, `user_email`, `user_password`) VALUES
-(1, 'test', 'test', 'test@test.com', 'test123');
 
 -- --------------------------------------------------------
 
