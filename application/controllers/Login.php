@@ -34,7 +34,7 @@ class Login extends CI_Controller {
 			$uresult = $this->user_model->get_user($email, $password);
 			if (count($uresult) > 0) {
 				// set session data if user exists
-				$sess_data = array('login' => TRUE, 'fname' => $uresult[0]->user_fname, 'lname' => $uresult[0]->user_fname, 'uid' => $uresult[0]->user_id);
+				$sess_data = array('login' => TRUE, 'fname' => $uresult[0]->user_fname, 'lname' => $uresult[0]->user_lname, 'uid' => $uresult[0]->user_id);
 				$this->session->set_userdata($sess_data);
 				redirect("home/index");
 			} else {
