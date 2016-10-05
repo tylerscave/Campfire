@@ -17,6 +17,9 @@ class EditProfile extends CI_Controller {
 		$this->load->library(array('session', 'form_validation'));
 		$this->load->database();
 		$this->load->model('user_model');
+		if (!$this->session->userdata('login')) {
+			redirect('home/index');
+		}
 		
 
 	}
@@ -29,7 +32,7 @@ class EditProfile extends CI_Controller {
 		$this->form_validation->set_rules('fname', 'First Name', 'trim|required|regex_match[#^[a-zA-Z\'-]+$#]|min_length[2]|max_length[30]|xss_clean');
 		$this->form_validation->set_rules('lname', 'Last Name', 'trim|required|regex_match[#^[a-zA-Z\'-]+$#]|min_length[2]|max_length[30]|xss_clean');
 		$this->form_validation->set_rules('zip', 'Zip Code', 'trim|required|numeric|min_length[5]|max_length[10]|xss_clean');
-		$this->form_validation->set_rules('email', 'Email ID', 'trim|required|valid_email');
+		$this->form_validation->set_rules('email', 'Email ID','callback_email_check', 'trim|required|valid_email');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|matches[cpassword]');
 		$this->form_validation->set_rules('cpassword', 'Confirm Password', 'trim|required');
 		
@@ -67,6 +70,23 @@ class EditProfile extends CI_Controller {
 				redirect('editProfile/index');
 			}
 		}
+	}
+	
+	function email_check($str) {
+		$user_id = $this->session->userdata('uid');
+		$query = $this->db->get_where('user', array('user_email' => $str));
+		$validEmail = true;
+		if ($query->num_rows() > 0) {
+			foreach ($query->result() as $row) {
+				 if ($row->user_id != $user_id) {
+				 	$this->form_validation->set_message('email_check', 'This email is already in use.');
+				 	$validEmail = false;
+				 }
+			}
+		} else {
+			$validEmail = true;
+		}
+		return $validEmail;
 	}
 	
 	function deleteUser() {
