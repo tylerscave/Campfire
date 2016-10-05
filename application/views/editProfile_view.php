@@ -56,21 +56,49 @@
 	</nav>
 	<div class="container">
 		<div class="row">
-			<div class="col-md-4">
-				<h4>Notifications</h4>
-				<p>This is the Edit Profile Page<p/>
-				<p>You can probably re-use code from the signup_view.php<p/>
-				<p><p/>
-				<p>Thanks for Logging in!</p>
-				<p>Name: <?php echo $uname; ?></p>
-				<p>Email: <?php echo $uemail; ?></p>
-				<hr/>
-			</div>
-			<div class="col-md-8">
-				<h2>Welcome To Campfire!!!</h2>
-				<p>The purpose of this web app is to do</br>
-				super cool stuff with groups and events</p>
-				<p>GET TO WORK!!!</p>
+			<div class="col-md-4 col-md-offset-4 well">
+				<?php $attributes = array("name" => "editprofileform");
+				echo form_open("editprofile/index", $attributes);?>
+				<legend>EditProfile</legend>
+			
+				<div class="form-group">
+					<label for="name">First Name</label>
+					<input class="form-control" name="fname" placeholder="First Name" type="text" value="<?php echo set_value('fname'); ?>" />
+					<span class="text-danger"><?php echo form_error('fname'); ?></span>
+				</div>
+				<div class="form-group">
+					<label for="name">Last Name</label>
+					<input class="form-control" name="lname" placeholder="Last Name" type="text" value="<?php echo set_value('lname'); ?>" />
+					<span class="text-danger"><?php echo form_error('lname'); ?></span>
+				</div>
+				<div class="form-group">
+					<label for="name">Zip Code</label>
+					<input class="form-control" name="zip" placeholder="Zip Code" type="text" value="<?php echo set_value('zip'); ?>" />
+					<span class="text-danger"><?php echo form_error('lname'); ?></span>
+				</div>
+				<div class="form-group">
+					<label for="email">Email</label>
+					<input class="form-control" name="email" placeholder="Email" type="text" value="<?php echo set_value('email'); ?>" />
+					<span class="text-danger"><?php echo form_error('email'); ?></span>
+				</div>
+				<div class="form-group">
+					<label for="subject">Password</label>
+					<input class="form-control" name="password" placeholder="Password" type="password" />
+					<span class="text-danger"><?php echo form_error('password'); ?></span>
+				</div>
+				<div class="form-group">
+					<label for="subject">Confirm Password</label>
+					<input class="form-control" name="cpassword" placeholder="Confirm Password" type="password" />
+					<span class="text-danger"><?php echo form_error('cpassword'); ?></span>
+				</div>
+				<div class="form-group">
+					<button name="update" type="submit" value="update" class="btn btn-info">Update</button>
+					<button name="cancel" type="button" class="btn btn-info" onclick="location.href='home/index'">Cancel</button>
+					<button name="delete" type="button" value="delete" class="btn btn-danger pull-right" onclick="confirmDelete()">Delete Account</button>
+					<?php echo form_close(); ?>
+				</div>
+
+				<?php echo $this->session->flashdata('msg'); ?>
 			</div>
 		</div>
 	</div>
@@ -80,8 +108,10 @@
 	<script type="text/javascript" src="<?php echo base_url("assets/js/jquery-1.10.2.js"); ?>"></script>
 	<script type="text/javascript" src="<?php echo base_url("assets/js/bootstrap.js"); ?>"></script>
 	<script type="text/javascript" src="<?php echo base_url("assets/js/bootstrap.min.js"); ?>"></script>
+	<script type="text/javascript" src="<?php echo base_url("assets/js/bootbox.min.js"); ?>"></script>
 	<script type="text/javascript" src="<?php echo base_url("assets/js/custom.js"); ?>"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> 
+	   
 </body>
 </html>

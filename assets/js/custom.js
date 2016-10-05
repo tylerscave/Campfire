@@ -48,3 +48,34 @@ function initMap() {
           // Browser doesn't support Geolocation
         }
       }
+
+function confirmDelete() {
+	bootbox.confirm({
+	    message: "Are you sure you want to delete your account? This can not be undone.",
+	    buttons: {
+	        confirm: {
+	            label: 'Delete',
+	            className: 'btn-danger'
+	        },
+	        cancel: {
+	            label: 'Cancel',
+	            className: 'btn'
+	        }
+	    },
+	    callback: function (result) {
+	        if (result) {
+	            $.ajax({
+	                url: 'editProfile/deleteUser',
+	                type: 'POST'
+	            });
+	            $('.well').append('<div class="alert alert-success text-center">You have Successfully Deleted your account! You will be redirected shortly.</div>');
+	            var delay = 3000;
+	            setTimeout(function() {
+	            	location.href='home/index';
+	            }, delay);
+	            
+
+	        }
+	    }
+	});
+}
