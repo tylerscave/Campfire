@@ -7,8 +7,8 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-4">
-			<h4>Notification</h4>
-			<p>This is the About Page.</p>
+			<h4>Scrum Team</h4>
+			<img src="<?php echo base_url("assets/img/devteam.jpg"); ?>" class="img-rounded" alt="Cinque Terre" width="304" height="236">
 		</div>
 		<div class="col-md-8">
 			<h2>Welcome To Campfire!!!</h2>
