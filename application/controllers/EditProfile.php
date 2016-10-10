@@ -32,7 +32,7 @@ class EditProfile extends CI_Controller {
 		$this->form_validation->set_rules('fname', 'First Name', 'trim|required|regex_match[#^[a-zA-Z\'-]+$#]|min_length[2]|max_length[30]|xss_clean');
 		$this->form_validation->set_rules('lname', 'Last Name', 'trim|required|regex_match[#^[a-zA-Z\'-]+$#]|min_length[2]|max_length[30]|xss_clean');
 		$this->form_validation->set_rules('zip', 'Zip Code', 'trim|required|numeric|min_length[5]|max_length[10]|xss_clean');
-		$this->form_validation->set_rules('email', 'Email ID','callback_email_check', 'trim|required|valid_email');
+		$this->form_validation->set_rules('email', 'Email ID', 'trim|required|valid_email|callback_email_check');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|matches[cpassword]');
 		$this->form_validation->set_rules('cpassword', 'Confirm Password', 'trim|required');
 		
@@ -60,8 +60,8 @@ class EditProfile extends CI_Controller {
 			
 			if ($this->user_model->update_user($user_id, $user_data, $location_data)) {
 				// success!!!
-				$sess_data = array('login' => TRUE, 'uname' => $user_data['user_fname'], 'uid' => $user_id);
-				$this->session->set_userdata($sess_data);
+				$this->session->set_userdata('fname', $user_data['user_fname']);
+				$this->session->set_userdata('lname', $user_data['user_lname']);
 				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">You have Successfully Updated your account! </div>');
 				redirect('editProfile/index');
 			} else {
@@ -79,7 +79,7 @@ class EditProfile extends CI_Controller {
 		if ($query->num_rows() > 0) {
 			foreach ($query->result() as $row) {
 				 if ($row->user_id != $user_id) {
-				 	$this->form_validation->set_message('email_check', 'This email is already in use.');
+				 	$this->form_validation->set_message('email_check', 'This Email ID is already in use.');
 				 	$validEmail = false;
 				 }
 			}
@@ -95,7 +95,7 @@ class EditProfile extends CI_Controller {
 		//Delete from the database using the User ID
 		$this->user_model->delete_user($user_id);
 		//Delete the Session information
-		$data = array('login' => '', 'uname' => '', 'uid' => '');
+		$data = array('login' => '', 'fname' => '','lname' => '', 'uid' => '');
 		$this->session->unset_userdata($data);
 		$this->session->sess_destroy();
 	}
