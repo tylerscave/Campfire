@@ -8,7 +8,7 @@
 	<div class="row">
 		<div class="col-md-4">
 			<h4>Scrum Team</h4>
-			<img src="<?php echo base_url("assets/img/devteam.jpg"); ?>" class="img-rounded" alt="Cinque Terre" width="304" height="236">
+			<img src="<?php echo base_url("assets/img/devteam.JPG"); ?>" class="img-rounded"  width="304" height="236">
 		</div>
 		<div class="col-md-8">
 			<h2>Welcome To Campfire!!!</h2>
@@ -41,7 +41,7 @@
 				Contact Us
 			</h3>
 			<p>
-				Any questions? suggestions? Contact us at <a href = "http://www.gmail.com">teamcampfire@gmail.com</a>.
+				Any questions? suggestions? Contact us at <a href = "http://www.gmail.com">teamcampfirellc@gmail.com</a>.
 			</p>
 		</div>
 	</div>
