@@ -7,12 +7,15 @@
  *     Luis Otero, Jorge Aguiniga, Stephen Piazza, Jatinder Verma
 */
 class CreateGroup extends CI_Controller {
+	private $upload_success;
 
 	// constructor used for needed initialization
 	public function __construct() {
 		parent::__construct();
+		$this->upload_success = FALSE;
 		$this->load->helper(array('url','html'));
 		$this->load->helper('security');
+		$this->load->helper(array('form', 'url'));
 		$this->load->library(array('session', 'form_validation'));
 		$this->load->database();
 		$this->load->model('user_model');
@@ -27,7 +30,7 @@ class CreateGroup extends CI_Controller {
 		$data['tag_list'] = $this->group_model->get_dropdown_list();
 
 		// set form validation rules
-		$this->form_validation->set_rules('groupName', 'Group Name', 'trim|required|alpha|min_length[1]|max_length[30]|xss_clean');
+		$this->form_validation->set_rules('groupName', 'Group Name', 'trim|required|regex_match[#^[a-zA-Z0-9\'-]+$#]|min_length[1]|max_length[30]|xss_clean');
 		$this->form_validation->set_rules('zip', 'Group Zip Code', 'trim|required|numeric|min_length[5]|max_length[10]|xss_clean');
 		$this->form_validation->set_rules('description', 'Group Description', 'required|max_length[200]|xss_clean');
 		
@@ -65,6 +68,22 @@ class CreateGroup extends CI_Controller {
 				redirect('createGroup/index');
 			}
 		}
+	}
+	
+	 public function do_upload() {
+		$config['upload_path'] = './uploads/';
+		$config['allowed_types'] = 'gif|jpg|jpeg|png';
+		$config['max_size'] = 2048;
+		$config['max_width'] = 1024;
+		$config['max_height'] = 768;
+		$config['file_name'] = $this->session->userdata('fname') . time();
+		$this->load->library('upload', $config);
 
+		if ( ! $this->upload->do_upload('imageUpload')) {
+			$this->upload_success = FALSE;
+			redirect('createGroup/index');
+		} else {
+			$this->upload_success = TRUE;
+		}
 	}
 }
