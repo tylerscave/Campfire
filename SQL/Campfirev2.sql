@@ -108,7 +108,8 @@ CREATE TABLE `member` (
 CREATE TABLE `organization` (
   `org_id` bigint(20) NOT NULL,
   `org_title` varchar(255) NOT NULL,
-  `org_description` text NOT NULL
+  `org_description` text NOT NULL,
+  `org_picture` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -303,3 +304,8 @@ ALTER TABLE `user`
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+/*####################################################################
+######### You must change the path to match your machine #############
+######################################################################*/
+LOAD DATA LOCAL INFILE '~/websites/Campfire/SQL/tags.txt' INTO TABLE `tag` SET `tag_id` = NULL;
