@@ -40,9 +40,14 @@
 				<input class="form-control" name="cpassword" placeholder="Confirm Password" type="password" />
 				<span class="text-danger"><?php echo form_error('cpassword'); ?></span>
 			</div>
+
+<div class="form-group">
+<input type="checkbox" name="checkemail" value="OFF"> It's ok to send me (very ocassional) emails about the Campfire.<br>
+</div>
+
 			<div class="form-group">
 				<button name="submit" type="submit" class="btn btn-info">Signup</button>
-				<button name="cancel" type="reset" class="btn btn-info">Cancel</button>
+				<button name="cancel" type="reset" class="btn btn-info">Clear</button>
 			</div>
 			<?php echo form_close(); ?>
 			<?php echo $this->session->flashdata('msg'); ?>

@@ -20,8 +20,8 @@ class Signup extends CI_Controller {
 	
 	function index() {
 		// set form validation rules
-		$this->form_validation->set_rules('fname', 'First Name', 'trim|required|alpha|min_length[3]|max_length[30]|xss_clean');
-		$this->form_validation->set_rules('lname', 'Last Name', 'trim|required|alpha|min_length[3]|max_length[30]|xss_clean');
+		$this->form_validation->set_rules('fname', 'First Name', 'trim|required|alpha|min_length[1]|max_length[30]|xss_clean');
+		$this->form_validation->set_rules('lname', 'Last Name', 'trim|required|alpha|min_length[1]|max_length[30]|xss_clean');
 		$this->form_validation->set_rules('zip', 'Zip Code', 'trim|required|numeric|min_length[5]|max_length[10]|xss_clean');
 		$this->form_validation->set_rules('email', 'Email ID', 'trim|required|valid_email|is_unique[user.user_email]');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|matches[cpassword]');

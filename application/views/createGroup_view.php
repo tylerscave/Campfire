@@ -5,24 +5,48 @@
 <!-- Body -->
 <div class="container">
 	<div class="row">
-		<div class="col-md-4">
-			<h4>Notifications</h4>
-			<p>This is the Create Group Page<p/>
-			<p><p/>
-			<p>Thanks for Logging in!</p>
-			<p>Name: <?php echo $uname; ?></p>
-			<p>Email: <?php echo $uemail; ?></p>
-			<hr/>
-		</div>
-		<div class="col-md-8">
-			<h2>Welcome To Campfire!!!</h2>
-			<p>The purpose of this web app is to do</br>
-			super cool stuff with groups and events</p>
-			<p>GET TO WORK!!!</p>
+		<div class="col-md-4 col-md-offset-4 well">
+			<?php $attributes = array("name" => "creategroupform");
+			echo form_open("createGroup/index", $attributes);?>
+			<legend>Create Group</legend>
+			<div class="form-group">
+				<label for="groupName">Group Name</label>
+				<input class="form-control" name="groupName" placeholder="Group Name" type="text" value="<?php echo set_value('groupName'); ?>" />
+				<span class="text-danger"><?php echo form_error('groupName'); ?></span>
+			</div>
+			<div class="form-group">
+				<label for="name">Group Zip Code</label>
+				<input class="form-control" name="zip" placeholder="Group Zip Code" type="text" value="<?php echo set_value('zip'); ?>" />
+				<span class="text-danger"><?php echo form_error('zip'); ?></span>
+			</div>
+			<div class="form-group">
+				<label for="tag">Choose Tag</label>
+				<select class="form-control" id="tag">
+					<option>tag 1</option>
+					<option>tag 2</option>
+					<option>tag 3</option>
+					<option>tag 4</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="description">Group Description</label>
+				<textarea class="form-control" rows="5" name="description" value="<?php echo set_value('description'); ?>"></textarea>
+				<span class="text-danger"><?php echo form_error('description'); ?></span>
+			</div>
+			<div class="form-group">
+				<label for="imageUpload">Upload an Image</label>
+				<input class="file" name="imageUpload" type="file" data-buttonText="Upload Image" />
+				<span class="text-danger"><?php if (isset($error)) { echo $error; } ?></span>
+			</div>
+			<div class="form-group">
+				<button name="submit" type="submit" class="btn btn-info">Create Group</button>
+				<button name="cancel" type="button" class="btn btn-info" onclick="location.href='home/index'">Cancel</button>
+			</div>
+			<?php echo form_close(); ?>
+			<?php echo $this->session->flashdata('msg'); ?>
 		</div>
 	</div>
 </div>
-
 <!-- End Body -->
 
 <!-- Footer -->
