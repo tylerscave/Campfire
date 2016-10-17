@@ -41,9 +41,9 @@
 				<span class="text-danger"><?php echo form_error('cpassword'); ?></span>
 			</div>
 
-<div class="form-group">
-<input type="checkbox" name="checkemail" value="OFF"> It's ok to send me (very ocassional) emails about the Campfire.<br>
-</div>
+            <div class="form-group">
+                <input type="checkbox" name="emailCheckBox" value="yes"> It's ok to send me (very ocassional) emails about the Campfire.<br>
+            </div>
 
 			<div class="form-group">
 				<button name="submit" type="submit" class="btn btn-info">Signup</button>

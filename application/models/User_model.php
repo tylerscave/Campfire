@@ -90,12 +90,11 @@ class User_model extends CI_Model {
 		$this->db->delete('user', array('user_id'=> $user_id));
 		$this->db->delete('user_location', array('user_id' => $user_id));
 		
+		$this->db->delete('user_location', array('user_id' => $user_id)); 
 	}
 	
 	// insert user_id and location_id into DB
 	function insert_ids($id_data) {
 		return $this->db->insert('user_location', $id_data);
 	}
-	
-
 }?>
