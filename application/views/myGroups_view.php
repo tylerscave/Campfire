@@ -15,6 +15,7 @@
 			<hr/>
 		</div>
 		<div class="col-md-8">
+			<button type="button" class="btn btn-info" onclick="location.href='createGroup/index'">Create New Group</button>
 			<h2>Welcome To Campfire!!!</h2>
 			<p>The purpose of this web app is to do</br>
 			super cool stuff with groups and events</p>
