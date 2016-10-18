@@ -3,7 +3,7 @@
 <!-- End Header -->
 
 <!-- Body -->
-<div class="container">
+<div class="container custom-body">
 	<div class="row">
 		<div class="col-md-4">
 			<h4>Notifications</h4>
@@ -18,7 +18,7 @@
 			<button type="button" class="btn btn-info" onclick="location.href='createGroup/index'">Create New Group</button>
 			<div class="container">
 				<div class="col-md-3">
-					<?php 
+					<?php
 						$size = sizeof($memberedgroups);
 						echo "<div>";
 						for ($x = 0; $x < $size; $x++) {

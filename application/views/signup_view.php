@@ -3,7 +3,7 @@
 <!-- End Header -->
 
 <!-- Body -->
-<div class="container">
+<div class="container custom-body">
 	<div class="row">
 		<div class="col-md-4 col-md-offset-4 well">
 			<?php $attributes = array("name" => "signupform");
