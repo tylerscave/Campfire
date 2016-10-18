@@ -70,4 +70,14 @@ body > .container {
 }
 .custom-body{
   min-height:100%;
+  text-align: center;
+  color: #fff;
+  width: 100%;
+  background-color: #c9c9c9;
+  background-image: url('https://cdn.elegantthemes.com/blog/wp-content/uploads/2013/09/bg-5-full.jpg');
+  background-position: center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
 }
