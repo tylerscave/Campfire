@@ -15,6 +15,7 @@ class MyGroups extends CI_Controller {
 		$this->load->library('session');
 		$this->load->database();
 		$this->load->model('user_model');
+		$this->load->model('group_model');
 	}
 
 	function index() {
@@ -22,6 +23,14 @@ class MyGroups extends CI_Controller {
 		$details = $this->user_model->get_user_by_id($this->session->userdata('uid'));
 		$data['uname'] = $details[0]->user_fname . " " . $details[0]->user_lname;
 		$data['uemail'] = $details[0]->user_email;
+		
+		// get all groups for user
+		$group_member = $this->group_model->get_groups($this->session->userdata('uid'), 'member');
+		$group_owner = $this->group_model->get_groups($this->session->userdata('uid'), 'owner');
+		$group_admin = $this->group_model->get_groups($this->session->userdata('uid'), 'admin');
+		$data['memberedgroups'] = $group_member;
+		$data['ownedgroups'] = $group_owner;
+		$data['adminedgroups'] = $group_admin;
 
 		// load and populate the profile_view
 		$this->load->view('myGroups_view', $data);
