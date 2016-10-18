@@ -16,10 +16,21 @@
 		</div>
 		<div class="col-md-8">
 			<button type="button" class="btn btn-info" onclick="location.href='createGroup/index'">Create New Group</button>
-			<h2>Welcome To Campfire!!!</h2>
-			<p>The purpose of this web app is to do</br>
-			super cool stuff with groups and events</p>
-			<p>GET TO WORK!!!</p>
+			<div class="container">
+				<div class="col-md-3">
+					<?php 
+						$size = sizeof($memberedgroups);
+						echo "<div>";
+						for ($x = 0; $x < $size; $x++) {
+							#echo '<div float: left;>';
+							echo '<div float:left;>' .$memberedgroups[$x]->org_title;
+							echo '</br>' .$memberedgroups[$x]->org_description. '</div>';
+							#echo '</div>';
+						}
+						echo "</div>";
+					?>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
