@@ -13,6 +13,7 @@ class Group_model extends CI_Model {
 		parent::__construct();
 	}
 	
+	// Get all tags for the dropdown list
 	function get_dropdown_list() {
 		$this->db->from('tag');
 		$this->db->order_by('tag_id');
@@ -26,13 +27,13 @@ class Group_model extends CI_Model {
 		return $return;
 	}
 	
-	// insert new user into DB
+	// insert new group into DB
 	function insert_group($group_data, $location_data, $tag_data, $owner_data) {
 		// insert values into organization
 		$group_success = $this->db->insert('organization', $group_data);
 		// Get the group ID and add it to the owner_data array
 		$group_id = $this->db->insert_id();
-		$owner_data['org_id'] = $group_id; 
+		$owner_data['org_id'] = $group_id;
 		// insert values into location
 		$location_success = $this->db->insert('location', $location_data);
 		// Get the location ID
@@ -42,7 +43,7 @@ class Group_model extends CI_Model {
 		$query = $this->db->get('tag');
 		$tag_id_array = $query->result();
 		$tag_id = $tag_id_array[0]->tag_id;
-		// insert values into owner, admin, and member
+		// insert this user into owner, admin, and member
 		$owner_success = $this->db->insert('owner', $owner_data);
 		$admin_success = $this->db->insert('admin', $owner_data);
 		$member_success = $this->db->insert('member', $owner_data);
