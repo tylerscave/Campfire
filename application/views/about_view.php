@@ -4,7 +4,7 @@
 
 <!-- Body -->
 
-<div class="container">
+<div class="container custom-body">
 	<div class="row">
 		<div class="col-md-4">
 			<h4>Scrum Team</h4>
