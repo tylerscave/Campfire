@@ -1,6 +1,12 @@
 <!-- Fixed navbar -->
    <nav class="navbar navbar-inverse navbar-fixed-top">
-     <div class="container">
+     <div class="container">     
+         
+         <!--Transparent logo-->
+         <div class="navbar-header">
+         <img id="transparentLogo" src="<?php echo base_url("assets/img/logo_transparent.png");?>">
+         </div>
+         
        <div class="navbar-header">
          <a class="navbar-brand" href="<?php echo base_url(); ?>index.php/home">Campfire</a>
        </div>

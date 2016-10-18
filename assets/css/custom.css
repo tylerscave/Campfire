@@ -113,3 +113,9 @@ code {
 #target {
   width: 345px;
 }
+
+#transparentLogo {
+    width: 20%;
+    margin: 5% 0 0 60%;
+}
+

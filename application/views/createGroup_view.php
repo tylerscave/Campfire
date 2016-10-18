@@ -21,11 +21,12 @@
 			</div>
 			<div class="form-group">
 				<label for="tag">Choose Tag</label>
-				<select class="form-control" id="tag">
-					<option>tag 1</option>
-					<option>tag 2</option>
-					<option>tag 3</option>
-					<option>tag 4</option>
+				<select class="form-control" name="tag">
+					<?php 
+					foreach($tag_list as $row) { 
+						echo '<option>'.$row.'</option>';
+					}
+					?>
 				</select>
 			</div>
 			<div class="form-group">
@@ -35,12 +36,13 @@
 			</div>
 			<div class="form-group">
 				<label for="imageUpload">Upload an Image</label>
+				<?php echo form_open_multipart('upload/do_upload');?>
 				<input class="file" name="imageUpload" type="file" data-buttonText="Upload Image" />
 				<span class="text-danger"><?php if (isset($error)) { echo $error; } ?></span>
 			</div>
 			<div class="form-group">
 				<button name="submit" type="submit" class="btn btn-info">Create Group</button>
-				<button name="cancel" type="button" class="btn btn-info" onclick="location.href='home/index'">Cancel</button>
+				<button type="button" class="btn btn-info" onclick="location.href='../home/index'">Cancel</button>
 			</div>
 			<?php echo form_close(); ?>
 			<?php echo $this->session->flashdata('msg'); ?>
