@@ -47,6 +47,15 @@ class Group extends CI_Controller {
 	}
 	
 	function display($gID){
+		if (strpos($gID, 'owned')) {
+			$arr['gID'] = substr($gID, 5);
+		}
+		else if (strpos($gID, 'joined')){
+			$arr['gID'] = substr($gID, 6);
+		}
+		else {
+			$arr['gID'] = $gID;
+		}
 		$arr['gID'] = $gID;
 		$this->load->view('group_view', $arr);
 	}
