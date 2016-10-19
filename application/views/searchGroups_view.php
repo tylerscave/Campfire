@@ -10,7 +10,7 @@
 		<div class="form-group">
 				<input type="search" class="form-control" id="zip" name="zip" placeholder="Enter a zip code">
 		</div>
-				<div class="form-group">
+	<div class="form-group">
 		<button type="submit" id="searchButton" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> </button>
 	</div>
 	<?php echo form_close(); ?>
