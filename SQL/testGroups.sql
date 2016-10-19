@@ -32,11 +32,17 @@ VALUES (@u_id, @o_id);
 
 /*MOVIES*/
 /*connect Luis to movies organization*/
+
 @o_id = SELECT org_id FROM organization WHERE org_title = 'movies';
 INSERT INTO owner (user_id, org_id)
 VALUES (@u_id, @o_id)
 
 /*connect Pete to movies organization*/
+@u_id = SELECT user_id FROM user WHERE user_email = 'pmjcurtis@gmail.com';
+INSERT INTO member (user_id, org_id)
+VALUES (@u_id, @o_id)
+
+--connect Pete to movies organization
 @u_id = SELECT user_id FROM user WHERE user_email = 'pmjcurtis@gmail.com';
 INSERT INTO member (user_id, org_id)
 VALUES (@u_id, @o_id)
