@@ -21,7 +21,7 @@
 			</div>
 			<div class="form-group">
 				<button name="submit" type="submit" class="btn btn-info">Login</button>
-				<button name="cancel" type="reset" class="btn btn-info">Cancel</button>
+				<button name="cancel" type="reset" class="btn btn-info">Clear</button>
 			</div>
 		<?php echo form_close(); ?>
 		<?php echo $this->session->flashdata('msg'); ?>
