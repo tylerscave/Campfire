@@ -322,7 +322,7 @@ footer {
 
 }
 
-.form-control {
+.custom-form-control {
     display: block;
     width: 100%;
     height: 35px;
@@ -338,7 +338,7 @@ footer {
     transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 }
 
-.form-control:focus {
+.custom-form-control:focus {
     color: #222;
     background-color: #ccc;
     box-shadow: none;
