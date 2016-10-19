@@ -14,8 +14,8 @@
             <a id = 'search_groups' href="<?php echo base_url(); ?>index.php/group/search" class="btn btn-primary btn-xl page-scroll">Search Groups</a>
         </div>
     </div>
-    <video autoplay="" loop="" class="fillWidth fadeIn wow collapse in" data-wow-delay="0.5s" poster="<?php echo base_url("assets/img/Go-With-The-Flow.jpg"); ?>" id="video-background">
-        <source src="<?php echo base_url("assets/video/Go-With-The-Flow.mp4"); ?>" type="video/mp4">Your browser does not support the video tag. I suggest you upgrade your browser.
+    <video autoplay="" loop="" class="fillWidth fadeIn wow collapse in" data-wow-delay="0.5s" poster="<?php echo base_url("assets/img/Campfire.png"); ?>" id="video-background">
+        <source src="<?php echo base_url("assets/video/Campfire.mp4"); ?>" type="video/mp4">Your browser does not support the video tag. I suggest you upgrade your browser.
     </video>
 </header>
 <section class="bg-primary" id="intro">
