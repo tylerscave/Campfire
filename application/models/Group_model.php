@@ -93,7 +93,29 @@ class Group_model extends CI_Model {
 
 		return $data->result();
 	}
-
+	
+	function get_group_by_id($group_id) {
+		$group_result = $this->db->query('SELECT a.org_id, a.org_title, a.org_description, d.user_fname, d.user_lname, d.user_email, e.zipcode
+										FROM organization a, owner b, organization_location c, user d, location e
+										WHERE a.org_id = '.$group_id.'
+										AND a.org_id = b.org_id
+										AND a.org_id = c.org_id
+										AND b.user_id = d.user_id
+										AND c.location_id = e.location_id');
+		$query = $group_result->result_array();
+		if ($query != null) {
+			$group_data = $query[0];
+		}
+		if (isset($group_data)) {
+			return $group_data;
+		}
+		return NULL;
+	}
+		
+	function get_group_members($group_id) {
+		
+	}
+	
 	//input: zip code
 	//output: array of matching groups information
 	function search_groups_zip($zip){

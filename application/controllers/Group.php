@@ -45,8 +45,18 @@ class Group extends CI_Controller {
 			$this->load->view('searchGroups_view');
 		}
 	}
-	function display($gID){
-		$arr['gID'] = $gID;
-		$this->load->view('group_view', $arr);
+	
+	function display($gID = NULL){
+		if ($gID != NULL) {
+			$arr['gID'] = $gID;
+			$group_data = $this->group_model->get_group_by_id($gID);
+			if ($group_data != NULL) {
+				$this->load->view('group_view', $group_data);
+			} else {
+				redirect('group/search');
+			}
+		} else {
+			redirect('group/search');
+		}
 	}
 }
