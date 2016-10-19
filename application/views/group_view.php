@@ -15,6 +15,7 @@
 				<p>The purpose of this web app is to do</br>
 				super cool stuff with groups and events</p>
 				<p>GET TO WORK!!!</p>
+				<p>Group ID: <?php echo $gID; ?></p>
 			</div>
 		</div>
 	</div>
