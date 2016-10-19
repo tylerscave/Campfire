@@ -10,7 +10,8 @@
             <h1 class="cursive">Welcome to Campfire <img id="transparentLogo" src="<?php echo base_url("assets/img/ionicons_bonfire.png");?>"></h1>
             <h4>Connect with others by simply searching for events or groups</h4>
             <hr>
-            <a href="<?php echo base_url(); ?>index.php/event/search" class="btn btn-primary btn-xl">Search Events</a> &nbsp; <a href="<?php echo base_url(); ?>index.php/group/search" class="btn btn-primary btn-xl page-scroll">Search Groups</a>
+            <a id = 'search_events' href="<?php echo base_url(); ?>index.php/event/search" class="btn btn-primary btn-xl">Search Events</a> &nbsp;
+            <a id = 'search_groups' href="<?php echo base_url(); ?>index.php/group/search" class="btn btn-primary btn-xl page-scroll">Search Groups</a>
         </div>
     </div>
     <video autoplay="" loop="" class="fillWidth fadeIn wow collapse in" data-wow-delay="0.5s" poster="<?php echo base_url("assets/img/Go-With-The-Flow.jpg"); ?>" id="video-background">
