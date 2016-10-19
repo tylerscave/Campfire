@@ -28,18 +28,29 @@
 								$size = sizeof($memberedgroups);
 								for ($x = 0; $x < $size; $x++) {
 									echo '<div class="panel panel-default"; onclick="location.href='; echo "'group/index'"; echo '"; onmouseover="background-color:black";>';
-									echo '<div class="panel-body" style="background-color: red;"><div>' .$memberedgroups[$x]->org_title;
-									echo '</div><div>' .$memberedgroups[$x]->org_description. '</div></div>';
+									echo '<div class="panel-body" style="background-color: red;"><div>' .$ownedgroups[$x]->org_title;
+									echo '</div><div>' .$ownedgroups[$x]->org_description. '</div></div>';
 									echo '</div>';
 								}
 							}
 							if ($memberedgroups != null) {
 								$size = sizeof($memberedgroups);
+								$ownedsameasmembered = false;
 								for ($x = 0; $x < $size; $x++) {
-									echo '<div class="panel panel-default">';
-									echo '<div class="panel-body" style="background-color: yellow;"><div>' .$memberedgroups[$x]->org_title;
-									echo '</div><div>' .$memberedgroups[$x]->org_description. '</div></div>';
-									echo '</div>';
+									for ($y = 0; $y < $size; $y++) {
+										if ($memberedgroups[$x]->org_id == $ownedgroups[$y]->org_id) {
+											$ownedsameasmembered = true;
+										}
+									}
+									if ($ownedsameasmembered != true) {
+										echo '<div class="panel panel-default">';
+										echo '<div class="panel-body" style="background-color: yellow;"><div>' .$memberedgroups[$x]->org_title;
+										echo '</div><div>' .$memberedgroups[$x]->org_description. '</div></div>';
+										echo '</div>';
+									}
+									else {
+										$ownedsameasmembered = false;
+									}
 								}
 							}
 					echo '</div>';
