@@ -45,6 +45,7 @@ class Group extends CI_Controller {
 			$this->load->view('searchGroups_view');
 		}
 	}
+	
 	function display($gID){
 		$arr['gID'] = $gID;
 		$this->load->view('group_view', $arr);
