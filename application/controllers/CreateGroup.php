@@ -3,7 +3,7 @@
  *COPYRIGHT (C) 2016 Campfire. All Rights Reserved.
  * CreateGroup.php is the controller for createGroup_view.php
  * Solves SE165 Semester Project Fall 2016
- * @author Peter Curtis, Tyler Jones, Troy Nguyen, Marshall Cargle, 
+ * @author Peter Curtis, Tyler Jones, Troy Nguyen, Marshall Cargle,
  *     Luis Otero, Jorge Aguiniga, Stephen Piazza, Jatinder Verma
 */
 class CreateGroup extends CI_Controller {
@@ -26,7 +26,7 @@ class CreateGroup extends CI_Controller {
 	function index() {
 		//dynamically populate the tag_list for the dropdown
 		$data['tag_list'] = $this->group_model->get_dropdown_list();
-		
+
 		//new directory for images
 		$targetDir = './uploads/';
 
@@ -37,7 +37,7 @@ class CreateGroup extends CI_Controller {
 		if (empty($_FILES['imageUpload']['name'])) {
 			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'required');
 		}
-		
+
 		// submit the form and validate
 		if ($this->form_validation->run() == FALSE) {
 			// if it fails just load the view again
@@ -80,7 +80,7 @@ class CreateGroup extends CI_Controller {
 			$owner_data = array(
 				'user_id' => $this->session->userdata('uid')
 			);
-			
+
 			if ($this->group_model->insert_group($group_data, $location_data, $tag_data, $owner_data) && $upload_success) {
 				// success!!!
 				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Group has been successfully created!</div>');

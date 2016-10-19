@@ -38,7 +38,7 @@ class Group_model extends CI_Model {
 		// Get the location ID
 		$location_id = $this->db->insert_id();
 		// Get the tag ID
-		$this->db->where('tag_title', $tag_data['tag_title']);
+		$this->db->like('tag_title', $tag_data['tag_title']);
 		$query = $this->db->get('tag');
 		$tag_id_array = $query->result();
 		$tag_id = $tag_id_array[0]->tag_id;
@@ -59,7 +59,7 @@ class Group_model extends CI_Model {
 		$id_success = $this->insert_ids($location_id_data, $tag_id_data);
 		// return true only if all inserts were successful
 		return ($group_success && $location_success && $owner_success &&
-				$admin_success && member_success && $id_success);
+				$admin_success && $member_success && $id_success);
 	}
 
 	// insert ids into organization_location and organization_tag
