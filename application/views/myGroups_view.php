@@ -16,21 +16,35 @@
 		</div>
 		<div class="col-md-8">
 			<button type="button" class="btn btn-info" onclick="location.href='createGroup/index'">Create New Group</button>
-			<div class="container">
-				<div class="col-md-3">
-					<?php
-						$size = sizeof($memberedgroups);
-						echo "<div>";
-						for ($x = 0; $x < $size; $x++) {
-							#echo '<div float: left;>';
-							echo '<div float:left;>' .$memberedgroups[$x]->org_title;
-							echo '</br>' .$memberedgroups[$x]->org_description. '</div>';
-							#echo '</div>';
-						}
-						echo "</div>";
-					?>
-				</div>
-			</div>
+		</div>
+		<div class="col-md-8" style="margin-top: 15px; margin-bottom: 15px;">
+			<?php 
+				if ($ownedgroups == null && $memberedgroups == null){
+					echo 'No groups joined or owned';
+				}
+				else {
+					echo '<div class="panel-group">';
+							if ($ownedgroups != null) {
+								$size = sizeof($memberedgroups);
+								for ($x = 0; $x < $size; $x++) {
+									echo '<div class="panel panel-default"; onclick="location.href='; echo "'group/index'"; echo '"; onmouseover="background-color:black";>';
+									echo '<div class="panel-body" style="background-color: red;"><div>' .$memberedgroups[$x]->org_title;
+									echo '</div><div>' .$memberedgroups[$x]->org_description. '</div></div>';
+									echo '</div>';
+								}
+							}
+							if ($memberedgroups != null) {
+								$size = sizeof($memberedgroups);
+								for ($x = 0; $x < $size; $x++) {
+									echo '<div class="panel panel-default">';
+									echo '<div class="panel-body" style="background-color: yellow;"><div>' .$memberedgroups[$x]->org_title;
+									echo '</div><div>' .$memberedgroups[$x]->org_description. '</div></div>';
+									echo '</div>';
+								}
+							}
+					echo '</div>';
+				}
+			?>
 		</div>
 	</div>
 </div>
