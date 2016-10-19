@@ -3,11 +3,11 @@
 <!-- End Header -->
 
 <!-- Body -->
-<div class="container">
+<div class="container custom-body">
 	<div class="row">
 		<div class="col-md-4 col-md-offset-4 well">
 			<?php $attributes = array("name" => "creategroupform");
-			echo form_open("createGroup/index", $attributes);?>
+			echo form_open_multipart("createGroup/index", $attributes);?>
 			<legend>Create Group</legend>
 			<div class="form-group">
 				<label for="groupName">Group Name</label>
@@ -22,8 +22,8 @@
 			<div class="form-group">
 				<label for="tag">Choose Tag</label>
 				<select class="form-control" name="tag">
-					<?php 
-					foreach($tag_list as $row) { 
+					<?php
+					foreach($tag_list as $row) {
 						echo '<option>'.$row.'</option>';
 					}
 					?>
@@ -36,9 +36,8 @@
 			</div>
 			<div class="form-group">
 				<label for="imageUpload">Upload an Image</label>
-				<?php echo form_open_multipart('upload/do_upload');?>
-				<input class="file" name="imageUpload" type="file" data-buttonText="Upload Image" />
-				<span class="text-danger"><?php if (isset($error)) { echo $error; } ?></span>
+				<input class="file" name="imageUpload" type="file" />
+				<span class="text-danger"><?php echo form_error('imageUpload'); ?></span>
 			</div>
 			<div class="form-group">
 				<button name="submit" type="submit" class="btn btn-info">Create Group</button>

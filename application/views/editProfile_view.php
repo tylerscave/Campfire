@@ -3,13 +3,13 @@
 <!-- End Header -->
 
 <!-- Body -->
-	<div class="container">
+	<div class="container custom-body">
 		<div class="row">
 			<div class="col-md-4 col-md-offset-4 well">
 				<?php $attributes = array("name" => "editprofileform");
 				echo form_open("editProfile/index", $attributes);?>
 				<legend>EditProfile</legend>
-			
+
 				<div class="form-group">
 					<label for="name">First Name</label>
 					<input class="form-control" name="fname" placeholder="First Name" type="text" value="<?php echo set_value('fname'); ?>" />
