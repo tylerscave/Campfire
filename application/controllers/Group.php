@@ -58,5 +58,6 @@ class Group extends CI_Controller {
 		} else {
 			redirect('group/search');
 		}
+
 	}
 }
