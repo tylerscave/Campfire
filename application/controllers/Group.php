@@ -46,17 +46,18 @@ class Group extends CI_Controller {
 		}
 	}
 	
-	function display($gID){
-		if (strpos($gID, 'owned')) {
-			$arr['gID'] = substr($gID, 5);
-		}
-		else if (strpos($gID, 'joined')){
-			$arr['gID'] = substr($gID, 6);
-		}
-		else {
+	function display($gID = NULL){
+		if ($gID != NULL) {
 			$arr['gID'] = $gID;
+			$group_data = $this->group_model->get_group_by_id($gID);
+			if ($group_data != NULL) {
+				$this->load->view('group_view', $group_data);
+			} else {
+				redirect('group/search');
+			}
+		} else {
+			redirect('group/search');
 		}
-		$arr['gID'] = $gID;
-		$this->load->view('group_view', $arr);
+
 	}
 }
