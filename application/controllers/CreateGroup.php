@@ -26,12 +26,17 @@ class CreateGroup extends CI_Controller {
 	function index() {
 		//dynamically populate the tag_list for the dropdown
 		$data['tag_list'] = $this->group_model->get_dropdown_list();
+		
+		//new directory for images
+		$targetDir = './uploads/';
 
 		// set form validation rules
 		$this->form_validation->set_rules('groupName', 'Group Name', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[30]|xss_clean');
 		$this->form_validation->set_rules('zip', 'Group Zip Code', 'trim|required|numeric|min_length[5]|max_length[10]|xss_clean');
 		$this->form_validation->set_rules('description', 'Group Description', 'required|max_length[200]|xss_clean');
-		$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'trim|required|xss_clean');
+		if (empty($_FILES['imageUpload']['name'])) {
+			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'required');
+		}
 		
 		// submit the form and validate
 		if ($this->form_validation->run() == FALSE) {
@@ -39,7 +44,7 @@ class CreateGroup extends CI_Controller {
 			$this->load->view('createGroup_view', $data);
 		} else {
 			// Set preferences for the uploaded image
-			$config['upload_path'] = './uploads/';
+			$config['upload_path'] = $targetDir;
 			$config['allowed_types'] = 'gif|jpg|jpeg|png';
 			$config['max_size'] = 5242880; // 5MB probably lower this later
 			$config['max_width'] = 5000;

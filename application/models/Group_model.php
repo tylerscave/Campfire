@@ -3,16 +3,15 @@
  *COPYRIGHT (C) 2016 Campfire. All Rights Reserved.
  * Group_model.php is the model for a group
  * Solves SE165 Semester Project Fall 2016
- * @author Peter Curtis, Tyler Jones, Troy Nguyen, Marshall Cargle, 
+ * @author Peter Curtis, Tyler Jones, Troy Nguyen, Marshall Cargle,
  *     Luis Otero, Jorge Aguiniga, Stephen Piazza, Jatinder Verma
 */
 class Group_model extends CI_Model {
-
 	// constructor for the user_model
 	function __construct() {
 		parent::__construct();
 	}
-	
+
 	// Get all tags for the dropdown list
 	function get_dropdown_list() {
 		$this->db->from('tag');
@@ -26,7 +25,7 @@ class Group_model extends CI_Model {
 		}
 		return $return;
 	}
-	
+
 	// insert new group into DB
 	function insert_group($group_data, $location_data, $tag_data, $owner_data) {
 		// insert values into organization
@@ -62,36 +61,56 @@ class Group_model extends CI_Model {
 		return ($group_success && $location_success && $owner_success &&
 				$admin_success && member_success && $id_success);
 	}
-	
+
 	// insert ids into organization_location and organization_tag
 	function insert_ids($location_id_data, $tag_id_data) {
 		$location_success = $this->db->insert('organization_location', $location_id_data);
 		$tag_success = $this->db->insert('organization_tag', $tag_id_data);
 		return ($location_success && $tag_success);
 	}
-	
+
 	// get groups joined, owned, or admined
 	function get_groups($id, $user_type) {
-		
+
 		if ($user_type == 'member') {
 			$data = $this->db->query('SELECT * FROM organization c JOIN
-									(SELECT m.org_id FROM user u JOIN member m WHERE u.user_id = m.user_id and u.user_id = '.$id.') 
+									(SELECT m.org_id FROM user u JOIN member m WHERE u.user_id = m.user_id and u.user_id = '.$id.')
 										AS f WHERE f.org_id = c.org_id');
 		}
 		else if ($user_type == 'owner') {
 			$data = $this->db->query('SELECT * FROM organization c JOIN
-									(SELECT o.org_id FROM user u JOIN owner o WHERE u.user_id = o.user_id and u.user_id = '.$id.') 
+									(SELECT o.org_id FROM user u JOIN owner o WHERE u.user_id = o.user_id and u.user_id = '.$id.')
 										AS f WHERE f.org_id = c.org_id');
 		}
 		else if ($user_type == 'admin') {
 			$data = $this->db->query('SELECT * FROM organization c JOIN
-									(SELECT a.org_id FROM user u JOIN admin a WHERE u.user_id = a.user_id and u.user_id = '.$id.') 
+									(SELECT a.org_id FROM user u JOIN admin a WHERE u.user_id = a.user_id and u.user_id = '.$id.')
 										AS f WHERE f.org_id = c.org_id');
 		}
 		else {
 			return null;
 		}
-								
+
 		return $data->result();
+	}
+
+	//input: zip code
+	//output: array of matching groups information
+	function search_groups_zip($zip){
+		$this->db->where('zipcode', $zip);
+		$location_results = $this->db->get('location')->result();
+		foreach ($location_results as &$location) {
+					$this->db->where('location_id', $location->location_id);
+					$org_result = $this->db->get('organization_location')->result();
+					foreach($org_result as &$org_id){
+							$this->db->where('org_id', $org_id->org_id);
+							$org_list[] = $this->db->get('organization')->result();
+					}
+		}
+		if(isset($org_list)){
+			return $org_list;
+		}
+
+		return '';
 	}
 }

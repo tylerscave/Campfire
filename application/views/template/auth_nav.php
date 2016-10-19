@@ -8,31 +8,29 @@
              <span class="icon-bar"></span>
              <span class="icon-bar"></span>
          </button>
-           <a class="navbar-brand page-scroll" href="<?php echo base_url(); ?>index.php/home"><p class="cursive">Campfire  <i class="ion-bonfire" id= "custom-icon"></i></p></a>
+           <a class="navbar-brand" href="<?php echo base_url(); ?>index.php/home"><p class="cursive">Campfire  <i class="ion-bonfire" id= "custom-icon"></i></p></a>
        </div>
        <div class="navbar-collapse collapse" id="bs-navbar">
-           <ul class="nav navbar-nav">
-             <ul class="nav navbar-nav">
-                 <li>
-                     <a class="page-scroll" href="<?php echo base_url(); ?>index.php/home#one">Intro</a>
-                 </li>
-                 <li>
-                     <a class="page-scroll" href="<?php echo base_url(); ?>index.php/home#two">Highlights</a>
-                 </li>
-                 <li>
-                     <a class="page-scroll" href="<?php echo base_url(); ?>index.php/home#three">Gallery</a>
-                 </li>
-                 <li>
-                     <a class="page-scroll" href="<?php echo base_url(); ?>index.php/home#four">Features</a>
-                 </li>
-                 <li>
-                     <a class="page-scroll" href="<?php echo base_url(); ?>index.php/home#five">About</a>
-                 </li>
-                 <li>
-                     <a class="page-scroll" href="<?php echo base_url(); ?>index.php/home#last">Contact</a>
-                 </li>
-             </ul>
-           </ul>
+         <ul class="nav navbar-nav">
+               <li>
+                   <a class="page-scroll" href="<?php if(!isActive("home")) echo base_url("index.php/home");?>#intro">Intro</a>
+               </li>
+               <li>
+                   <a class="page-scroll" href="<?php if(!isActive("home")) echo base_url("index.php/home");?>#highlights">Highlights</a>
+               </li>
+               <li>
+                   <a class="page-scroll" href="<?php if(!isActive("home")) echo base_url("index.php/home");?>#gallery">Gallery</a>
+               </li>
+               <li>
+                   <a class="page-scroll" href="<?php if(!isActive("home")) echo base_url("index.php/home");?>#features">Features</a>
+               </li>
+               <li>
+                   <a class="page-scroll" href="<?php if(!isActive("home")) echo base_url("index.php/home");?>#about">About</a>
+               </li>
+               <li>
+                   <a class="page-scroll" href="<?php if(!isActive("home")) echo base_url("index.php/home");?>#contact">Contact</a>
+               </li>
+         </ul>
            <ul class="nav navbar-nav navbar-right">
              <li class="dropdown" id="dropmenu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
