@@ -13,11 +13,11 @@
             <a href="<?php echo base_url(); ?>index.php/event/search" class="btn btn-primary btn-xl">Search Events</a> &nbsp; <a href="<?php echo base_url(); ?>index.php/group/search" class="btn btn-primary btn-xl page-scroll">Search Groups</a>
         </div>
     </div>
-    <video autoplay="" loop="" class="fillWidth fadeIn wow collapse in" data-wow-delay="0.5s" poster="<?php echo base_url("assets/img/Traffic-blurred2.jpg"); ?>" id="video-background">
-        <source src="<?php echo base_url("assets/video/Traffic-blurred2.mp4"); ?>" type="video/mp4">Your browser does not support the video tag. I suggest you upgrade your browser.
+    <video autoplay="" loop="" class="fillWidth fadeIn wow collapse in" data-wow-delay="0.5s" poster="<?php echo base_url("assets/img/Go-With-The-Flow.jpg"); ?>" id="video-background">
+        <source src="<?php echo base_url("assets/video/Go-With-The-Flow.mp4"); ?>" type="video/mp4">Your browser does not support the video tag. I suggest you upgrade your browser.
     </video>
 </header>
-<section class="bg-primary" id="one">
+<section class="bg-primary" id="intro">
     <div class="container">
         <div class="row">
             <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 text-center">
@@ -31,7 +31,7 @@
         </div>
     </div>
 </section>
-<section id="two">
+<section id="highlights">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
@@ -66,7 +66,7 @@
         </div>
     </div>
 </section>
-<section id="three" class="no-padding">
+<section id="gallery" class="no-padding">
     <div class="container-fluid">
         <div class="row no-gutter">
             <div class="col-lg-4 col-sm-6">
@@ -144,7 +144,7 @@
         </div>
     </div>
 </section>
-<section class="container-fluid" id="four">
+<section class="container-fluid" id="features">
     <div class="row">
         <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
             <h2 class="text-center text-primary">Features</h2>
@@ -231,7 +231,7 @@
         </div>
     </div>
 </aside>
-<section id="five">
+<section id="about">
 <div class="container">
 	<div class="row">
 		<div class="col-md-4">
@@ -275,7 +275,7 @@
 	</div>
 </div>
 </section>
-<section id="last" class="bg-dark">
+<section id="contact" class="bg-dark">
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 text-center">
@@ -287,19 +287,19 @@
                 <form class="contact-form row">
                     <div class="col-md-4">
                         <label></label>
-                        <input type="text" class="form-control" placeholder="Name">
+                        <input type="text" class="form-control custom-form-control" placeholder="Name">
                     </div>
                     <div class="col-md-4">
                         <label></label>
-                        <input type="text" class="form-control" placeholder="Email">
+                        <input type="text" class="form-control custom-form-control" placeholder="Email">
                     </div>
                     <div class="col-md-4">
                         <label></label>
-                        <input type="text" class="form-control" placeholder="Phone">
+                        <input type="text" class="form-control custom-form-control" placeholder="Phone">
                     </div>
                     <div class="col-md-12">
                         <label></label>
-                        <textarea class="form-control" rows="9" placeholder="Your message here.."></textarea>
+                        <textarea class="form-control custom-form-control" rows="9" placeholder="Your message here.."></textarea>
                     </div>
                     <div class="col-md-4 col-md-offset-4">
                         <label></label>
@@ -357,8 +357,32 @@
     </div>
     </div>
 </div>
-
 <!-- End Body -->
+<script>
+$(".page-scroll").on("click", function(event) {
+      var $ele = $(this);
+      $('html, body').stop().animate({
+          scrollTop: ($($ele.attr('href')).offset().top - 60)
+      }, 1450, 'easeInOutExpo');
+      event.preventDefault();
+});
+$('#topNav').affix({
+    offset: {
+        top: 200
+    }
+});
+
+new WOW().init();
+
+$('.navbar-collapse ul li a').click(function() {
+    /* always close responsive nav after click */
+    $('.navbar-toggle:visible').click();
+});
+
+$('#galleryModal').on('show.bs.modal', function (e) {
+   $('#galleryImage').attr("src",$(e.relatedTarget).data("src"));
+});
+</script>
 
 <!-- Footer -->
 <?php $this->load->view('template/footer.php'); ?>
