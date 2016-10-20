@@ -29,7 +29,11 @@
 								$size = sizeof($memberedgroups);
 								for ($x = 0; $x < $size; $x++) {
 									echo "<div class='col-lg-3 col-md-4 col-sm-6 col-xs-12'> <div class='hovereffect'> <img class='img-responsive' src='";
+<<<<<<< HEAD
 									echo base_url()."uploads/".$ownedgroups[$x]->org_picture."'>";
+=======
+									echo base_url()."uploads/".$ownedgroups[$x]->org_picture."' style='width:300px; height:200px';>";
+>>>>>>> refs/remotes/origin/master
 									echo "<div class='overlay'><h2>".$ownedgroups[$x]->org_title."</h2>";
 									echo "<a class='info' id = 'owned".$ownedgroups[$x]->org_id."' href='".base_url()."index.php/Group/display/".$ownedgroups[$x]->org_id."'>View more details</a>";
 									echo "</div></div>".$ownedgroups[$x]->org_title."</div>";
@@ -60,7 +64,11 @@
 										}
 										if ($ownedsameasmembered != true) {
 											echo "<div class='col-lg-3 col-md-4 col-sm-6 col-xs-12'> <div class='hovereffect'> <img class='img-responsive' src='";
+<<<<<<< HEAD
 											echo base_url()."uploads/".$memberedgroups[$x]->org_picture."'>";
+=======
+											echo base_url()."uploads/".$memberedgroups[$x]->org_picture."' style='width:300px; height:200px';>";
+>>>>>>> refs/remotes/origin/master
 											echo "<div class='overlay'><h2>".$memberedgroups[$x]->org_title."</h2>";
 											echo "<a class='info' id = 'joined".$memberedgroups[$x]->org_id."' href='".base_url()."index.php/Group/display/".$memberedgroups[$x]->org_id."'>View more details</a>";
 											echo "</div></div>".$memberedgroups[$x]->org_title."</div>";
