@@ -36,6 +36,8 @@ class CreateGroup extends CI_Controller {
 		$this->form_validation->set_rules('description', 'Group Description', 'required|max_length[200]|xss_clean');
 		if (empty($_FILES['imageUpload']['tmp_name'])) {
 			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'required');
+		} else {
+			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'callback_ext_check');
 		}
 
 		// submit the form and validate
@@ -120,6 +122,17 @@ class CreateGroup extends CI_Controller {
 				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error.  Please try again later!!!</div>');
 				redirect('createGroup/index');
 			}
+		}
+	}
+	
+	function ext_check() {
+		$filename = $_FILES['imageUpload']['name'];
+		$ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+		if (preg_match("/(jpg|jpeg|png)/",$ext)) {
+			return TRUE;
+		} else {
+			$this->form_validation->set_message('ext_check', 'Must be a jpg, jpeg, or png file.');
+			return FALSE;
 		}
 	}
 }
