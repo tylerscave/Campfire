@@ -34,7 +34,7 @@ class CreateGroup extends CI_Controller {
 		$this->form_validation->set_rules('groupName', 'Group Name', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[30]|xss_clean');
 		$this->form_validation->set_rules('zip', 'Group Zip Code', 'trim|required|numeric|min_length[5]|max_length[10]|xss_clean');
 		$this->form_validation->set_rules('description', 'Group Description', 'required|max_length[200]|xss_clean');
-		if (empty($_FILES['imageUpload']['name'])) {
+		if (empty($_FILES['imageUpload']['tmp_name'])) {
 			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'required');
 		}
 
@@ -43,29 +43,59 @@ class CreateGroup extends CI_Controller {
 			// if it fails just load the view again
 			$this->load->view('createGroup_view', $data);
 		} else {
-			// Set preferences for the uploaded image
-			$config['upload_path'] = $targetDir;
-			$config['allowed_types'] = 'gif|jpg|jpeg|png';
-			$config['max_size'] = 5242880; // 5MB probably lower this later
-			$config['max_width'] = 5000;
-			$config['max_height'] = 5000;
-			$config['file_ext_tolower'] = TRUE;
-			$config['file_name'] = $this->session->userdata('fname') . time();
-			$this->load->library('upload', $config);
-			$this->upload->initialize($config);
-
-			// Upload the image
-			$upload_success = $this->upload->do_upload('imageUpload');
-			if ($upload_success) {
-				// get all of the uploaded image info
-				$image_data = $this->upload->data();
+			//calculate new image height to preserve ratio
+			list($orig_w, $orig_h) = getimagesize($_FILES['imageUpload']['tmp_name']);
+			$thumbSize = 500;
+			$w_ratio = ($thumbSize / $orig_w);
+			$h_ratio = ($thumbSize / $orig_h);
+			if ($orig_w > $orig_h ) {//landscape
+				$crop_w = round($orig_w * $h_ratio);
+				$crop_h = $thumbSize;
+			} elseif ($orig_w < $orig_h ) {//portrait
+				$crop_h = round($orig_h * $w_ratio);
+				$crop_w = $thumbSize;
+			} else {//square
+				$crop_w = $thumbSize;
+				$crop_h = $thumbSize;
 			}
+
+			//new filename for uploaded file
+			$filename = $_FILES['imageUpload']['name'];
+			$ext = pathinfo($filename, PATHINFO_EXTENSION);
+			$newFileName = $targetDir . '/' . $this->session->userdata('fname') . time() . "." . $ext;
+			$simpleNewFileName = $this->session->userdata('fname') . time() . "." . $ext;
+			//read binary data from image file
+			$imgString = file_get_contents($_FILES['imageUpload']['tmp_name']);
+			//create image from string
+			$image = imagecreatefromstring($imgString);
+			//correct orientation based on exif data using GD function
+			$exif = exif_read_data($_FILES['imageUpload']['tmp_name']);
+			if(!empty($exif['Orientation'])) {
+				switch($exif['Orientation']) {
+					case 8:
+						$image = imagerotate($image,90,0);
+						break;
+					case 3:
+						$image = imagerotate($image,180,0);
+						break;
+					case 6:
+						$image = imagerotate($image,-90,0);
+						break;
+				}
+			}
+			$tmp = imagecreatetruecolor($thumbSize, $thumbSize);
+			imagecopyresampled($tmp, $image, 0, 0, 0, 0, $crop_w, $crop_h, $orig_w, $orig_h);
+			//Save image
+			$image_success = imagejpeg($tmp, $newFileName, 100);
+			//cleanup
+			imagedestroy($image);
+			imagedestroy($tmp);
 
 			//prepare to insert group details into organization table
 			$group_data = array(
 				'org_title' => $this->input->post('groupName'),
 				'org_description' => $this->input->post('description'),
-				'org_picture' => $image_data['file_name']
+				'org_picture' => $simpleNewFileName
 			);
 			//prepare to insert user location details into location table
 			$location_data = array(
@@ -81,7 +111,7 @@ class CreateGroup extends CI_Controller {
 				'user_id' => $this->session->userdata('uid')
 			);
 
-			if ($this->group_model->insert_group($group_data, $location_data, $tag_data, $owner_data) && $upload_success) {
+			if ($this->group_model->insert_group($group_data, $location_data, $tag_data, $owner_data) && $image_success) {
 				// success!!!
 				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Group has been successfully created!</div>');
 				redirect('createGroup/index');
