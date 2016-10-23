@@ -8,7 +8,7 @@
              <span class="icon-bar"></span>
              <span class="icon-bar"></span>
          </button>
-           <a class="navbar-brand" href="<?php echo base_url(); ?>index.php/home"><p class="cursive">Campfire  <i class="ion-bonfire" id= "custom-icon"></i></p></a>
+           <a id="bHome" class="navbar-brand" href="<?php echo base_url(); ?>index.php/home"><p class="cursive">Campfire  <i class="ion-bonfire" id= "custom-icon"></i></p></a>
        </div>
        <div class="navbar-collapse collapse" id="bs-navbar">
          <ul class="nav navbar-nav">
@@ -38,11 +38,11 @@
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                      <li <?php if(isActive("editProfile")) echo "class='active' "; ?>><a href="<?php echo base_url(); ?>index.php/editProfile">Edit Profile</a></li>
-                      <li <?php if(isActive("myGroups")) echo "class='active' "; ?>><a href="<?php echo base_url(); ?>index.php/myGroups">My Groups</a></li>
-                      <li <?php if(isActive("myEvents")) echo "class='active' "; ?>><a href="<?php echo base_url(); ?>index.php/myEvents">My Events</a></li>
+                      <li <?php if(isActive("editProfile")) echo "class='active' "; ?>><a id = "bEditProfile" href="<?php echo base_url(); ?>index.php/editProfile">Edit Profile</a></li>
+                      <li <?php if(isActive("myGroups")) echo "class='active' "; ?>><a id = "bMyGroups" href="<?php echo base_url(); ?>index.php/myGroups">My Groups</a></li>
+                      <li <?php if(isActive("myEvents")) echo "class='active' "; ?>><a id = "bMyEvents" href="<?php echo base_url(); ?>index.php/myEvents">My Events</a></li>
                       <li class="divider"></li>
-                      <li><a href="<?php echo base_url(); ?>index.php/home/logout">Log Out</a></li>
+                      <li><a id = "bLogout" href="<?php echo base_url(); ?>index.php/home/logout">Log Out</a></li>
                     </ul>
             </li>
            </ul>

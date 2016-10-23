@@ -6,14 +6,14 @@
 <div class="container custom-body">
 	<div class="row">
 		<div class="no-gutter">
-			<button type="button" class="btn btn-info" onclick="location.href='createGroup/index'">Create New Group</button>
+			<button id="create_group" type="button" class="btn btn-info" onclick="location.href='createGroup/index'">Create New Group</button>
 		</div>
 	</div>
 	<div class="container">
-	<?php 
-		if (!isset($ownedgroups) && !isset($memberedgroups))
+	<?php
+		if ($ownedgroups == null && $memberedgroups == null)
 		{
-			echo 'No groups joined or owned';
+			echo "<div id = 'error_msg'>No groups joined or owned</div>";
 		}
 		else {
 			if (isset($ownedgroups))
@@ -23,7 +23,7 @@
 				echo "</div>";
 				echo "<section id='view_group_list_owned' class='no-padding'>";
 					echo "<div class='container-fluid'>";
-						echo "<div class='row no-gutter'>";			
+						echo "<div class='row no-gutter'>";
 							//lists all the groups that the user created
 							if ($ownedgroups != null) {
 								$size = sizeof($memberedgroups);
@@ -69,11 +69,11 @@
 											$ownedsameasmembered = false;
 										}
 									}
-								}	
+								}
 						echo "</div>";
 					echo "</div>";
 				echo "</section>";
-			}	
+			}
 		}
 	?>
 	</div>
