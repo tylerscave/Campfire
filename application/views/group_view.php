@@ -26,6 +26,7 @@
 							echo '<button class="btn btn-info" name="Join">Join</button>';
 						} else {
 							echo '<button class="btn btn-info" name="leave">Leave</button>';
+							echo '<a class="btn btn-info" id="editGroupButton" href="'.base_url().'index.php/EditGroup/index/'.$org_id.'">Edit Group</a>';
 						}
 						?>
 					</div>
