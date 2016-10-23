@@ -132,7 +132,53 @@ class Group_model extends CI_Model {
 		if(isset($org_list)){
 			return $org_list;
 		}
-
 		return '';
+	}
+	
+	// updates group and location in DB
+	function update_group($group_data, $location_data, $tag_data) {
+		try {
+			//update organization table with new values
+			$this->db->start_cache();
+			$this->db->where('org_id', $group_data['org_id']);
+			$group_succes = $this->db->update('organization', $group_data);
+			$this->db->stop_cache();
+			$this->db->flush_cache();
+		
+			//Update group location with new value
+			$this->db->start_cache();
+			$this->db->where('zipcode', $location_data['zipcode']);
+			$location_succes = $this->db->update('location', $location_data);
+			$this->db->stop_cache();
+			$this->db->flush_cache();
+		
+			// Get the tag ID
+			$this->db->like('tag_title', $tag_data['tag_title']);
+			$query = $this->db->get('tag');
+			$tag_id_array = $query->result();
+			$tag_id = $tag_id_array[0]->tag_id;
+			$tag_id_data = array(
+				'org_id' => $group_data['org_id'],
+				'tag_id' => $tag_id
+			);
+			//Update group tag info with new values
+			$this->db->start_cache();
+			$this->db->where('org_id', $group_data['org_id']);
+			$tag_success = $this->db->update('organization_tag', $tag_id_data);
+			$this->db->stop_cache();
+			$this->db->flush_cache();
+
+			return true;
+		} catch (Exception $e) {
+			return false;
+		}
+	}
+
+	// delete group from database
+	function delete_group($groupData) {
+		$this->db->delete('organization', $groupData);
+		$this->db->delete('organization_location', $groupData);
+		$this->db->delete('organization_tag', $groupData);
+		$this->db->delete('organization_event', $groupData);
 	}
 }
