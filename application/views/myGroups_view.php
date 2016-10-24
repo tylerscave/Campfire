@@ -17,7 +17,7 @@
 		</ul>
 
 		<div class="tab-content">
-			<div id="owned_groups" class="pill-pane fade in active">
+			<div id="owned_groups" class="tab-pane fade in active">
 			<?php
 				if ($ownedgroups == NULL)
 				{
@@ -47,7 +47,7 @@
 				}
 				?>
 			</div>
-			<div id="joined_groups" class="pill-pane fade">
+			<div id="joined_groups" class="tab-pane fade">
 				<?php
 					if (sizeof($memberedgroups) == sizeof($ownedgroups))
 					{
