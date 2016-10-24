@@ -11,13 +11,13 @@
 	</div>
 	<div class="row" style="padding-top:50px">
 	<div class="container-fluid">
-		<ul class="nav nav-tabs nav-justified">
+		<ul class="nav nav-pills nav-justified" style="background-color:white">
 		<li class="active"><a data-toggle="tab" href="#owned_groups">Owned</a></li>
 		<li><a data-toggle="tab" href="#joined_groups">Joined</a></li>
 		</ul>
 
 		<div class="tab-content">
-			<div id="owned_groups" class="tab-pane fade in active">
+			<div id="owned_groups" class="pill-pane fade in active">
 			<?php
 				if ($ownedgroups == NULL)
 				{
@@ -47,7 +47,7 @@
 				}
 				?>
 			</div>
-			<div id="joined_groups" class="tab-pane fade">
+			<div id="joined_groups" class="pill-pane fade">
 				<?php
 					if (sizeof($memberedgroups) == sizeof($ownedgroups))
 					{
