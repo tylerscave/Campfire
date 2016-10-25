@@ -276,6 +276,7 @@
 	</div>
 </div>
 </section>
+
 <section id="contact" class="bg-dark">
     <div class="container">
         <div class="row">
@@ -285,28 +286,35 @@
                 <p>We love feedback. Fill out the form below and we'll get back to you as soon as possible.</p>
             </div>
             <div class="col-lg-10 col-lg-offset-1 text-center">
-                <form class="contact-form row">
-                    <div class="col-md-4">
+                <?php
+                $this->load->helper("form"); 
+                
+                echo validation_errors();
+                
+                echo form_open("/home/send_email");
+                ?>
+                
+                <form method="post" action="/home/send_email" class="contact-form row">
+                    <div class="col-md-6">
                         <label></label>
-                        <input type="text" class="form-control custom-form-control" placeholder="Name">
+                        <input name="name" id="name" type="text" value="<?php echo set_value('name');?>" class="form-control custom-form-control" placeholder="Name">
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label></label>
-                        <input type="text" class="form-control custom-form-control" placeholder="Email">
-                    </div>
-                    <div class="col-md-4">
-                        <label></label>
-                        <input type="text" class="form-control custom-form-control" placeholder="Phone">
+                        <input name="email" id="email" type="text" value="<?php echo set_value('email');?>" class="form-control custom-form-control" placeholder="Email">
                     </div>
                     <div class="col-md-12">
                         <label></label>
-                        <textarea class="form-control custom-form-control" rows="9" placeholder="Your message here.."></textarea>
+                        <textarea name="message" id="message" class="form-control custom-form-control" rows="9" placeholder="Your message here.."><?php echo set_value('message');?></textarea>
                     </div>
                     <div class="col-md-4 col-md-offset-4">
                         <label></label>
-                        <button type="button" data-toggle="modal" data-target="#alertModal" class="btn btn-primary btn-block btn-lg">Send <i class="ion-android-arrow-forward"></i></button>
+<!--                        <button type="button" data-toggle="modal" data-target="#alertModal" class="btn btn-primary btn-block btn-lg">Send <i class="ion-android-arrow-forward"></i></button>-->
+                        <input type="submit" name="submit" value="Submit"/>
                     </div>
                 </form>
+                
+                <?php echo form_close(); ?>
             </div>
         </div>
     </div>
@@ -349,11 +357,11 @@
     <div class="modal-dialog modal-sm">
     <div class="modal-content">
       <div class="modal-body">
-        <h2 class="text-center">Nice Job!</h2>
-        <p class="text-center">You clicked the button, but it doesn't actually go anywhere because this is only a demo.</p>
-        <p class="text-center"><a href="http://www.bootstrapzero.com">Learn more at BootstrapZero</a></p>
+        <h2 class="text-center">Message Sent!</h2>
+        <p class="text-center">Someone from the team will respond back soon.</p>
+
         <br/>
-        <button class="btn btn-primary btn-lg center-block" data-dismiss="modal" aria-hidden="true">OK <i class="ion-android-close"></i></button>
+        <button class="btn btn-primary btn-lg center-block" data-dismiss="modal" aria-hidden="true">OK</i></button>
       </div>
     </div>
     </div>
