@@ -86,15 +86,15 @@ class Group_model extends CI_Model {
 		$tag_success = $this->db->insert('organization_tag', $tag_id_data);
 		return ($location_success && $tag_success);
 	}
-	
+
 	// Get lattitude and longitude from zip
 	function getGeo($zip) {
 		if(!empty($zip)){
 			//Send request and receive json data by address
-			$geocodeFromAddr = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.$zip.'&sensor=false'); 
+			$geocodeFromAddr = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.$zip.'&sensor=false');
 			$output = json_decode($geocodeFromAddr);
 			//Get latitude and longitute from json data
-			$geocode['lat']  = $output->results[0]->geometry->location->lat; 
+			$geocode['lat']  = $output->results[0]->geometry->location->lat;
 			$geocode['lng'] = $output->results[0]->geometry->location->lng;
 			$address_data = $output->results[0]->address_components;
 			for ($i = 0; $i <= sizeof($address_data); $i++) {
@@ -104,7 +104,7 @@ class Group_model extends CI_Model {
 				if ($address_data[$i]->types[0] == "administrative_area_level_1") {
 					$geocode['state'] = $address_data[$i]->long_name;
 				}
-			} 
+			}
 
 			//Return latitude and longitude of the given address
 			if(!empty($geocode)){
@@ -113,7 +113,7 @@ class Group_model extends CI_Model {
 				return false;
 			}
 		}else{
-			return false;   
+			return false;
 		}
 	}
 
@@ -167,25 +167,15 @@ class Group_model extends CI_Model {
 	//input: zip code
 	//output: array of matching groups information
 	function search_groups_zip($zip){
-		$this->db->where('zipcode', $zip);
-		$location_results = $this->db->get('location')->result();
-		foreach ($location_results as &$location) {
-					$this->db->where('location_id', $location->location_id);
-					$org_result = $this->db->get('organization_location')->result();
-					foreach($org_result as &$org_id){
-							$this->db->where('org_id', $org_id->org_id);
-							$org_list[] = $this->db->get('organization')->result();
-					}
-		}
-		if(isset($org_list)){
-			return $org_list;
-		}
-		return '';
+		$query = $this->db->query("SELECT t2.*, t5.tag_title from location t1, organization t2, organization_location t3, organization_tag t4, tag t5
+WHERE t1.zipcode = $zip AND t1.location_id = t3.location_id AND t2.org_id = t3.org_id
+AND t2.org_id = t4.org_id AND  t4.tag_id = t5.tag_id");
+		return $query->result_array();
 	}
 
 	//output: array of random groups information
 	function get_random_groups(){
-		$query	= $this->db->query("SELECT * FROM organization ORDER BY RAND() LIMIT 0,12;");
+		$query	= $this->db->query("SELECT t1.*, t3.tag_title FROM organization t1, organization_tag t2, tag t3 WHERE t1.org_id = t2.org_id AND t2.tag_id = t3.tag_id ORDER BY RAND() LIMIT 0,12;");
 		return $query->result_array();
 	}
 
