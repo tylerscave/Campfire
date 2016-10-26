@@ -33,10 +33,23 @@ class Group_model extends CI_Model {
 		// Get the group ID and add it to the owner_data array
 		$group_id = $this->db->insert_id();
 		$owner_data['org_id'] = $group_id;
-		// insert values into location
-		$location_success = $this->db->insert('location', $location_data);
-		// Get the location ID
-		$location_id = $this->db->insert_id();
+		//Check if location is in database
+		$this->db->start_cache();
+		$this->db->where('zipcode', $location_data['zipcode']);
+		$this->db->where('street', '');
+		$query = $this->db->get('location');
+		$this->db->stop_cache();
+		$this->db->flush_cache();
+		//If location isnt in database yet
+		if ($query->num_rows() == 0){
+			// insert values into location and get the location ID
+			$location_success = $this->db->insert('location', $location_data);
+			$location_id = $this->db->insert_id();
+		} else {
+			$locResult = $query->result();
+			$location_id = $locResult[0]->location_id;
+			$location_success = TRUE;
+		}
 		// Get the tag ID
 		$this->db->like('tag_title', $tag_data['tag_title']);
 		$query = $this->db->get('tag');

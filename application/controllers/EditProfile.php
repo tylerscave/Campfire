@@ -55,6 +55,7 @@ class EditProfile extends CI_Controller {
 			);
 			//prepare to update user location details into location table
 			$location_data = array(
+				'street' => '',
 				'zipcode' => $this->input->post('zip')
 			);
 			

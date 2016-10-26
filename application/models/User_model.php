@@ -36,6 +36,7 @@ class User_model extends CI_Model {
 		//Check if location is in database
 		$this->db->start_cache();
 		$this->db->where('zipcode', $location_data['zipcode']);
+		$this->db->where('street', '');
 		$query = $this->db->get('location');
 		$this->db->stop_cache();
 		$this->db->flush_cache();
@@ -74,6 +75,7 @@ class User_model extends CI_Model {
 		//Check if location is in database
 		$this->db->start_cache();
 		$this->db->where('zipcode', $location_data['zipcode']);
+		$this->db->where('street', '');
 		$query = $this->db->get('location');
 		$this->db->stop_cache();
 		$this->db->flush_cache();
