@@ -18,11 +18,11 @@
 	    <div class="container">
 				<div>
 					<button class="btn btn-danger filter-button" data-filter="all">All</button>
-					<button class="btn btn-default filter-button" data-filter="movies">Movies</button>
-					<button class="btn btn-default filter-button" data-filter="education">Education</button>
-					<button class="btn btn-default filter-button" data-filter="sports">Sports</button>
-					<button class="btn btn-default filter-button" data-filter="food">Food</button>
-					<button class="btn btn-default filter-button" data-filter="coffee">Foffee</button>
+					<button class="btn btn-default filter-button" data-filter="Movies">Movies</button>
+					<button class="btn btn-default filter-button" data-filter="Education">Education</button>
+					<button class="btn btn-default filter-button" data-filter="Sports">Sports</button>
+					<button class="btn btn-default filter-button" data-filter="Food">Food</button>
+					<button class="btn btn-default filter-button" data-filter="Coffee">Coffee</button>
 				</div>
 	        <div class="row no-gutter">
 						<?php
@@ -62,7 +62,7 @@ function displayTiles($groups){
 }
 function displayRandomTiles($groups){
 	foreach($groups as $group){
-		echo "<div class='col-md-3 filter ".$group['org_tag']."'>";
+		echo "<div class='col-md-3 filter ".$group['tag_title']."'>";
 		echo "<p class='org-title'>".$group['org_title']."</p>";
 		echo "<a href='".base_url()."index.php/Group/display/".$group['org_id']."'>";
 		echo "<img class='img-responsive center-cropped' src='";

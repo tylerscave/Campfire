@@ -86,15 +86,15 @@ class Group_model extends CI_Model {
 		$tag_success = $this->db->insert('organization_tag', $tag_id_data);
 		return ($location_success && $tag_success);
 	}
-	
+
 	// Get lattitude and longitude from zip
 	function getGeo($zip) {
 		if(!empty($zip)){
 			//Send request and receive json data by address
-			$geocodeFromAddr = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.$zip.'&sensor=false'); 
+			$geocodeFromAddr = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.$zip.'&sensor=false');
 			$output = json_decode($geocodeFromAddr);
 			//Get latitude and longitute from json data
-			$geocode['lat']  = $output->results[0]->geometry->location->lat; 
+			$geocode['lat']  = $output->results[0]->geometry->location->lat;
 			$geocode['lng'] = $output->results[0]->geometry->location->lng;
 			//Return latitude and longitude of the given address
 			if(!empty($geocode)){
@@ -103,7 +103,7 @@ class Group_model extends CI_Model {
 				return false;
 			}
 		}else{
-			return false;   
+			return false;
 		}
 	}
 
@@ -175,7 +175,7 @@ class Group_model extends CI_Model {
 
 	//output: array of random groups information
 	function get_random_groups(){
-		$query	= $this->db->query("SELECT * FROM organization ORDER BY RAND() LIMIT 0,12;");
+		$query	= $this->db->query("SELECT t1.*, t3.tag_title FROM organization t1, organization_tag t2, tag t3 WHERE t1.org_id = t2.org_id AND t2.tag_id = t3.tag_id ORDER BY RAND() LIMIT 0,12;");
 		return $query->result_array();
 	}
 
