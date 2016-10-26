@@ -50,6 +50,11 @@ class Group_model extends CI_Model {
 			$location_id = $locResult[0]->location_id;
 			$location_success = TRUE;
 		}
+		// Get and update geocode for this zipcode
+		$geocode = $this->getGeo($location_data['zipcode']);
+		$geo_success = $this->db->query('UPDATE location
+							SET geolat = '.$geocode['lat'].', geolng = '.$geocode['lng'].'
+							WHERE location_id = '.$location_id.'');
 		// Get the tag ID
 		$this->db->like('tag_title', $tag_data['tag_title']);
 		$query = $this->db->get('tag');
@@ -72,7 +77,7 @@ class Group_model extends CI_Model {
 		$id_success = $this->insert_ids($location_id_data, $tag_id_data);
 		// return true only if all inserts were successful
 		return ($group_success && $location_success && $owner_success &&
-				$admin_success && $member_success && $id_success);
+				$admin_success && $member_success && $id_success && $geo_success);
 	}
 
 	// insert ids into organization_location and organization_tag
@@ -80,6 +85,26 @@ class Group_model extends CI_Model {
 		$location_success = $this->db->insert('organization_location', $location_id_data);
 		$tag_success = $this->db->insert('organization_tag', $tag_id_data);
 		return ($location_success && $tag_success);
+	}
+	
+	// Get lattitude and longitude from zip
+	function getGeo($zip) {
+		if(!empty($zip)){
+			//Send request and receive json data by address
+			$geocodeFromAddr = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.$zip.'&sensor=false'); 
+			$output = json_decode($geocodeFromAddr);
+			//Get latitude and longitute from json data
+			$geocode['lat']  = $output->results[0]->geometry->location->lat; 
+			$geocode['lng'] = $output->results[0]->geometry->location->lng;
+			//Return latitude and longitude of the given address
+			if(!empty($geocode)){
+				return $geocode;
+			}else{
+				return false;
+			}
+		}else{
+			return false;   
+		}
 	}
 
 	// get groups joined, owned, or admined
