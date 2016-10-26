@@ -93,7 +93,7 @@ class Group_model extends CI_Model {
 
 		return $data->result();
 	}
-	
+
 	function get_group_by_id($group_id) {
 		$group_result = $this->db->query('SELECT a.org_id, a.org_title, a.org_description, d.user_fname, d.user_lname, d.user_email, e.zipcode
 										FROM organization a, owner b, organization_location c, user d, location e
@@ -111,11 +111,11 @@ class Group_model extends CI_Model {
 		}
 		return NULL;
 	}
-		
+
 	function get_group_members($group_id) {
-		
+
 	}
-	
+
 	//input: zip code
 	//output: array of matching groups information
 	function search_groups_zip($zip){
@@ -134,7 +134,13 @@ class Group_model extends CI_Model {
 		}
 		return '';
 	}
-	
+
+	//output: array of random groups information
+	function get_random_groups(){
+		$query	= $this->db->query("SELECT * FROM organization ORDER BY RAND() LIMIT 0,12;");
+		return $query->result_array();
+	}
+
 	// updates group and location in DB
 	function update_group($group_data, $location_data, $tag_data) {
 		try {
@@ -144,14 +150,14 @@ class Group_model extends CI_Model {
 			$group_succes = $this->db->update('organization', $group_data);
 			$this->db->stop_cache();
 			$this->db->flush_cache();
-		
+
 			//Update group location with new value
 			$this->db->start_cache();
 			$this->db->where('zipcode', $location_data['zipcode']);
 			$location_succes = $this->db->update('location', $location_data);
 			$this->db->stop_cache();
 			$this->db->flush_cache();
-		
+
 			// Get the tag ID
 			$this->db->like('tag_title', $tag_data['tag_title']);
 			$query = $this->db->get('tag');

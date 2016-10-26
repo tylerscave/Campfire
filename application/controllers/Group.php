@@ -27,13 +27,15 @@ class Group extends CI_Controller {
 
 		if($zip){
 			$group_search_info = $this->group_model->search_groups_zip($zip);
+			$random_group_query = '';
 		}
 		else{
-			$group_search_info ='';
+			$group_search_info = '';
+			$random_group_query = $this->group_model->get_random_groups();
 		}
 
 
-		if($group_search_info){
+		if($group_search_info){//for displaying searched groups
 			$groups = array();
 			foreach($group_search_info as $key => $val){
 				$groups[$key] = $val;
@@ -41,11 +43,16 @@ class Group extends CI_Controller {
 			$arr['groups'] = $groups;
 			$this->load->view('searchGroups_view', $arr);
 		}
+		else if($random_group_query){ //for displaying random groups
+
+			$arr['random'] = $random_group_query;
+			$this->load->view('searchGroups_view', $arr);
+		}
 		else{
 			$this->load->view('searchGroups_view');
 		}
 	}
-	
+
 	function display($gID = NULL){
 		if ($gID != NULL) {
 			$arr['gID'] = $gID;

@@ -232,6 +232,7 @@
         </div>
     </div>
 </aside>
+
 <section id="about">
 <div class="container">
 	<div class="row">
@@ -287,13 +288,13 @@
             </div>
             <div class="col-lg-10 col-lg-offset-1 text-center">
                 <?php
-                $this->load->helper("form"); 
-                
+                $this->load->helper("form");
+
                 echo validation_errors();
-                
+
                 echo form_open("/home/send_email");
                 ?>
-                
+
                 <form method="post" action="/home/send_email" class="contact-form row">
                     <div class="col-md-6">
                         <label></label>
@@ -313,7 +314,7 @@
                         <input type="submit" name="submit" value="Submit"/>
                     </div>
                 </form>
-                
+
                 <?php echo form_close(); ?>
             </div>
         </div>
