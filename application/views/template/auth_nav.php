@@ -12,8 +12,8 @@
        </div>
        <div class="navbar-collapse collapse" id="bs-navbar">
          <ul class="nav navbar-nav">
-               <li>
-                   <a class="page-scroll" href="<?php if(!isActive("home")) echo base_url("index.php/about");?>">About</a>
+               <li <?php if(isActive("about")) echo "class='active' "; ?>>
+                   <a id = "about" href="<?php echo base_url('index.php/about'); ?>">About</a>
                </li>
                <li>
                    <a class="page-scroll" href="<?php if(!isActive("home")) echo base_url("index.php/home");?>#contact">Contact</a>

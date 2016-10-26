@@ -24,7 +24,7 @@
 	<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="<?php echo base_url("assets/js/custom.js"); ?>"></script>
 </head>
-<body data-spy="scroll" data-target=".navbar" data-offset="65">
+<body data-spy="scroll" data-target=".navbar" data-offset="80">
 
   <?php
   //Due to a flickering issue on page load, authenticated navbar and normal navbar would be stored in seprate files
