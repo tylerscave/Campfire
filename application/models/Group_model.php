@@ -104,7 +104,7 @@ class Group_model extends CI_Model {
 				if ($address_data[$i]->types[0] == "administrative_area_level_1") {
 					$geocode['state'] = $address_data[$i]->long_name;
 				}
-			} 
+			}
 
 			//Return latitude and longitude of the given address
 			if(!empty($geocode)){
@@ -167,20 +167,10 @@ class Group_model extends CI_Model {
 	//input: zip code
 	//output: array of matching groups information
 	function search_groups_zip($zip){
-		$this->db->where('zipcode', $zip);
-		$location_results = $this->db->get('location')->result();
-		foreach ($location_results as &$location) {
-					$this->db->where('location_id', $location->location_id);
-					$org_result = $this->db->get('organization_location')->result();
-					foreach($org_result as &$org_id){
-							$this->db->where('org_id', $org_id->org_id);
-							$org_list[] = $this->db->get('organization')->result();
-					}
-		}
-		if(isset($org_list)){
-			return $org_list;
-		}
-		return '';
+		$query = $this->db->query("SELECT t2.*, t5.tag_title from location t1, organization t2, organization_location t3, organization_tag t4, tag t5
+WHERE t1.zipcode = $zip AND t1.location_id = t3.location_id AND t2.org_id = t3.org_id
+AND t2.org_id = t4.org_id AND  t4.tag_id = t5.tag_id");
+		return $query->result_array();
 	}
 
 	//output: array of random groups information
