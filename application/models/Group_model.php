@@ -37,16 +37,16 @@ class Group_model extends CI_Model {
 		$this->db->start_cache();
 		$this->db->where('zipcode', $location_data['zipcode']);
 		$this->db->where('street', '');
-		$query = $this->db->get('location');
+		$loc_query = $this->db->get('location');
 		$this->db->stop_cache();
 		$this->db->flush_cache();
 		//If location isnt in database yet
-		if ($query->num_rows() == 0){
+		if ($loc_query->num_rows() == 0){
 			// insert values into location and get the location ID
 			$location_success = $this->db->insert('location', $location_data);
 			$location_id = $this->db->insert_id();
 		} else {
-			$locResult = $query->result();
+			$locResult = $loc_query->result();
 			$location_id = $locResult[0]->location_id;
 			$location_success = TRUE;
 		}
@@ -143,7 +143,7 @@ class Group_model extends CI_Model {
 	}
 
 	function get_group_by_id($group_id) {
-		$group_result = $this->db->query('SELECT a.org_id, a.org_title, a.org_description, d.user_fname, d.user_lname, d.user_email, e.zipcode
+		$group_result = $this->db->query('SELECT a.org_id, a.org_title, a.org_description, a.org_picture, d.user_fname, d.user_lname, d.user_email, e.zipcode
 										FROM organization a, owner b, organization_location c, user d, location e
 										WHERE a.org_id = '.$group_id.'
 										AND a.org_id = b.org_id
@@ -200,11 +200,28 @@ class Group_model extends CI_Model {
 			$this->db->flush_cache();
 
 			//Update group location with new value
+			//Check if location is in database
 			$this->db->start_cache();
 			$this->db->where('zipcode', $location_data['zipcode']);
-			$location_succes = $this->db->update('location', $location_data);
+			$this->db->where('street', '');
+			$loc_query = $this->db->get('location');
 			$this->db->stop_cache();
 			$this->db->flush_cache();
+			//If location isnt in database yet
+			if ($loc_query->num_rows() == 0){
+				// insert values into location and get the location ID
+				$location_success = $this->db->insert('location', $location_data);
+				$location_id = $this->db->insert_id();
+			} else {
+				$locResult = $loc_query->result();
+				$location_id = $locResult[0]->location_id;
+				$location_success = TRUE;
+			}
+			// Get and update geocode for this zipcode
+			$geocode = $this->getGeo($location_data['zipcode']);
+			$geo_success = $this->db->query('UPDATE location
+								SET city = "'.$geocode['city'].'", state = "'.$geocode['state'].'", geolat = '.$geocode['lat'].', geolng = '.$geocode['lng'].'
+								WHERE location_id = '.$location_id.'');
 
 			// Get the tag ID
 			$this->db->like('tag_title', $tag_data['tag_title']);
