@@ -53,7 +53,7 @@ class Group_model extends CI_Model {
 		// Get and update geocode for this zipcode
 		$geocode = $this->getGeo($location_data['zipcode']);
 		$geo_success = $this->db->query('UPDATE location
-							SET geolat = '.$geocode['lat'].', geolng = '.$geocode['lng'].'
+							SET city = "'.$geocode['city'].'", state = "'.$geocode['state'].'", geolat = '.$geocode['lat'].', geolng = '.$geocode['lng'].'
 							WHERE location_id = '.$location_id.'');
 		// Get the tag ID
 		$this->db->like('tag_title', $tag_data['tag_title']);
@@ -96,6 +96,16 @@ class Group_model extends CI_Model {
 			//Get latitude and longitute from json data
 			$geocode['lat']  = $output->results[0]->geometry->location->lat;
 			$geocode['lng'] = $output->results[0]->geometry->location->lng;
+			$address_data = $output->results[0]->address_components;
+			for ($i = 0; $i <= sizeof($address_data); $i++) {
+				if ($address_data[$i]->types[0] == "locality") {
+					$geocode['city'] = $address_data[$i]->long_name;
+				}
+				if ($address_data[$i]->types[0] == "administrative_area_level_1") {
+					$geocode['state'] = $address_data[$i]->long_name;
+				}
+			} 
+
 			//Return latitude and longitude of the given address
 			if(!empty($geocode)){
 				return $geocode;
