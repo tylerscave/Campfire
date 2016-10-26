@@ -80,6 +80,7 @@ CREATE TABLE `event_location` (
 
 CREATE TABLE `location` (
   `location_id` bigint(20) NOT NULL,
+  `street` varchar(255) NOT NULL,
   `city` varchar(255) NOT NULL,
   `state` varchar(255) NOT NULL,
   `zipcode` varchar(10) NOT NULL,
