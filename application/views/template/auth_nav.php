@@ -25,6 +25,7 @@
                       <ul class="dropdown-menu">
                         <li <?php if(isActive("Event/search")) echo "class='active' "; ?>><a id = "searchEvents" href="<?php echo base_url('index.php/Event/search'); ?>">Search Event</a></li>
                         <li <?php if(isActive("myEvents")) echo "class='active' "; ?>><a id = "bMyEvents" href="<?php echo base_url(); ?>index.php/myEvents">My Events</a></li>
+						<li <?php if(isActive("createEvent")) echo "class='active' "; ?>><a id = "createAnEvent" href="<?php echo base_url(); ?>index.php/createEvent">Create Event</a></li>
                       </ul>
               </li>
               <li class="dropdown" id="dropmenu-group">
@@ -34,6 +35,7 @@
                      <ul class="dropdown-menu">
                          <li <?php if(isActive("Group/search")) echo "class='active' "; ?>><a id = "searchGroups" href="<?php echo base_url('index.php/Group/search'); ?>">Search Groups</a></li>
                          <li <?php if(isActive("myGroups")) echo "class='active' "; ?>><a id = "bMyGroups" href="<?php echo base_url(); ?>index.php/myGroups">My Groups</a></li>
+						 <li <?php if(isActive("createGroup")) echo "class='active' "; ?>><a id = "createAGroup" href="<?php echo base_url(); ?>index.php/createGroup">Create Group</a></li>
                      </ul>
              </li>
          </ul>
