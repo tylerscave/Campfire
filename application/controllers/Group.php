@@ -52,16 +52,51 @@ class Group extends CI_Controller {
 
 	function display($gID = NULL){
 		if ($gID != NULL) {
+			$uid = $this->session->userdata('uid');
 			$arr['gID'] = $gID;
-			$group_data = $this->group_model->get_group_by_id($gID);
-			if ($group_data != NULL) {
-				$this->load->view('group_view', $group_data);
+			$data['info'] = $this->group_model->get_group_by_id($gID);
+			$data['members'] = $this->group_model->get_group_members($gID);
+			
+			$member_status = 'nonmember';
+			if ( $uid == $data['info']['user_id']) {
+				$member_status = 'owner';
+			}
+			else {
+				foreach($data['members'] as $row) {
+					if ($row['user_id'] == $uid) {
+						$member_status="member";
+					}
+				}
+			}
+			
+			$data['status'] = $member_status;
+			if ($data != NULL) {
+				$this->load->view('group_view', $data);
 			} else {
 				redirect('group/search');
 			}
 		} else {
 			redirect('group/search');
 		}
+		
 
+	}
+	
+	function join_group($gID = NULL) {
+		if ($gID != NULL) {
+			$arr['gID'] = $gID;
+			$uid = $this->session->userdata('uid');
+			$this->group_model->join_group($uid, $gID);
+		}
+		redirect('group/display/'.$gID);
+	}
+	
+	function leave_group($gID = NULL) {
+		if ($gID != NULL) {
+			$arr['gID'] = $gID;
+			$uid = $this->session->userdata('uid');
+			$this->group_model->leave_group($uid, $gID);
+		}
+		redirect('group/display/'.$gID);
 	}
 }
