@@ -97,7 +97,8 @@ class CreateGroup extends CI_Controller {
 			$group_data = array(
 				'org_title' => $this->input->post('groupName'),
 				'org_description' => $this->input->post('description'),
-				'org_picture' => $simpleNewFileName
+				'org_picture' => $simpleNewFileName,
+				'org_tag' => $this->input->post('tag')
 			);
 			//prepare to insert user location details into location table
 			$location_data = array(
