@@ -36,11 +36,8 @@ class Group extends CI_Controller {
 
 
 		if($group_search_info){//for displaying searched groups
-			$groups = array();
-			foreach($group_search_info as $key => $val){
-				$groups[$key] = $val;
-			}
-			$arr['groups'] = $groups;
+
+			$arr['groups'] = $group_search_info;
 			$this->load->view('searchGroups_view', $arr);
 		}
 		else if($random_group_query){ //for displaying random groups

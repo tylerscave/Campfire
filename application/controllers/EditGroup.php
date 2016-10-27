@@ -25,7 +25,7 @@ class EditGroup extends CI_Controller {
 	}
 
 	function index($gID = NULL) {
-		// Get the group data before update
+		// Get the old group data before update
 		if ($gID != NULL) {
 			$this->gID = $gID;
 			$data['oldGroupData'] = $this->group_model->get_group_by_id($gID);
@@ -47,65 +47,76 @@ class EditGroup extends CI_Controller {
 		if (!empty($_FILES['imageUpload']['tmp_name'])) {
 			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'callback_ext_check');
 		}
-
 		// submit the form and validate
 		if ($this->form_validation->run() == FALSE) {
 			// if it fails just load the view again
 			$this->load->view('editGroup_view', $data);
 		} else {
-			//calculate new image height to preserve ratio
-			list($orig_w, $orig_h) = getimagesize($_FILES['imageUpload']['tmp_name']);
-			$thumbSize = 500;
-			$w_ratio = ($thumbSize / $orig_w);
-			$h_ratio = ($thumbSize / $orig_h);
-			if ($orig_w > $orig_h ) {//landscape
-				$crop_w = round($orig_w * $h_ratio);
-				$crop_h = $thumbSize;
-			} elseif ($orig_w < $orig_h ) {//portrait
-				$crop_h = round($orig_h * $w_ratio);
-				$crop_w = $thumbSize;
-			} else {//square
-				$crop_w = $thumbSize;
-				$crop_h = $thumbSize;
-			}
-
-			//new filename for uploaded file
-			$filename = $_FILES['imageUpload']['name'];
-			$ext = pathinfo($filename, PATHINFO_EXTENSION);
-			$newFileName = $targetDir . '/' . $this->session->userdata('fname') . time() . "." . $ext;
-			$simpleNewFileName = $this->session->userdata('fname') . time() . "." . $ext;
-			//read binary data from image file
-			$imgString = file_get_contents($_FILES['imageUpload']['tmp_name']);
-			//create image from string
-			$image = imagecreatefromstring($imgString);
-			//correct orientation based on exif data using GD function
-			$exif = exif_read_data($_FILES['imageUpload']['tmp_name']);
-			if(!empty($exif['Orientation'])) {
-				switch($exif['Orientation']) {
-					case 8:
-						$image = imagerotate($image,90,0);
-						break;
-					case 3:
-						$image = imagerotate($image,180,0);
-						break;
-					case 6:
-						$image = imagerotate($image,-90,0);
-						break;
+			if (!empty($_FILES['imageUpload']['tmp_name'])) {
+				//calculate new image height to preserve ratio
+				list($orig_w, $orig_h) = getimagesize($_FILES['imageUpload']['tmp_name']);
+				$thumbSize = 500;
+				$w_ratio = ($thumbSize / $orig_w);
+				$h_ratio = ($thumbSize / $orig_h);
+				if ($orig_w > $orig_h ) {//landscape
+					$crop_w = round($orig_w * $h_ratio);
+					$crop_h = $thumbSize;
+				} elseif ($orig_w < $orig_h ) {//portrait
+					$crop_h = round($orig_h * $w_ratio);
+					$crop_w = $thumbSize;
+				} else {//square
+					$crop_w = $thumbSize;
+					$crop_h = $thumbSize;
 				}
+				//new filename for uploaded file
+				$filename = $_FILES['imageUpload']['name'];
+				$ext = pathinfo($filename, PATHINFO_EXTENSION);
+				$newFileName = $targetDir . '/' . $this->session->userdata('fname') . time() . "." . $ext;
+				$simpleNewFileName = $this->session->userdata('fname') . time() . "." . $ext;
+				//read binary data from image file
+				$imgString = file_get_contents($_FILES['imageUpload']['tmp_name']);
+				//create image from string
+				$image = imagecreatefromstring($imgString);
+				//correct orientation based on exif data using GD function
+				$exif = exif_read_data($_FILES['imageUpload']['tmp_name']);
+				if(!empty($exif['Orientation'])) {
+					switch($exif['Orientation']) {
+						case 8:
+							$image = imagerotate($image,90,0);
+							break;
+						case 3:
+							$image = imagerotate($image,180,0);
+							break;
+						case 6:
+							$image = imagerotate($image,-90,0);
+							break;
+					}
+				}
+				$tmp = imagecreatetruecolor($thumbSize, $thumbSize);
+				imagecopyresampled($tmp, $image, 0, 0, 0, 0, $crop_w, $crop_h, $orig_w, $orig_h);
+				//Save image
+				$image_success = imagejpeg($tmp, $newFileName, 100);
+				// Remove the old image if a new image has been uploaded
+				if (!empty($data['oldGroupData']['org_picture'])) {
+					$remove_success = $this->removeImage($data['oldGroupData']['org_picture']);
+				}
+				//cleanup
+				imagedestroy($image);
+				imagedestroy($tmp);
+			} elseif (!empty($data['oldGroupData']['org_picture'])) {
+				//If no new image is selected, keep the old one
+				$simpleNewFileName = $data['oldGroupData']['org_picture'];
+			} else {
+				$simpleNewFileName = "NOT";
 			}
-			$tmp = imagecreatetruecolor($thumbSize, $thumbSize);
-			imagecopyresampled($tmp, $image, 0, 0, 0, 0, $crop_w, $crop_h, $orig_w, $orig_h);
-			//Save image
-			$image_success = imagejpeg($tmp, $newFileName, 100);
-			//cleanup
-			imagedestroy($image);
-			imagedestroy($tmp);
 
 			//prepare to insert group details into organization table
 			$group_data = array(
+				'org_id' => 1, //$gID,
 				'org_title' => $this->input->post('groupName'),
 				'org_description' => $this->input->post('description'),
-				'org_picture' => $simpleNewFileName
+				'org_picture' => $simpleNewFileName,
+				'org_tag' => $this->input->post('tag')
 			);
 			//prepare to insert user location details into location table
 			$location_data = array(
@@ -121,11 +132,7 @@ class EditGroup extends CI_Controller {
 				'user_id' => $this->session->userdata('uid')
 			);
 			
-			if (false) {
-				$deleteSuccess = $this->removeImage($data['oldGroupData']['org_picture']);
-			}
-			
-			if ($this->group_model->insert_group($group_data, $location_data, $tag_data, $owner_data) && $image_success) {
+			if ($this->group_model->update_group($group_data, $location_data, $tag_data) && ($image_success || $remove_success)) {
 				// success!!!
 				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Group has been successfully updated with the new information!</div>');
 				redirect('editGroup/index');
@@ -149,7 +156,12 @@ class EditGroup extends CI_Controller {
 	}
 	
 	function removeImage($fileName) {
-	
+		$path = './uploads/'.$fileName;
+		if(unlink($path)) {
+			return TRUE;
+		} else {
+			return FALSE;
+		}
 	}
 	
 	function deleteGroup() {
