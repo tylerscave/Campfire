@@ -107,12 +107,12 @@ class EditGroup extends CI_Controller {
 				//If no new image is selected, keep the old one
 				$simpleNewFileName = $data['oldGroupData']['org_picture'];
 			} else {
-				$simpleNewFileName = "NOT_WORKING";
+				$simpleNewFileName = "NOT";
 			}
 
 			//prepare to insert group details into organization table
 			$group_data = array(
-				'org_id' => $gID,
+				'org_id' => 1, //$gID,
 				'org_title' => $this->input->post('groupName'),
 				'org_description' => $this->input->post('description'),
 				'org_picture' => $simpleNewFileName,

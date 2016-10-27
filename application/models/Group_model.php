@@ -105,7 +105,6 @@ class Group_model extends CI_Model {
 					$geocode['state'] = $address_data[$i]->long_name;
 				}
 			}
-
 			//Return latitude and longitude of the given address
 			if(!empty($geocode)){
 				return $geocode;
@@ -183,17 +182,12 @@ AND t2.org_id = t4.org_id AND  t4.tag_id = t5.tag_id");
 	function update_group($group_data, $location_data, $tag_data) {
 		try {
 			//update organization table with new values
-			//$this->db->start_cache();
-			//$this->db->where('org_id', $group_data['org_id']);
-			//$group_success = $this->db->update('organization', $group_data);
-			//$this->db->stop_cache();
-			//$this->db->flush_cache();
 			$group_success = $this->db->query('UPDATE organization
-							SET org_title = "'.$group_data['org_title'].'", org_description = "'.$group_data['org_description'].'", org_picture = '.$group_data['org_picture'].', org_tag = '.$group_data['org_tag'].'
-							WHERE org_id = '.$group_data['org_id'].'');
+							SET org_title = "'.$group_data['org_title'].'", org_description = "'.$group_data['org_description'].'", 
+											org_picture = "'.$group_data['org_picture'].'", org_tag = "'.$group_data['org_tag'].'"
+							WHERE org_id = "'.$group_data['org_id'].'"');
 
-
-			//Update group location with new value
+			//Update organization_location table with new value
 			//Check if location is in database
 			$this->db->start_cache();
 			$this->db->where('zipcode', $location_data['zipcode']);
@@ -211,17 +205,9 @@ AND t2.org_id = t4.org_id AND  t4.tag_id = t5.tag_id");
 				$location_id = $locResult[0]->location_id;
 				$location_success = TRUE;
 			}
-			// Create arrays of id_data to insert in DB
-			$location_id_data = array(
-				'org_id' => $group_data['org_id'],
-				'location_id' => $location_id
-			);
-			//Update organization_location
-			$this->db->start_cache();
-			$this->db->where('org_id', $group_data['org_id']);
-			$group_succes = $this->db->update('organization_location', $location_id_data);
-			$this->db->stop_cache();
-			$this->db->flush_cache();
+			$location_success = $this->db->query('UPDATE organization_location
+							SET location_id = '.$location_id.'
+							WHERE org_id = "'.$group_data['org_id'].'"');
 
 			// Get and update geocode for this zipcode
 			$geocode = $this->getGeo($location_data['zipcode']);
@@ -229,21 +215,14 @@ AND t2.org_id = t4.org_id AND  t4.tag_id = t5.tag_id");
 								SET city = "'.$geocode['city'].'", state = "'.$geocode['state'].'", geolat = '.$geocode['lat'].', geolng = '.$geocode['lng'].'
 								WHERE location_id = '.$location_id.'');
 
-			// Get the tag ID
+			// Get the tag ID and update organization_tag table with new values
 			$this->db->like('tag_title', $tag_data['tag_title']);
 			$query = $this->db->get('tag');
 			$tag_id_array = $query->result();
 			$tag_id = $tag_id_array[0]->tag_id;
-			$tag_id_data = array(
-				'org_id' => $group_data['org_id'],
-				'tag_id' => $tag_id
-			);
-			//Update group tag info with new values
-			$this->db->start_cache();
-			$this->db->where('org_id', $group_data['org_id']);
-			$tag_success = $this->db->update('organization_tag', $tag_id_data);
-			$this->db->stop_cache();
-			$this->db->flush_cache();
+			$tag_success = $this->db->query('UPDATE organization_tag
+							SET tag_id = '.$tag_id.'
+							WHERE org_id = "'.$group_data['org_id'].'"');
 
 			if ($group_success && $location_success && $geo_success && $tag_success) {
 				return TRUE;
