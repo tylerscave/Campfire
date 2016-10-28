@@ -4,11 +4,6 @@
 
 <!-- Body -->
 <div class="container custom-body">
-	<div class="row">
-		<div class="no-gutter">
-			<button id = "create_group" type="button" class="btn btn-info" onclick="location.href='createGroup/index'">Create New Group</button>
-		</div>
-	</div>
 	<div class="row" style="padding-top:50px">
 	<div class="container-fluid">
 		<ul class="nav nav-pills nav-justified" style="background-color:white">
@@ -21,29 +16,24 @@
 			<?php
 				if ($ownedgroups == NULL)
 				{
-					echo '<h2>No groups owned</h2>';
+					echo '<h4 style="padding-top:30px">No groups owned. Create a group? <a href="createGroup/index">click here</a></h4>';
 				}
 				else {
-					echo "<div class='container-fluid'>";
-						echo "<h3 style='text-align:left'>Owned Groups:</h3>";
+					echo '<div style="padding-top:30px">';
+					
+						//lists all the groups that the user created
+						if ($ownedgroups != null) {
+							$size = sizeof($memberedgroups);
+							for ($x = 0; $x < $size; $x++) {
+								echo "<div class='col-md-3 filter ".$ownedgroups[$x]->org_tag."'>";
+								echo "<p class='org-title'>".$ownedgroups[$x]->org_title."</p>";
+								echo "<a href='".base_url()."index.php/Group/display/".$ownedgroups[$x]->org_id."'>";
+								echo "<img class='img-responsive center-cropped' src='";
+								echo base_url()."uploads/".$ownedgroups[$x]->org_picture."' alt='".$ownedgroups[$x]->org_title."'></a></div>";																																																																																																	
+							}
+							
+						}
 					echo "</div>";
-					echo "<section id='view_group_list_owned' class='no-padding'>";
-						echo "<div class='container-fluid'>";
-							echo "<div class='row no-gutter'>";
-								//lists all the groups that the user created
-								if ($ownedgroups != null) {
-									$size = sizeof($memberedgroups);
-									for ($x = 0; $x < $size; $x++) {
-										echo "<div class='col-lg-3 col-md-4 col-sm-6 col-xs-12'> <div class='hovereffect'> <img class='img-responsive' src='";
-										echo base_url()."uploads/".$ownedgroups[$x]->org_picture."'>";
-										echo "<div class='overlay'><h2>".$ownedgroups[$x]->org_title."</h2>";
-										echo "<a class='info' id = 'owned".$ownedgroups[$x]->org_id."' href='".base_url()."index.php/Group/display/".$ownedgroups[$x]->org_id."'>View more details</a>";
-										echo "</div></div>".$ownedgroups[$x]->org_title."</div>";
-									}
-								}
-							echo "</div>";
-						echo "</div>";
-					echo "</section>";
 				}
 				?>
 			</div>
@@ -51,42 +41,37 @@
 				<?php
 					if (sizeof($memberedgroups) == sizeof($ownedgroups))
 					{
-						echo '<h2>No groups joined</h2>';
+						echo '<h4 style="padding-top:50px">No groups joined. Search for a group to join: <a href="';
+						echo base_url('index.php/Group/search');
+						echo '">click here</a></h4>';
 					}
 					else
 					{
-						echo "<div class='no-padding'>";
-							echo "<h3 style='text-align:left'>Joined Groups:</h3>";
-						echo "</div>";
-						echo "<section id='view_group_list_joined' class='no-padding' style='alignment:center'>";
-							echo "<div class='container-fluid'>";
-								echo "<div class='row no-gutter'>";
-										//list all groups the user joined
-										if ($memberedgroups != null) {
-											$size = sizeof($memberedgroups);
-											$ownedsameasmembered = false;
-											for ($x = 0; $x < $size; $x++) {
-												//excludes all groups user is an owner but is a member of
-												for ($y = 0; $y < $size; $y++) {
-													if ($memberedgroups[$x]->org_id == $ownedgroups[$y]->org_id) {
-														$ownedsameasmembered = true;
-													}
-												}
-												if ($ownedsameasmembered != true) {
-													echo "<div class='col-lg-3 col-md-4 col-sm-6 col-xs-12'> <div class='hovereffect'> <img class='img-responsive' src='";
-													echo base_url()."uploads/".$memberedgroups[$x]->org_picture."'>";
-													echo "<div class='overlay'><h2>".$memberedgroups[$x]->org_title."</h2>";
-													echo "<a class='info' id = 'joined".$memberedgroups[$x]->org_id."' href='".base_url()."index.php/Group/display/".$memberedgroups[$x]->org_id."'>View more details</a>";
-													echo "</div></div>".$memberedgroups[$x]->org_title."</div>";
-												}
-												else {
-													$ownedsameasmembered = false;
-												}
-											}
+						echo '<div style="padding-top:30px">';
+							//list all groups the user joined
+							if ($memberedgroups != null) {
+								$size = sizeof($memberedgroups);
+								$ownedsameasmembered = false;
+								for ($x = 0; $x < $size; $x++) {
+									//excludes all groups user is an owner but is a member of
+									for ($y = 0; $y < $size; $y++) {
+										if ($memberedgroups[$x]->org_id == $ownedgroups[$y]->org_id) {
+											$ownedsameasmembered = true;
 										}
-								echo "</div>";
-							echo "</div>";
-						echo "</section>";
+									}
+									if ($ownedsameasmembered != true) {
+										echo "<div class='col-md-3 filter ".$memberedgroups[$x]->org_tag."'>";
+										echo "<p class='org-title'>".$memberedgroups[$x]->org_title."</p>";
+										echo "<a href='".base_url()."index.php/Group/display/".$memberedgroups[$x]->org_id."'>";
+										echo "<img class='img-responsive center-cropped' src='";
+										echo base_url()."uploads/".$memberedgroups[$x]->org_picture."' alt='".$memberedgroups[$x]->org_title."'></a></div>";
+									}
+									else {
+										$ownedsameasmembered = false;
+									}
+								}
+							}
+						echo "</div>";
 					}
 				?>
 			</div>
