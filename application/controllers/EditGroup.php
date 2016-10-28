@@ -7,7 +7,6 @@
  *     Luis Otero, Jorge Aguiniga, Stephen Piazza, Jatinder Verma
 */
 class EditGroup extends CI_Controller {
-	protected $gID = NULL;
 
 	// constructor used for needed initialization
 	public function __construct() {
@@ -27,7 +26,6 @@ class EditGroup extends CI_Controller {
 	function index($gID = NULL) {
 		// Get the old group data before update
 		if ($gID != NULL) {
-			$this->gID = $gID;
 			$data['oldGroupData'] = $this->group_model->get_group_by_id($gID);
 		} else {
 			$data['oldGroupData']['org_title'] = "";
@@ -47,6 +45,7 @@ class EditGroup extends CI_Controller {
 		if (!empty($_FILES['imageUpload']['tmp_name'])) {
 			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'callback_ext_check');
 		}
+
 		// submit the form and validate
 		if ($this->form_validation->run() == FALSE) {
 			// if it fails just load the view again
@@ -112,7 +111,8 @@ class EditGroup extends CI_Controller {
 
 			//prepare to insert group details into organization table
 			$group_data = array(
-				'org_id' => 1, //$gID,
+				'org_id' => (isset($data['oldGroupData']['org_id']) ? $data['oldGroupData']['org_id'] : 2),//THIS IS WHERE THE PROBLEM IS
+				//########################################################################  IT ALWAYS DEFAULTS TO 2 -> WHERE AM I LOSING THAT VARIABLE 
 				'org_title' => $this->input->post('groupName'),
 				'org_description' => $this->input->post('description'),
 				'org_picture' => $simpleNewFileName,
@@ -164,8 +164,7 @@ class EditGroup extends CI_Controller {
 		}
 	}
 	
-	function deleteGroup() {
-		$gID = $this->gID;
+	function deleteGroup($gID) {
 		$groupData = $this->group_model->get_group_by_id($gID);
 		//Delete from the database using the User ID
 		$this->group_model->delete_group($groupData);
