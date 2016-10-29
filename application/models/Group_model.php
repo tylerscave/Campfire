@@ -256,10 +256,14 @@ AND t2.org_id = t4.org_id AND  t4.tag_id = t5.tag_id");
 	}
 	
 	// delete group from database
-	function delete_group($groupData) {
-		$this->db->delete('organization', $groupData);
-		$this->db->delete('organization_location', $groupData);
-		$this->db->delete('organization_tag', $groupData);
-		$this->db->delete('organization_event', $groupData);
+	function delete_group($gID) {
+		$this->db->where('org_id', $gID);
+		$this->db->delete('organization');
+		$this->db->where('org_id', $gID);
+		$this->db->delete('organization_location');
+		$this->db->where('org_id', $gID);
+		$this->db->delete('organization_tag');
+		$this->db->where('org_id', $gID);
+		$this->db->delete('organization_event');
 	}
 }

@@ -91,31 +91,5 @@ function confirmDelete() {
 	});
 }
 
-function confirmGroupDelete() {
-	bootbox.confirm({
-	    message: "Are you sure you want to delete this group? This can not be undone.",
-	    buttons: {
-	        confirm: {
-	            label: 'Delete',
-	            className: 'btn-danger'
-	        },
-	        cancel: {
-	            label: 'Cancel',
-	            className: 'btn'
-	        }
-	    },
-	    callback: function (result) {
-	        if (result) {
-	            $.ajax({
-	                url: 'editGroup/deleteGroup',
-	                type: 'POST'
-	            });
-	            $('.well').append('<div class="alert alert-success text-center">You have Successfully Deleted The Group! You will be redirected shortly.</div>');
-	            var delay = 3000;
-	            setTimeout(function() {
-	            	location.href='home/index';
-	            }, delay);
-	        }
-	    }
-	});
+// end of custom.js
 }

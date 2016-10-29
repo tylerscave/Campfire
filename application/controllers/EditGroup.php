@@ -27,6 +27,8 @@ class EditGroup extends CI_Controller {
 		// Get the old group data before update
 		if ($gID != NULL) {
 			$data['oldGroupData'] = $this->group_model->get_group_by_id($gID);
+			$sess_data = array('gID' => $gID, 'oldPhoto' => $data['oldGroupData']['org_picture']);
+			$this->session->set_userdata($sess_data);
 		} else {
 			$data['oldGroupData']['org_title'] = "";
 			$data['oldGroupData']['zipcode'] = "";
@@ -45,12 +47,13 @@ class EditGroup extends CI_Controller {
 		if (!empty($_FILES['imageUpload']['tmp_name'])) {
 			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'callback_ext_check');
 		}
-
+		
 		// submit the form and validate
 		if ($this->form_validation->run() == FALSE) {
 			// if it fails just load the view again
 			$this->load->view('editGroup_view', $data);
 		} else {
+			//Upload a new image if it exists
 			if (!empty($_FILES['imageUpload']['tmp_name'])) {
 				//calculate new image height to preserve ratio
 				list($orig_w, $orig_h) = getimagesize($_FILES['imageUpload']['tmp_name']);
@@ -94,33 +97,30 @@ class EditGroup extends CI_Controller {
 				$tmp = imagecreatetruecolor($thumbSize, $thumbSize);
 				imagecopyresampled($tmp, $image, 0, 0, 0, 0, $crop_w, $crop_h, $orig_w, $orig_h);
 				//Save image
-				$image_success = imagejpeg($tmp, $newFileName, 100);
+				$upload_success = imagejpeg($tmp, $newFileName, 100);
 				// Remove the old image if a new image has been uploaded
-				if (!empty($data['oldGroupData']['org_picture'])) {
-					$remove_success = $this->removeImage($data['oldGroupData']['org_picture']);
-				}
+				$remove_success = $this->removeImage($this->session->userdata('oldPhoto'));
 				//cleanup
 				imagedestroy($image);
 				imagedestroy($tmp);
-			} elseif (!empty($data['oldGroupData']['org_picture'])) {
-				//If no new image is selected, keep the old one
-				$simpleNewFileName = $data['oldGroupData']['org_picture'];
 			} else {
-				$simpleNewFileName = "NOT";
+				//If no new image is selected, keep the old one
+				$simpleNewFileName = $this->session->userdata('oldPhoto');
 			}
-
+			// unset the session variable
+			$this->session->unset_userdata('oldPhoto');
 			//prepare to insert group details into organization table
 			$group_data = array(
-				'org_id' => (isset($data['oldGroupData']['org_id']) ? $data['oldGroupData']['org_id'] : 2),//THIS IS WHERE THE PROBLEM IS
-				//########################################################################  IT ALWAYS DEFAULTS TO 2 -> WHERE AM I LOSING THAT VARIABLE 
+				'org_id' => $this->session->userdata('gID'),
 				'org_title' => $this->input->post('groupName'),
 				'org_description' => $this->input->post('description'),
 				'org_picture' => $simpleNewFileName,
 				'org_tag' => $this->input->post('tag')
 			);
+			$this->session->unset_userdata('gID');
 			//prepare to insert user location details into location table
 			$location_data = array(
-				'city' => '',
+				'street' => '',
 				'zipcode' => $this->input->post('zip')
 			);
 			//prepare to insert group tag details into tag table
@@ -132,7 +132,8 @@ class EditGroup extends CI_Controller {
 				'user_id' => $this->session->userdata('uid')
 			);
 			
-			if ($this->group_model->update_group($group_data, $location_data, $tag_data) && ($image_success || $remove_success)) {
+			// Set error/success messages
+			if ($this->group_model->update_group($group_data, $location_data, $tag_data)) {
 				// success!!!
 				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Group has been successfully updated with the new information!</div>');
 				redirect('editGroup/index');
@@ -165,8 +166,11 @@ class EditGroup extends CI_Controller {
 	}
 	
 	function deleteGroup($gID) {
-		$groupData = $this->group_model->get_group_by_id($gID);
-		//Delete from the database using the User ID
-		$this->group_model->delete_group($groupData);
+		//Delete the image from the uploads folder
+		$data['oldGroupData'] = $this->group_model->get_group_by_id($gID);
+		$this->removeImage($data['oldGroupData']['org_picture']);
+		//Delete from the database using the org_ID
+		$this->group_model->delete_group($gID);
+		redirect('myGroups/index');
 	}
 }

@@ -102,7 +102,7 @@ class CreateGroup extends CI_Controller {
 			);
 			//prepare to insert user location details into location table
 			$location_data = array(
-				'city' => '',
+				'street' => '',
 				'zipcode' => $this->input->post('zip')
 			);
 			//prepare to insert group tag details into tag table
