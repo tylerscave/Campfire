@@ -141,8 +141,9 @@ class Group_model extends CI_Model {
 		return $data->result();
 	}
 
+	// get group by group id and return information
 	function get_group_by_id($group_id) {
-		$group_result = $this->db->query('SELECT a.org_id, a.org_title, a.org_description, a.org_picture, d.user_fname, d.user_lname, d.user_email, e.zipcode
+		$group_result = $this->db->query('SELECT a.org_id, a.org_title, a.org_description, a.org_picture, d.user_id, d.user_fname, d.user_lname, d.user_email, e.zipcode
 										FROM organization a, owner b, organization_location c, user d, location e
 										WHERE a.org_id = '.$group_id.'
 										AND a.org_id = b.org_id
@@ -159,8 +160,17 @@ class Group_model extends CI_Model {
 		return NULL;
 	}
 
+	// get first and last name of members in a group
 	function get_group_members($group_id) {
-
+		$query = $this->db->query('SELECT user.user_id, user.user_fname, user.user_lname 
+											FROM user, member 
+											WHERE user.user_id = member.user_id 
+											AND member.org_id = '.$group_id.';');
+		$group_members = array();
+		foreach ($query->result_array() as $row) {
+			$group_members[] = array('user_fname' => $row['user_fname'], 'user_lname' => $row['user_lname'], 'user_id' =>$row['user_id']); 
+		}
+		return $group_members;
 	}
 
 	//input: zip code
@@ -233,12 +243,27 @@ AND t2.org_id = t4.org_id AND  t4.tag_id = t5.tag_id");
 			return FALSE;
 		}
 	}
-
+	
+	// join a group
+	function join_group($uid, $gid) {
+		$data = array('user_id' => $uid, 'org_id' => $gid);
+		$this->db->insert('member', $data);
+	}
+	
+	// leave a group
+	function leave_group($uid, $gid) {
+		$this->db->delete('member', array('user_id' =>$uid, 'org_id' =>$gid));
+	}
+	
 	// delete group from database
-	function delete_group($groupData) {
-		$this->db->delete('organization', $groupData);
-		$this->db->delete('organization_location', $groupData);
-		$this->db->delete('organization_tag', $groupData);
-		$this->db->delete('organization_event', $groupData);
+	function delete_group($gID) {
+		$this->db->where('org_id', $gID);
+		$this->db->delete('organization');
+		$this->db->where('org_id', $gID);
+		$this->db->delete('organization_location');
+		$this->db->where('org_id', $gID);
+		$this->db->delete('organization_tag');
+		$this->db->where('org_id', $gID);
+		$this->db->delete('organization_event');
 	}
 }
