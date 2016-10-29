@@ -31,17 +31,15 @@ class Event_model extends CI_Model {
 
 		if ($user_type == 'member') {
 			$data = $this->db->query('SELECT e.event_id, e.event_description 
-									 FROM event e JOIN 
+									  FROM event e JOIN 
 											(SELECT * FROM user u JOIN member m USING(user_id) JOIN organization_event ev USING(org_id) 
-											 WHERE u.user_id = '.$id') AS f 
-									 ON e.event_id = f.event_id');
+											 WHERE u.user_id = '.$id.') AS f USING(event_id)');
 		}
 		else if ($user_type == 'owner') {
 			$data = $this->db->query('SELECT e.event_id, e.event_description 
-									 FROM event e JOIN 
+									  FROM event e JOIN 
 											(SELECT * FROM user u JOIN owner m USING(user_id) JOIN organization_event ev USING(org_id) 
-											 WHERE u.user_id = '.$id') AS f 
-									 ON e.event_id = f.event_id');
+											 WHERE u.user_id = '.$id.') AS f USING(event_id)');
 		}
 		else {
 			return null;
