@@ -25,8 +25,8 @@ class MyEvents extends CI_Controller {
 		$data['uemail'] = $details[0]->user_email;
 		
 		// get all events for user
-		$group_member = $this->event_model->get_events_by_user_id($this->session->userdata('uid'), 'member');
-		$group_owner = $this->event_model->get_events_by_user_id($this->session->userdata('uid'), 'owner');
+		$group_member = $this->event_model->get_events_by_user_id($this->session->userdata('uid'), 'rsvp');
+		$group_owner = $this->event_model->get_events_by_user_id($this->session->userdata('uid'), 'owned');
 		$data['memberedevents'] = $group_member;
 		$data['ownedevents'] = $group_owner;
 

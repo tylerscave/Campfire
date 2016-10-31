@@ -25,7 +25,7 @@
 						if ($ownedgroups != null) {
 							$size = sizeof($ownedgroups);
 							for ($x = 0; $x < $size; $x++) {
-								echo "<div class='col-md-3 filter ".$ownedgroups[$x]->org_tag."'>";
+							echo "<div class='col-md-3 id = ' ".$ownedgroups[$x]->org_id."'>";
 								echo "<p class='org-title'>".$ownedgroups[$x]->org_title."</p>";
 								echo "<a href='".base_url()."index.php/Group/display/".$ownedgroups[$x]->org_id."'>";
 								echo "<img class='img-responsive center-cropped' src='";
@@ -60,7 +60,7 @@
 										}
 									}
 									if ($ownedsameasmembered != true) {
-										echo "<div class='col-md-3 filter ".$memberedgroups[$x]->org_tag."'>";
+										echo "<div class='col-md-3 id= '".$memberedgroups[$x]->org_id."'>";
 										echo "<p class='org-title'>".$memberedgroups[$x]->org_title."</p>";
 										echo "<a href='".base_url()."index.php/Group/display/".$memberedgroups[$x]->org_id."'>";
 										echo "<img class='img-responsive center-cropped' src='";
