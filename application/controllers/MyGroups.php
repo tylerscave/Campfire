@@ -27,10 +27,8 @@ class MyGroups extends CI_Controller {
 		// get all groups for user
 		$group_member = $this->group_model->get_groups($this->session->userdata('uid'), 'member');
 		$group_owner = $this->group_model->get_groups($this->session->userdata('uid'), 'owner');
-		$group_admin = $this->group_model->get_groups($this->session->userdata('uid'), 'admin');
 		$data['memberedgroups'] = $group_member;
 		$data['ownedgroups'] = $group_owner;
-		$data['adminedgroups'] = $group_admin;
 
 		// load and populate the profile_view
 		$this->load->view('myGroups_view', $data);

@@ -120,18 +120,17 @@ class Group_model extends CI_Model {
 
 		if ($user_type == 'member') {
 			$data = $this->db->query('SELECT * FROM organization c JOIN
-									(SELECT m.org_id FROM user u JOIN member m WHERE u.user_id = m.user_id and u.user_id = '.$id.')
-										AS f WHERE f.org_id = c.org_id');
+											(SELECT org_id FROM member m 
+												WHERE m.user_id =(SELECT user_id FROM user u where u.user_id = '.$id.')) AS f
+											USING(org_id)');
+										
+						
 		}
 		else if ($user_type == 'owner') {
 			$data = $this->db->query('SELECT * FROM organization c JOIN
-									(SELECT o.org_id FROM user u JOIN owner o WHERE u.user_id = o.user_id and u.user_id = '.$id.')
-										AS f WHERE f.org_id = c.org_id');
-		}
-		else if ($user_type == 'admin') {
-			$data = $this->db->query('SELECT * FROM organization c JOIN
-									(SELECT a.org_id FROM user u JOIN admin a WHERE u.user_id = a.user_id and u.user_id = '.$id.')
-										AS f WHERE f.org_id = c.org_id');
+											(SELECT org_id FROM owner ow 
+												WHERE ow.user_id =(SELECT user_id FROM user u where u.user_id = '.$id.')) AS f
+											USING(org_id)');
 		}
 		else {
 			return null;
