@@ -41,7 +41,8 @@ class Signup extends CI_Controller {
 			);
 			//prepare to insert user location details into location table
 			$location_data = array(
-				'street' => '',
+				'address_one' => '',
+				'address_two' => '',
 				'zipcode' => $this->input->post('zip')
 			);
 			

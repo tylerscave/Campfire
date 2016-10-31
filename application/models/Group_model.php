@@ -60,9 +60,8 @@ class Group_model extends CI_Model {
 		$query = $this->db->get('tag');
 		$tag_id_array = $query->result();
 		$tag_id = $tag_id_array[0]->tag_id;
-		// insert this user into owner, admin, and member
+		// insert this user into owner and member
 		$owner_success = $this->db->insert('owner', $owner_data);
-		$admin_success = $this->db->insert('admin', $owner_data);
 		$member_success = $this->db->insert('member', $owner_data);
 		// Create arrays of id_data to insert in DB
 		$location_id_data = array(
@@ -194,8 +193,9 @@ AND t2.org_id = t4.org_id AND  t4.tag_id = t5.tag_id");
 			//update organization table with new values
 			$group_success = $this->db->query('UPDATE organization
 							SET org_title = "'.$group_data['org_title'].'", org_description = "'.$group_data['org_description'].'", 
-											org_picture = "'.$group_data['org_picture'].'", org_tag = "'.$group_data['org_tag'].'"
+											org_picture = "'.$group_data['org_picture'].'"
 							WHERE org_id = "'.$group_data['org_id'].'"');
+							
 
 			//Update organization_location table with new value
 			//Check if location is in database

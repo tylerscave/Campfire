@@ -97,12 +97,12 @@ class CreateGroup extends CI_Controller {
 			$group_data = array(
 				'org_title' => $this->input->post('groupName'),
 				'org_description' => $this->input->post('description'),
-				'org_picture' => $simpleNewFileName,
-				'org_tag' => $this->input->post('tag')
+				'org_picture' => $simpleNewFileName
 			);
 			//prepare to insert user location details into location table
 			$location_data = array(
-				'street' => '',
+				'address_one' => '',
+				'address_two' => '',
 				'zipcode' => $this->input->post('zip')
 			);
 			//prepare to insert group tag details into tag table

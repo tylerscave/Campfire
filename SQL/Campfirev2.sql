@@ -308,4 +308,4 @@ ALTER TABLE `user`
 /*####################################################################
 ######### You must change the path to match your machine #############
 ######################################################################*/
-LOAD DATA LOCAL INFILE 'C:/xampp/htdocs/Campfire/SQL/tags.txt' INTO TABLE `tag` SET `tag_id` = NULL;
+LOAD DATA LOCAL INFILE '~/websites/Campfire/SQL/tags.txt' INTO TABLE `tag` SET `tag_id` = NULL;
