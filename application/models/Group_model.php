@@ -36,7 +36,8 @@ class Group_model extends CI_Model {
 		//Check if location is in database
 		$this->db->start_cache();
 		$this->db->where('zipcode', $location_data['zipcode']);
-		$this->db->where('street', '');
+		$this->db->where('address_one', '');
+		$this->db->where('address_two', '');
 		$loc_query = $this->db->get('location');
 		$this->db->stop_cache();
 		$this->db->flush_cache();
@@ -200,7 +201,8 @@ AND t2.org_id = t4.org_id AND  t4.tag_id = t5.tag_id");
 			//Check if location is in database
 			$this->db->start_cache();
 			$this->db->where('zipcode', $location_data['zipcode']);
-			$this->db->where('street', '');
+			$this->db->where('address_one', '');
+			$this->db->where('address_two', '');
 			$loc_query = $this->db->get('location');
 			$this->db->stop_cache();
 			$this->db->flush_cache();
