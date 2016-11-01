@@ -77,7 +77,7 @@ class Group_model extends CI_Model {
 		$id_success = $this->insert_ids($location_id_data, $tag_id_data);
 		// return true only if all inserts were successful
 		return ($group_success && $location_success && $owner_success &&
-				$admin_success && $member_success && $id_success && $geo_success);
+				$member_success && $id_success && $geo_success);
 	}
 
 	// insert ids into organization_location and organization_tag
