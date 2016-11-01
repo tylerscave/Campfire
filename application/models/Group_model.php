@@ -176,8 +176,8 @@ class Group_model extends CI_Model {
 	//output: array of matching groups information
 	function search_groups_zip($zip){
 		$query = $this->db->query("SELECT t2.*, t5.tag_title from location t1, organization t2, organization_location t3, organization_tag t4, tag t5
-WHERE t1.zipcode = $zip AND t1.location_id = t3.location_id AND t2.org_id = t3.org_id
-AND t2.org_id = t4.org_id AND  t4.tag_id = t5.tag_id");
+			WHERE t1.zipcode = $zip AND t1.location_id = t3.location_id AND t2.org_id = t3.org_id
+			AND t2.org_id = t4.org_id AND  t4.tag_id = t5.tag_id");
 		return $query->result_array();
 	}
 

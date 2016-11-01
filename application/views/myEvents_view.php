@@ -41,7 +41,7 @@
 				<?php
 					if (sizeof($memberedevents) == sizeof($ownedevents))
 					{
-						echo '<h4 id="search_event_link" style="padding-top:30px">No events that you are going to. Search for events to go to: <a href="';
+						echo '<h4 id="search_event_link" style="padding-top:30px">No events pending. Search for events to attend: <a href="';
 						echo base_url('index.php/Event/search');
 						echo '">click here</a></h4>';
 					}
@@ -50,11 +50,12 @@
 						echo '<div style="padding-top:30px">';
 							//list all events the user RSVP
 							if ($memberedevents != null) {
-								$size = sizeof($memberedevents);
+								$memberedsize = sizeof($memberedevents);
+								$ownedsize = sizeof($ownedevents);
 								$ownedsameasmembered = false;
-								for ($x = 0; $x < $size; $x++) {
+								for ($x = 0; $x < $memberedsize; $x++) {
 									//excludes all events created by the user to show up on RSVP list
-									for ($y = 0; $y < $size; $y++) {
+									for ($y = 0; $y < $ownedsize; $y++) {
 										if ($memberedevents[$x]->org_id == $ownedevents[$y]->org_id) {
 											$ownedsameasmembered = true;
 										}

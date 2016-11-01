@@ -39,6 +39,7 @@
 			</div>
 			<div id="joined_groups" class="tab-pane fade">
 				<?php
+					
 					if (sizeof($memberedgroups) == sizeof($ownedgroups))
 					{
 						echo '<h4 style="padding-top:30px">No groups joined. Search for a group to join: <a href="';
@@ -50,15 +51,16 @@
 						echo '<div style="padding-top:30px">';
 							//list all groups the user joined
 							if ($memberedgroups != null) {
-								$size = sizeof($memberedgroups);
+								$memberedsize = sizeof($memberedgroups);
+								$ownedsize = sizeof($ownedgroups);
 								$ownedsameasmembered = false;
-								for ($x = 0; $x < $size; $x++) {
+								for ($x = 0; $x < $memberedsize; $x++) { 
 									//excludes all groups user is an owner but is a member of
-									for ($y = 0; $y < $size; $y++) {
+									for ($y = 0; $y < $ownedsize; $y++) {
 										if ($memberedgroups[$x]->org_id == $ownedgroups[$y]->org_id) {
 											$ownedsameasmembered = true;
 										}
-									}
+									}									
 									if ($ownedsameasmembered != true) {
 										echo "<div class='col-md-3 id= '".$memberedgroups[$x]->org_id."'>";
 										echo "<p class='org-title'>".$memberedgroups[$x]->org_title."</p>";

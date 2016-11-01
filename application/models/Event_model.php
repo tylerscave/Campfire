@@ -34,7 +34,7 @@ class Event_model extends CI_Model {
 		{
 			$data = $this->db->query('SELECT * FROM event ev JOIN 
 										(SELECT event_id FROM event_owner ow 
-											WHERE ow.user_id = (SELECT user_id FROM user u WHERE u.user_id = '.$id.')) AS f 
+											WHERE ow.owner_id = (SELECT owner_id FROM user u JOIN owner o WHERE u.user_id = '.$id.' AND o.user_id = u.user_id)) AS f 
 										USING(event_id)');
 			
 		}
