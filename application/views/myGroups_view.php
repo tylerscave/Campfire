@@ -20,18 +20,18 @@
 				}
 				else {
 					echo '<div style="padding-top:30px">';
-					
+
 						//lists all the groups that the user created
 						if ($ownedgroups != null) {
 							$size = sizeof($ownedgroups);
 							for ($x = 0; $x < $size; $x++) {
-							echo "<div class='col-md-3 id = ' ".$ownedgroups[$x]->org_id."'>";
+							echo "<div class='col-md-3 >";
 								echo "<p class='org-title'>".$ownedgroups[$x]->org_title."</p>";
-								echo "<a href='".base_url()."index.php/Group/display/".$ownedgroups[$x]->org_id."'>";
+								echo "<a id = '".$ownedgroups[$x]->org_id."' href='".base_url()."index.php/Group/display/".$ownedgroups[$x]->org_id."'>";
 								echo "<img class='img-responsive center-cropped' src='";
-								echo base_url()."uploads/".$ownedgroups[$x]->org_picture."' alt='".$ownedgroups[$x]->org_title."'></a></div>";																																																																																																	
+								echo base_url()."uploads/".$ownedgroups[$x]->org_picture."' alt='".$ownedgroups[$x]->org_title."'></a></div>";
 							}
-							
+
 						}
 					echo "</div>";
 				}
@@ -39,7 +39,7 @@
 			</div>
 			<div id="joined_groups" class="tab-pane fade">
 				<?php
-					
+
 					if (sizeof($memberedgroups) == sizeof($ownedgroups))
 					{
 						echo '<h4 style="padding-top:30px">No groups joined. Search for a group to join: <a href="';
@@ -54,17 +54,17 @@
 								$memberedsize = sizeof($memberedgroups);
 								$ownedsize = sizeof($ownedgroups);
 								$ownedsameasmembered = false;
-								for ($x = 0; $x < $memberedsize; $x++) { 
+								for ($x = 0; $x < $memberedsize; $x++) {
 									//excludes all groups user is an owner but is a member of
 									for ($y = 0; $y < $ownedsize; $y++) {
 										if ($memberedgroups[$x]->org_id == $ownedgroups[$y]->org_id) {
 											$ownedsameasmembered = true;
 										}
-									}									
+									}
 									if ($ownedsameasmembered != true) {
-										echo "<div class='col-md-3 id= '".$memberedgroups[$x]->org_id."'>";
+										echo "<div class='col-md-3 >";
 										echo "<p class='org-title'>".$memberedgroups[$x]->org_title."</p>";
-										echo "<a href='".base_url()."index.php/Group/display/".$memberedgroups[$x]->org_id."'>";
+										echo "<a id= '".$memberedgroups[$x]->org_id."' href='".base_url()."index.php/Group/display/".$memberedgroups[$x]->org_id."'>";
 										echo "<img class='img-responsive center-cropped' src='";
 										echo base_url()."uploads/".$memberedgroups[$x]->org_picture."' alt='".$memberedgroups[$x]->org_title."'></a></div>";
 									}

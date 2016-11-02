@@ -17,12 +17,12 @@
 	<?php echo form_close(); ?>
 	    <div class="container">
 				<div>
-					<button class="btn btn-danger filter-button" data-filter="all">All</button>
-					<button class="btn btn-default filter-button" data-filter="Movies">Movies</button>
-					<button class="btn btn-default filter-button" data-filter="Education">Education</button>
-					<button class="btn btn-default filter-button" data-filter="Sports">Sports</button>
-					<button class="btn btn-default filter-button" data-filter="Food">Food</button>
-					<button class="btn btn-default filter-button" data-filter="Coffee">Coffee</button>
+					<button id ="bAll" class="btn btn-danger filter-button" data-filter="all">All</button>
+					<button id ="bMovies"  class="btn btn-default filter-button" data-filter="Movies">Movies</button>
+					<button id ="bEducation"  class="btn btn-default filter-button" data-filter="Education">Education</button>
+					<button id ="bSports"  class="btn btn-default filter-button" data-filter="Sports">Sports</button>
+					<button id ="bFood"  class="btn btn-default filter-button" data-filter="Food">Food</button>
+					<button id ="bCoffee"  class="btn btn-default filter-button" data-filter="Coffee">Coffee</button>
 				</div>
 	        <div class="row no-gutter">
 						<?php
@@ -56,7 +56,7 @@ function displayTiles($groups){
 	foreach($groups as $group){
 		echo "<div class='col-md-3 filter ".$group['tag_title']."'>";
 		echo "<p class='org-title'>".$group['org_title']."</p>";
-		echo "<a href='".base_url()."index.php/Group/display/".$group['org_id']."'>";
+		echo "<a id='".$group['org_id']."' href='".base_url()."index.php/Group/display/".$group['org_id']."'>";
 		echo "<img class='img-responsive center-cropped' src='";
 		echo base_url()."uploads/".$group['org_picture']."' alt='".$group['org_title']."'></a></div>";
 	}
