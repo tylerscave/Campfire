@@ -30,14 +30,27 @@ class User_model extends CI_Model {
 
 	// insert new user into DB
 	function insert_user($user_data, $location_data) {
-		// insert values into user
+		// insert values into user and get the user ID
 		$user_success = $this->db->insert('user', $user_data);
-		// Get the user ID
 		$user_id = $this->db->insert_id();
-		// insert values into location
-		$location_success = $this->db->insert('location', $location_data);
-		// Get the location ID
-		$location_id = $this->db->insert_id();
+		//Check if location is in database
+		$this->db->start_cache();
+		$this->db->where('zipcode', $location_data['zipcode']);
+		$this->db->where('address_one', '');
+		$this->db->where('address_two', '');
+		$query = $this->db->get('location');
+		$this->db->stop_cache();
+		$this->db->flush_cache();
+		//If location isnt in database yet
+		if ($query->num_rows() == 0){
+			// insert values into location and get the location ID
+			$location_success = $this->db->insert('location', $location_data);
+			$location_id = $this->db->insert_id();
+		} else {
+			$locResult = $query->result();
+			$location_id = $locResult[0]->location_id;
+			$location_success = TRUE;
+		}
 		// Create array of id_data to insert in DB
 		$id_data = array(
 			'user_id' => $user_id,
@@ -63,6 +76,7 @@ class User_model extends CI_Model {
 		//Check if location is in database
 		$this->db->start_cache();
 		$this->db->where('zipcode', $location_data['zipcode']);
+		$this->db->where('street', '');
 		$query = $this->db->get('location');
 		$this->db->stop_cache();
 		$this->db->flush_cache();

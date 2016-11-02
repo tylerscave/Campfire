@@ -15,6 +15,7 @@ class MyEvents extends CI_Controller {
 		$this->load->library('session');
 		$this->load->database();
 		$this->load->model('user_model');
+		$this->load->model('event_model');
 	}
 
 	function index() {
@@ -22,6 +23,12 @@ class MyEvents extends CI_Controller {
 		$details = $this->user_model->get_user_by_id($this->session->userdata('uid'));
 		$data['uname'] = $details[0]->user_fname . " " . $details[0]->user_lname;
 		$data['uemail'] = $details[0]->user_email;
+		
+		// get all events for user
+		$group_member = $this->event_model->get_events_by_user_id($this->session->userdata('uid'), 'rsvp');
+		$group_owner = $this->event_model->get_events_by_user_id($this->session->userdata('uid'), 'owned');
+		$data['memberedevents'] = $group_member;
+		$data['ownedevents'] = $group_owner;
 
 		// load and populate the profile_view
 		$this->load->view('myEvents_view', $data);

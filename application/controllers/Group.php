@@ -26,32 +26,54 @@ class Group extends CI_Controller {
 		$zip = $this->input->get('zip');
 
 		if($zip){
-			$group_search_info = $this->group_model->search_groups_zip($zip);
+			$json = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($zip));
+			$match = json_decode($json);
+			$group_search_info = $this->group_model->search_groups_zip($match->results[0]->geometry->location->lat, $match->results[0]->geometry->location->lng);
+			$random_group_query = '';
 		}
 		else{
-			$group_search_info ='';
+			$group_search_info = '';
+			$random_group_query = $this->group_model->get_random_groups();
 		}
 
 
-		if($group_search_info){
-			$groups = array();
-			foreach($group_search_info as $key => $val){
-				$groups[$key] = $val;
-			}
-			$arr['groups'] = $groups;
+		if($group_search_info){//for displaying searched groups
+
+			$arr['groups'] = $group_search_info;
+			$this->load->view('searchGroups_view', $arr);
+		}
+		else if($random_group_query){ //for displaying random groups
+
+			$arr['random'] = $random_group_query;
 			$this->load->view('searchGroups_view', $arr);
 		}
 		else{
 			$this->load->view('searchGroups_view');
 		}
 	}
-	
+
 	function display($gID = NULL){
 		if ($gID != NULL) {
+			$uid = $this->session->userdata('uid');
 			$arr['gID'] = $gID;
-			$group_data = $this->group_model->get_group_by_id($gID);
-			if ($group_data != NULL) {
-				$this->load->view('group_view', $group_data);
+			$data['info'] = $this->group_model->get_group_by_id($gID);
+			$data['members'] = $this->group_model->get_group_members($gID);
+
+			$member_status = 'nonmember';
+			if ( $uid == $data['info']['user_id']) {
+				$member_status = 'owner';
+			}
+			else {
+				foreach($data['members'] as $row) {
+					if ($row['user_id'] == $uid) {
+						$member_status="member";
+					}
+				}
+			}
+
+			$data['status'] = $member_status;
+			if ($data != NULL) {
+				$this->load->view('group_view', $data);
 			} else {
 				redirect('group/search');
 			}
@@ -59,5 +81,24 @@ class Group extends CI_Controller {
 			redirect('group/search');
 		}
 
+
+	}
+
+	function join_group($gID = NULL) {
+		if ($gID != NULL) {
+			$arr['gID'] = $gID;
+			$uid = $this->session->userdata('uid');
+			$this->group_model->join_group($uid, $gID);
+		}
+		redirect('group/display/'.$gID);
+	}
+
+	function leave_group($gID = NULL) {
+		if ($gID != NULL) {
+			$arr['gID'] = $gID;
+			$uid = $this->session->userdata('uid');
+			$this->group_model->leave_group($uid, $gID);
+		}
+		redirect('group/display/'.$gID);
 	}
 }

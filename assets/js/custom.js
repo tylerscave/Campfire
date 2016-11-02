@@ -90,3 +90,5 @@ function confirmDelete() {
 	    }
 	});
 }
+
+// end of custom.js

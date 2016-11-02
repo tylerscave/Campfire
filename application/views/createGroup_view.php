@@ -11,17 +11,17 @@
 			<legend>Create Group</legend>
 			<div class="form-group">
 				<label for="groupName">Group Name</label>
-				<input class="form-control" name="groupName" placeholder="Group Name" type="text" value="<?php echo set_value('groupName'); ?>" />
-				<span class="text-danger"><?php echo form_error('groupName'); ?></span>
+				<input id="groupName" class="form-control" name="groupName" placeholder="Group Name" type="text" value="<?php echo set_value('groupName'); ?>" />
+				<span id="groupName_error" class="text-danger"><?php echo form_error('groupName'); ?></span>
 			</div>
 			<div class="form-group">
 				<label for="name">Group Zip Code</label>
-				<input class="form-control" name="zip" placeholder="Group Zip Code" type="text" value="<?php echo set_value('zip'); ?>" />
-				<span class="text-danger"><?php echo form_error('zip'); ?></span>
+				<input id="groupZip" class="form-control" name="zip" placeholder="Group Zip Code" type="text" value="<?php echo set_value('zip'); ?>" />
+				<span id="groupZip_error" class="text-danger"><?php echo form_error('zip'); ?></span>
 			</div>
 			<div class="form-group">
 				<label for="tag">Choose Tag</label>
-				<select class="form-control" name="tag">
+				<select id="groupTag" class="form-control" name="tag">
 					<?php
 					foreach($tag_list as $row) {
 						echo '<option>'.$row.'</option>';
@@ -31,17 +31,17 @@
 			</div>
 			<div class="form-group">
 				<label for="description">Group Description</label>
-				<textarea class="form-control" rows="5" name="description" value="<?php echo set_value('description'); ?>"></textarea>
-				<span class="text-danger"><?php echo form_error('description'); ?></span>
+				<textarea id="groupDescription" class="form-control" rows="5" name="description" value="<?php echo set_value('description'); ?>"></textarea>
+				<span id="groupDescription_error" class="text-danger"><?php echo form_error('description'); ?></span>
 			</div>
 			<div class="form-group">
 				<label for="imageUpload">Upload an Image</label>
-				<input class="file" name="imageUpload" type="file" />
-				<span class="text-danger"><?php echo form_error('imageUpload'); ?></span>
+				<input id="groupImage" class="file" name="imageUpload" type="file" />
+				<span id="groupimage_error" class="text-danger"><?php echo form_error('imageUpload'); ?></span>
 			</div>
 			<div class="form-group">
-				<button name="submit" type="submit" class="btn btn-info">Create Group</button>
-				<button type="button" class="btn btn-info" onclick="location.href='../home/index'">Cancel</button>
+				<button id="bSubmit" name="submit" type="submit" class="btn btn-info">Create Group</button>
+				<button id="bCancel" type="button" class="btn btn-info" onclick="location.href='<?php echo base_url();?>index.php/home/index'">Cancel</button>
 			</div>
 			<?php echo form_close(); ?>
 			<?php echo $this->session->flashdata('msg'); ?>

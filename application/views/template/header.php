@@ -10,7 +10,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Home | Campfire</title>
+	<title>Campfire | <?php $ci =& get_instance(); echo ucfirst($ci->uri->segment(1)); ?></title>
 	<link rel="shortcut icon" type="image/x-icon" href="<?php echo base_url("assets/img/favicon.png"); ?>">
 	<!--link local CSS files  :  note that javascript is linked at the bottom of page-->
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
@@ -24,7 +24,7 @@
 	<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="<?php echo base_url("assets/js/custom.js"); ?>"></script>
 </head>
-<body data-spy="scroll" data-target=".navbar" data-offset="50">
+<body data-spy="scroll" data-target=".navbar" data-offset="80">
 
   <?php
   //Due to a flickering issue on page load, authenticated navbar and normal navbar would be stored in seprate files
