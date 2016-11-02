@@ -26,7 +26,9 @@ class Group extends CI_Controller {
 		$zip = $this->input->get('zip');
 
 		if($zip){
-			$group_search_info = $this->group_model->search_groups_zip($zip);
+			$json = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($zip));
+			$match = json_decode($json);
+			$group_search_info = $this->group_model->search_groups_zip($match->results[0]->geometry->location->lat, $match->results[0]->geometry->location->lng);
 			$random_group_query = '';
 		}
 		else{
@@ -56,7 +58,7 @@ class Group extends CI_Controller {
 			$arr['gID'] = $gID;
 			$data['info'] = $this->group_model->get_group_by_id($gID);
 			$data['members'] = $this->group_model->get_group_members($gID);
-			
+
 			$member_status = 'nonmember';
 			if ( $uid == $data['info']['user_id']) {
 				$member_status = 'owner';
@@ -68,7 +70,7 @@ class Group extends CI_Controller {
 					}
 				}
 			}
-			
+
 			$data['status'] = $member_status;
 			if ($data != NULL) {
 				$this->load->view('group_view', $data);
@@ -78,10 +80,10 @@ class Group extends CI_Controller {
 		} else {
 			redirect('group/search');
 		}
-		
+
 
 	}
-	
+
 	function join_group($gID = NULL) {
 		if ($gID != NULL) {
 			$arr['gID'] = $gID;
@@ -90,7 +92,7 @@ class Group extends CI_Controller {
 		}
 		redirect('group/display/'.$gID);
 	}
-	
+
 	function leave_group($gID = NULL) {
 		if ($gID != NULL) {
 			$arr['gID'] = $gID;

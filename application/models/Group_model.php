@@ -121,15 +121,15 @@ class Group_model extends CI_Model {
 
 		if ($user_type == 'member') {
 			$data = $this->db->query('SELECT * FROM organization c JOIN
-											(SELECT org_id FROM member m 
+											(SELECT org_id FROM member m
 												WHERE m.user_id =(SELECT user_id FROM user u where u.user_id = '.$id.')) AS f
 											USING(org_id)');
-										
-						
+
+
 		}
 		else if ($user_type == 'owner') {
 			$data = $this->db->query('SELECT * FROM organization c JOIN
-											(SELECT org_id FROM owner ow 
+											(SELECT org_id FROM owner ow
 												WHERE ow.user_id =(SELECT user_id FROM user u where u.user_id = '.$id.')) AS f
 											USING(org_id)');
 		}
@@ -161,23 +161,39 @@ class Group_model extends CI_Model {
 
 	// get first and last name of members in a group
 	function get_group_members($group_id) {
-		$query = $this->db->query('SELECT user.user_id, user.user_fname, user.user_lname 
-											FROM user, member 
-											WHERE user.user_id = member.user_id 
+		$query = $this->db->query('SELECT user.user_id, user.user_fname, user.user_lname
+											FROM user, member
+											WHERE user.user_id = member.user_id
 											AND member.org_id = '.$group_id.';');
 		$group_members = array();
 		foreach ($query->result_array() as $row) {
-			$group_members[] = array('user_fname' => $row['user_fname'], 'user_lname' => $row['user_lname'], 'user_id' =>$row['user_id']); 
+			$group_members[] = array('user_fname' => $row['user_fname'], 'user_lname' => $row['user_lname'], 'user_id' =>$row['user_id']);
 		}
 		return $group_members;
 	}
 
 	//input: zip code
 	//output: array of matching groups information
-	function search_groups_zip($zip){
+	function search_groups_zip($lat, $lng){
+
+		$radius = 3958.761; //earth mean radius, in miles
+		$distance = 10; //miles radius for search
+
+		// latitude boundaries
+		$maxLat = (float) $lat + rad2deg($distance / $radius);
+		$minLat = (float) $lat - rad2deg($distance / $radius);
+
+		// longitude boundaries (longitude gets smaller when latitude increases)
+		$maxLng = (float) $lng + rad2deg($distance / $radius / cos(deg2rad((float) $lat)));
+		$minLng = (float) $lng - rad2deg($distance / $radius / cos(deg2rad((float) $lat)));
+
 		$query = $this->db->query("SELECT t2.*, t5.tag_title from location t1, organization t2, organization_location t3, organization_tag t4, tag t5
-			WHERE t1.zipcode = $zip AND t1.location_id = t3.location_id AND t2.org_id = t3.org_id
-			AND t2.org_id = t4.org_id AND  t4.tag_id = t5.tag_id");
+			WHERE t1.location_id = t3.location_id AND t2.org_id = t3.org_id
+			AND t2.org_id = t4.org_id AND  t4.tag_id = t5.tag_id
+			AND t1.geolat > $minLat AND t1.geolat < $maxLat AND t1.geolng > $minLng AND t1.geolng < $maxLng
+			ORDER BY ABS(t1.geolat - $lat) + ABS(t1.geolng - $lng)
+			ASC;");
+
 		return $query->result_array();
 	}
 
@@ -192,10 +208,10 @@ class Group_model extends CI_Model {
 		try {
 			//update organization table with new values
 			$group_success = $this->db->query('UPDATE organization
-							SET org_title = "'.$group_data['org_title'].'", org_description = "'.$group_data['org_description'].'", 
+							SET org_title = "'.$group_data['org_title'].'", org_description = "'.$group_data['org_description'].'",
 											org_picture = "'.$group_data['org_picture'].'"
 							WHERE org_id = "'.$group_data['org_id'].'"');
-							
+
 
 			//Update organization_location table with new value
 			//Check if location is in database
@@ -244,18 +260,18 @@ class Group_model extends CI_Model {
 			return FALSE;
 		}
 	}
-	
+
 	// join a group
 	function join_group($uid, $gid) {
 		$data = array('user_id' => $uid, 'org_id' => $gid);
 		$this->db->insert('member', $data);
 	}
-	
+
 	// leave a group
 	function leave_group($uid, $gid) {
 		$this->db->delete('member', array('user_id' =>$uid, 'org_id' =>$gid));
 	}
-	
+
 	// delete group from database
 	function delete_group($gID) {
 		$this->db->where('org_id', $gID);

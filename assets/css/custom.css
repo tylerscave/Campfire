@@ -310,3 +310,4 @@ Hover Effects
   -webkit-transform: translate3d(0,0,0);
   transform: translate3d(0,0,0);
 }
+button:focus { outline:0 !important; }

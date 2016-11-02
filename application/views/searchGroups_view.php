@@ -7,7 +7,7 @@
 				echo form_open("group/search", $attributes); ?>
 
 		<div class="form-group">
-				<input type="search" class="form-control" id="zip" name="zip" placeholder="Enter a zip code">
+				<input type="search" class="form-control" id="zip" name="zip" placeholder="Enter a city, state, or zip">
 		</div>
 		<div class="form-group">
 			<button type="submit" id="searchButton" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> </button>
@@ -17,12 +17,12 @@
 	<?php echo form_close(); ?>
 	    <div class="container">
 				<div>
-					<button class="btn btn-danger filter-button" data-filter="all">All</button>
-					<button class="btn btn-default filter-button" data-filter="Movies">Movies</button>
-					<button class="btn btn-default filter-button" data-filter="Education">Education</button>
-					<button class="btn btn-default filter-button" data-filter="Sports">Sports</button>
-					<button class="btn btn-default filter-button" data-filter="Food">Food</button>
-					<button class="btn btn-default filter-button" data-filter="Coffee">Coffee</button>
+					<button class="btn btn-default filter-button" id="all-btn" data-filter="all">All</button>
+					<button class="btn btn-default filter-button" id="movies-btn" data-filter="Movies">Movies</button>
+					<button class="btn btn-default filter-button" id="education-btn" data-filter="Education">Education</button>
+					<button class="btn btn-default filter-button" id="sports-btn" data-filter="Sports">Sports</button>
+					<button class="btn btn-default filter-button" id="food-btn" data-filter="Food">Food</button>
+					<button class="btn btn-default filter-button" id="coffee-btn" data-filter="Coffee">Coffee</button>
 				</div>
 	        <div class="row no-gutter">
 						<?php
@@ -65,7 +65,8 @@ function displayTiles($groups){
 
 <script>
 $(document).ready(function(){
-
+	var clicked = "btn btn-default filter-button active";
+	var defaultBtn = "btn btn-default filter-button";
     $(".filter-button").click(function(){
         var value = $(this).attr('data-filter');
 
@@ -79,6 +80,8 @@ $(document).ready(function(){
             $('.filter').filter('.'+value).show('3000');
 
         }
+				$(".filter-button").removeClass(clicked).addClass(defaultBtn);
+				$('#'+value.toLowerCase()+'-btn').addClass(clicked);
     });
 
 });
