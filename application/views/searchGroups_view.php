@@ -56,7 +56,7 @@ function displayTiles($groups){
 	foreach($groups as $group){
 		echo "<div class='col-md-3 filter ".$group['tag_title']."'>";
 		echo "<p class='org-title'>".$group['org_title']."</p>";
-		echo "<a href='".base_url()."index.php/Group/display/".$group['org_id']."'>";
+		echo "<a id='".$group['org_id']."' href='".base_url()."index.php/Group/display/".$group['org_id']."'>";
 		echo "<img class='img-responsive center-cropped' src='";
 		echo base_url()."uploads/".$group['org_picture']."' alt='".$group['org_title']."'></a></div>";
 	}

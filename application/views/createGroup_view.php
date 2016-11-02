@@ -41,7 +41,7 @@
 			</div>
 			<div class="form-group">
 				<button id="bSubmit" name="submit" type="submit" class="btn btn-info">Create Group</button>
-				<button id="bCancel" type="button" class="btn btn-info" onclick="location.href='../home/index'">Cancel</button>
+				<button id="bCancel" type="button" class="btn btn-info" onclick="location.href='<?php echo base_url();?>index.php/home/index'">Cancel</button>
 			</div>
 			<?php echo form_close(); ?>
 			<?php echo $this->session->flashdata('msg'); ?>
