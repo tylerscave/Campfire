@@ -64,8 +64,9 @@ class CreateGroup extends CI_Controller {
 			//new filename for uploaded file
 			$filename = $_FILES['imageUpload']['name'];
 			$ext = pathinfo($filename, PATHINFO_EXTENSION);
-			$newFileName = $targetDir . '/' . $this->session->userdata('fname') . time() . "." . $ext;
-			$simpleNewFileName = $this->session->userdata('fname') . time() . "." . $ext;
+			$filePrefix =  str_replace("'", '', $this->session->userdata('fname'));
+			$newFileName = $targetDir . '/' . $filePrefix . time() . "." . $ext;
+			$simpleNewFileName = $filePrefix . time() . "." . $ext;
 			//read binary data from image file
 			$imgString = file_get_contents($_FILES['imageUpload']['tmp_name']);
 			//create image from string
@@ -125,7 +126,7 @@ class CreateGroup extends CI_Controller {
 			}
 		}
 	}
-	
+
 	function ext_check() {
 		$filename = $_FILES['imageUpload']['name'];
 		$ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
