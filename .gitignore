@@ -6,6 +6,7 @@ npm-debug.log
 /node_modules
 /vendor
 
+application/config/*
 application/cache/*
 !application/cache/index.html
 !application/cache/.htaccess
