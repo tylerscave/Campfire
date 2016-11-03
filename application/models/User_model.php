@@ -104,8 +104,9 @@ class User_model extends CI_Model {
 	function delete_user($user_id) {
 		$this->db->delete('user', array('user_id'=> $user_id));
 		$this->db->delete('user_location', array('user_id' => $user_id));
-
-		$this->db->delete('user_location', array('user_id' => $user_id));
+		$this->db->delete('attendee', array('user_id' => $user_id));
+		$this->db->delete('member', array('user_id' => $user_id));
+		$this->db->delete('owner', array('user_id' => $user_id));
 	}
 
 	// insert user_id and location_id into DB
