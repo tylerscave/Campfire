@@ -260,7 +260,7 @@ class Group_model extends CI_Model {
 			return FALSE;
 		}
 	}
-	
+
 	// gets bulletin message for group
 	function get_bulletins($gid) {
 		$query = $this->db->query('SELECT t1.user_fname, t1.user_lname, t3.bulletin_message, t3.bulletin_datetime
@@ -271,9 +271,9 @@ class Group_model extends CI_Model {
 									ORDER BY t3.bulletin_datetime DESC');
 		$group_bulletins = array();
 		foreach ($query->result_array() as $row) {
-			$group_bulletins[] = array('user_fname' => $row['user_fname'], 'user_lname' => $row['user_lname'], 
+			$group_bulletins[] = array('user_fname' => $row['user_fname'], 'user_lname' => $row['user_lname'],
 					'bulletin_message' =>$row['bulletin_message'], 'bulletin_datetime' => $row['bulletin_datetime']);
-		} 
+		}
 		return $group_bulletins;
 	}
 
@@ -298,5 +298,11 @@ class Group_model extends CI_Model {
 		$this->db->delete('organization_tag');
 		$this->db->where('org_id', $gID);
 		$this->db->delete('organization_event');
+        $this->db->where('org_id', $gID);
+        $this->db->delete('organization_bulletin');
+        $this->db->where('org_id', $gID);
+        $this->db->delete('member');
+        $this->db->where('org_id', $gID);
+        $this->db->delete('owner');
 	}
 }
