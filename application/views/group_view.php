@@ -20,8 +20,10 @@
 									echo '<a class="btn btn-info pull-right" id="editGroupButton" href="'.base_url().'index.php/EditGroup/index/'.$info['org_id'].'">Edit Group</a>';
 								} else if ($status == 'member') {
 									echo '<a class="btn btn-info pull-right" id="leaveGroupButton" href="'.base_url().'index.php/Group/leave_group/'.$info['org_id'].'">Leave</a>';
-								} else {
+								} else  if ($status == 'nonmember'){
 									echo '<a class="btn btn-info pull-right" id="joinGroupButton" href="'.base_url().'index.php/Group/join_group/'.$info['org_id'].'">Join</a>';
+								} else {
+									echo '<a class="btn btn-info pull-right" id="joinGroupButton" href="'.base_url().'index.php/Login">Login to Join</a>';
 								}
 								?></div>
 								<table class="table">
@@ -69,8 +71,16 @@
 					<div class="panel panel-default">
 						<div class="panel-heading"><h5 class="panel-title">Bulletin Board</h5></div>
 						<div class="panel-body">
-							Here are all messages for the group
-							<table class="table">
+							<table class="table table-responsive">
+							<?php 
+								foreach ($bulletins as $row) {
+									echo '<tr class="row">';
+									echo '<td class="col-md-2">'.$row['user_fname'].' '.substr($row['user_lname'], 0,1).'.</td>';
+									echo '<td class="col-md-2">'.$row['bulletin_datetime'].'.</td>';
+									echo '<td class="col-md-8"><p style="font-size: 14px;">'.$row['bulletin_message'].'</p></td>';
+									echo '</tr>';
+								}
+							?>
 							</table>
 						</div>
 					</div>
