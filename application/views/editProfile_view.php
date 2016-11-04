@@ -12,22 +12,22 @@
 
 				<div class="form-group">
 					<label for="name">First Name</label>
-					<input class="form-control" name="fname" placeholder="First Name" type="text" value="<?php echo set_value('fname'); ?>" />
+					<input class="form-control" name="fname" placeholder="First Name" type="text" value="<?php echo set_value('fname', $user_data['user_fname']); ?>" />
 					<span class="text-danger"><?php echo form_error('fname'); ?></span>
 				</div>
 				<div class="form-group">
 					<label for="name">Last Name</label>
-					<input class="form-control" name="lname" placeholder="Last Name" type="text" value="<?php echo set_value('lname'); ?>" />
+					<input class="form-control" name="lname" placeholder="Last Name" type="text" value="<?php echo set_value('lname', $user_data['user_lname']); ?>" />
 					<span class="text-danger"><?php echo form_error('lname'); ?></span>
 				</div>
 				<div class="form-group">
 					<label for="name">Zip Code</label>
-					<input class="form-control" name="zip" placeholder="Zip Code" type="text" value="<?php echo set_value('zip'); ?>" />
+					<input class="form-control" name="zip" placeholder="Zip Code" type="text" value="<?php echo set_value('zip', $user_data['zipcode']); ?>" />
 					<span class="text-danger"><?php echo form_error('zip'); ?></span>
 				</div>
 				<div class="form-group">
 					<label for="email">Email</label>
-					<input class="form-control" name="email" placeholder="Email" type="text" value="<?php echo set_value('email'); ?>" />
+					<input class="form-control" name="email" placeholder="Email" type="text" value="<?php echo set_value('email', $user_data['user_email']); ?>" />
 					<span class="text-danger"><?php echo form_error('email'); ?></span>
 				</div>
 				<div class="form-group">
@@ -42,7 +42,7 @@
 				</div>
 				<div class="form-group">
 					<button name="update" type="submit" value="update" class="btn btn-info">Update</button>
-					<button name="cancel" type="button" class="btn btn-info" onclick="location.href='home/index'">Cancel</button>
+					<button name="cancel" type="button" class="btn btn-info" onclick="location.href='<?php echo base_url();?>index.php/home'">Cancel</button>
 					<button name="delete" type="button" value="delete" class="btn btn-danger pull-right" onclick="confirmDelete()">Delete Account</button>
 					<?php echo form_close(); ?>
 				</div>

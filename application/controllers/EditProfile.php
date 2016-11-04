@@ -26,7 +26,9 @@ class EditProfile extends CI_Controller {
 
 	function index() {
 		$user_id = $this->session->userdata('uid');
-		$userData = $this->user_model->get_user_by_id($user_id);
+		$tempUserData = $this->user_model->get_user_by_id($user_id);
+		$data['user_data'] = array('user_fname' => $tempUserData[0]->user_fname,'user_lname' => $tempUserData[0]->user_lname,
+				'user_email' => $tempUserData[0]->user_email, 'zipcode' => $tempUserData[0]->zipcode);
 		
 		// set form validation rules
 		$this->form_validation->set_rules('fname', 'First Name', 'trim|required|regex_match[#^[a-zA-Z\'-]+$#]|min_length[2]|max_length[30]|xss_clean');
@@ -37,13 +39,10 @@ class EditProfile extends CI_Controller {
 		$this->form_validation->set_rules('cpassword', 'Confirm Password', 'trim|required');
 		
 		
-		
-		if ($this->input->post('cancel')) {
-			redirect('home/index');
-		} else if ($this->form_validation->run() == FALSE) {
+		if ($this->form_validation->run() == FALSE) {
 	
 			// if it fails just load the view again
-			$this->load->view('editProfile_view');
+			$this->load->view('editProfile_view', $data);
  			
  		} else {
 			//prepare to update user details into user table
@@ -65,11 +64,11 @@ class EditProfile extends CI_Controller {
 				$this->session->set_userdata('fname', $user_data['user_fname']);
 				$this->session->set_userdata('lname', $user_data['user_lname']);
 				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">You have Successfully Updated your account! </div>');
-				redirect('editProfile/index');
+				redirect('editProfile');
 			} else {
 				// error
 				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error.  Please try again later!!!</div>');
-				redirect('editProfile/index');
+				redirect('editProfile');
 			}
 		}
 	}

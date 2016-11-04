@@ -11,6 +11,8 @@ class User_model extends CI_Model {
 	// constructor for the user_model
 	function __construct() {
 		parent::__construct();
+		$this->load->model('event_model');
+		$this->load->model('group_model');
 	}
 
 	// get user for for login validation
@@ -23,8 +25,11 @@ class User_model extends CI_Model {
 
 	// get user by ID
 	function get_user_by_id($id) {
-		$this->db->where('user_id', $id);
-		$query = $this->db->get('user');
+		$query = $this->db->query('SELECT t1.user_fname, t1.user_lname, t1.user_email, t3.zipcode
+									FROM user t1, user_location t2, location t3
+									WHERE t1.user_id = '.$id.'
+									AND t1.user_id = t2.user_id
+									AND t2.location_id = t3.location_id');
 		return $query->result();
 	}
 
@@ -102,10 +107,23 @@ class User_model extends CI_Model {
 
 	// delete user from database
 	function delete_user($user_id) {
+		$owned_groups = $this->group_model->get_groups($user_id, 'owner');
+		$owned_events = $this->event_model->get_events_by_user_id($user_id, 'owned');
+		
+		for ($x = 0; $x < sizeof($owned_groups); $x++) {
+			$this->group_model->delete_group($owned_groups[$x]->org_id);
+		}
+		
+		for ($x = 0; $x < sizeof($owned_events); $x++) {
+			$this->group_model->delete_event($owned_events[$x]->event_id);
+		}
+		
 		$this->db->delete('user', array('user_id'=> $user_id));
 		$this->db->delete('user_location', array('user_id' => $user_id));
-
-		$this->db->delete('user_location', array('user_id' => $user_id));
+		$this->db->delete('attendee', array('user_id' => $user_id));
+		$this->db->delete('bulletin', array('bulletin_user_id' => $user_id));
+		$this->db->delete('member', array('user_id' => $user_id));
+		$this->db->delete('owner', array('user_id' => $user_id));
 	}
 
 	// insert user_id and location_id into DB

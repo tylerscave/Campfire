@@ -22,6 +22,7 @@
 	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
 	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/wow/1.1.2/wow.js"></script>
 	<script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="<?php echo base_url("assets/js/bootbox.min.js"); ?>"></script>
 	<script type="text/javascript" src="<?php echo base_url("assets/js/custom.js"); ?>"></script>
 </head>
 <body data-spy="scroll" data-target=".navbar" data-offset="80">

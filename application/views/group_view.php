@@ -9,12 +9,12 @@
 			<div class="col-md-8 col-md-offset-2 ">
 				<div class="row">
 					<div class="col-md-3">
-				      	<img height="200" width="200" src="<?php echo base_url().'uploads/'.$info['org_picture']?>" alt="...">
+				      	<img id="groupPicture" height="200" width="200" src="<?php echo base_url().'uploads/'.$info['org_picture']?>" alt="...">
 				  	</div>
 			  		<div class="col-md-9">
 						<div class="row">
 							<div class=" col-md-12 panel panel-default">
-								<div class="panel-body"><?php echo $info['org_title'];?>
+								<div class="panel-body" id="groupTitleText"><?php echo $info['org_title'];?>
 								<?php 
 								if ($status == 'owner') {
 									echo '<a class="btn btn-info pull-right" id="editGroupButton" href="'.base_url().'index.php/EditGroup/index/'.$info['org_id'].'">Edit Group</a>';
@@ -28,8 +28,8 @@
 								?></div>
 								<table class="table">
 									<tr>
-										<td><?php echo $info['user_fname'].' '.$info['user_lname'];?></td>
-										<td><?php echo $info['user_email']?></td>
+										<td id="groupOwnerName"><?php echo $info['user_fname'].' '.$info['user_lname'];?></td>
+										<td id="groupOwnerEmail"><?php echo $info['user_email']?></td>
 									</tr>
 								</table>
 							</div>
@@ -62,7 +62,7 @@
 				<div class="row">
 					<div class="panel panel-default">
 						<div class="panel-heading"><h5 class="panel-title">Description</h5></div>
-						<div class="panel-body">
+						<div class="panel-body" id="groupDescriptionText">
 							<?php echo $info['org_description'];?>
 						</div>
 					</div>
