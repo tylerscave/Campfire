@@ -305,4 +305,10 @@ class Group_model extends CI_Model {
         $this->db->where('org_id', $gID);
         $this->db->delete('owner');
 	}
+	
+	// gets all org_id's for organizations owned by this user
+	function get_owned_by_uid($uid) {
+		$data = $this->db->query('SELECT org_id FROM owner WHERE user_id='.$uid.'');
+		return $data->result();
+	}
 }
