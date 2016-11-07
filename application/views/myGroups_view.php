@@ -7,8 +7,8 @@
 	<div class="row" style="padding-top:50px">
 	<div class="container-fluid">
 		<ul class="nav nav-pills nav-justified" style="background-color:white">
-		<li class="active"><a data-toggle="tab" href="#owned_groups">Owned</a></li>
-		<li><a data-toggle="tab" href="#joined_groups">Joined</a></li>
+		<li id="owned_groupsTab" class="active"><a data-toggle="tab" href="#owned_groups">Owned</a></li>
+		<li id="joined_groupsTab"><a data-toggle="tab" href="#joined_groups">Joined</a></li>
 		</ul>
 
 		<div class="tab-content">

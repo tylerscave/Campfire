@@ -51,4 +51,13 @@ class Event_model extends CI_Model {
 
 		return $data->result();
 	}
+
+	// delete event by event id
+	function delete_event($event_id) {
+		$this->db->delete('event', array('event_id' => $event_id));
+		$this->db->delete('event_bulletin', array('event_id' => $event_id));
+		$this->db->delete('event_owner', array('event_id' => $event_id));
+		$this->db->delete('event_location', array('event_id' => $event_id));
+		$this->db->delete('event_tag', array('event_id' => $event_id));
+	}
 }

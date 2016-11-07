@@ -261,6 +261,22 @@ class Group_model extends CI_Model {
 		}
 	}
 
+	// gets bulletin message for group
+	function get_bulletins($gid) {
+		$query = $this->db->query('SELECT t1.user_fname, t1.user_lname, t3.bulletin_message, t3.bulletin_datetime
+									FROM User t1, organization_bulletin t2, bulletin t3
+									WHERE t2.org_id = '.$gid.'
+									AND t2.bulletin_id = t3.bulletin_id
+									AND t3.bulletin_datetime >= DATE_ADD(NOW(), INTERVAL -30 DAY)
+									ORDER BY t3.bulletin_datetime DESC');
+		$group_bulletins = array();
+		foreach ($query->result_array() as $row) {
+			$group_bulletins[] = array('user_fname' => $row['user_fname'], 'user_lname' => $row['user_lname'],
+					'bulletin_message' =>$row['bulletin_message'], 'bulletin_datetime' => $row['bulletin_datetime']);
+		}
+		return $group_bulletins;
+	}
+
 	// join a group
 	function join_group($uid, $gid) {
 		$data = array('user_id' => $uid, 'org_id' => $gid);
@@ -282,5 +298,17 @@ class Group_model extends CI_Model {
 		$this->db->delete('organization_tag');
 		$this->db->where('org_id', $gID);
 		$this->db->delete('organization_event');
+        $this->db->where('org_id', $gID);
+        $this->db->delete('organization_bulletin');
+        $this->db->where('org_id', $gID);
+        $this->db->delete('member');
+        $this->db->where('org_id', $gID);
+        $this->db->delete('owner');
+	}
+	
+	// gets all org_id's for organizations owned by this user
+	function get_owned_by_uid($uid) {
+		$data = $this->db->query('SELECT org_id FROM owner WHERE user_id='.$uid.'');
+		return $data->result();
 	}
 }

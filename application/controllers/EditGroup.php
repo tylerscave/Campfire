@@ -7,7 +7,6 @@
  *     Luis Otero, Jorge Aguiniga, Stephen Piazza, Jatinder Verma
 */
 class EditGroup extends CI_Controller {
-
 	// constructor used for needed initialization
 	public function __construct() {
 		parent::__construct();
@@ -24,8 +23,21 @@ class EditGroup extends CI_Controller {
 	}
 
 	function index($gID = NULL) {
-		// Get the old group data before update
+		$groupsOwned = $this->group_model->get_owned_by_uid($this->session->userdata('uid'));
+		$owned = FALSE;
 		if ($gID != NULL) {
+			// Check if user is owner of this group
+			foreach ($groupsOwned as &$value) {
+				if ($gID == $value->org_id) {
+					$owned = TRUE;
+					break;
+				}
+			}
+			// If not the owner of this group, then redirect
+			if (!$owned) {
+				redirect('home/index');
+			}
+			// Get the old group data before update
 			$data['oldGroupData'] = $this->group_model->get_group_by_id($gID);
 			$sess_data = array('gID' => $gID, 'oldPhoto' => $data['oldGroupData']['org_picture']);
 			$this->session->set_userdata($sess_data);

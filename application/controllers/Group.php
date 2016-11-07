@@ -58,9 +58,13 @@ class Group extends CI_Controller {
 			$arr['gID'] = $gID;
 			$data['info'] = $this->group_model->get_group_by_id($gID);
 			$data['members'] = $this->group_model->get_group_members($gID);
+			$data['bulletins'] = $this->group_model->get_bulletins($gID);
 
 			$member_status = 'nonmember';
-			if ( $uid == $data['info']['user_id']) {
+			if ($this->session->userdata('login') == FALSE) {
+				$member_status = 'notlogged';
+			}
+			else if ( $uid == $data['info']['user_id']) {
 				$member_status = 'owner';
 			}
 			else {
