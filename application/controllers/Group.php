@@ -22,27 +22,31 @@ class Group extends CI_Controller {
 	}
 
 	function search(){
-		// get form input from the view
-		$zip = $this->input->get('zip');
 
-		if($zip){
-			$json = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($zip));
-			$match = json_decode($json);
-			$group_search_info = $this->group_model->search_groups_zip($match->results[0]->geometry->location->lat, $match->results[0]->geometry->location->lng);
-			$random_group_query = '';
+		// get form input from the view
+		$query = $this->input->get('groupQuery');
+
+		if($query){
+
+			$json = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($query)); //http request, output is a json object
+			$match = json_decode($json);//decode json object into a php variable
+
+			//if search is invalid
+			if(empty($match->results) == false){
+				$group_search_info = $this->group_model->search_groups_query($match->results[0]->geometry->location->lat, $match->results[0]->geometry->location->lng); //input first geolocation
+			}
 		}
 		else{
-			$group_search_info = '';
 			$random_group_query = $this->group_model->get_random_groups();
 		}
 
 
-		if($group_search_info){//for displaying searched groups
+		if(isset($group_search_info)){//for displaying searched groups
 
 			$arr['groups'] = $group_search_info;
 			$this->load->view('searchGroups_view', $arr);
 		}
-		else if($random_group_query){ //for displaying random groups
+		else if(isset($random_group_query)){ //for displaying random groups
 
 			$arr['random'] = $random_group_query;
 			$this->load->view('searchGroups_view', $arr);

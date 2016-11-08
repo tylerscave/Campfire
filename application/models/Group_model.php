@@ -172,9 +172,9 @@ class Group_model extends CI_Model {
 		return $group_members;
 	}
 
-	//input: zip code
+	//input: geolocation
 	//output: array of matching groups information
-	function search_groups_zip($lat, $lng){
+	function search_groups_query($lat, $lng){
 
 		$radius = 3958.761; //earth mean radius, in miles
 		$distance = 10; //miles radius for search
@@ -305,7 +305,7 @@ class Group_model extends CI_Model {
         $this->db->where('org_id', $gID);
         $this->db->delete('owner');
 	}
-	
+
 	// gets all org_id's for organizations owned by this user
 	function get_owned_by_uid($uid) {
 		$data = $this->db->query('SELECT org_id FROM owner WHERE user_id='.$uid.'');

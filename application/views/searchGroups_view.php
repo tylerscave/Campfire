@@ -7,7 +7,7 @@
 				echo form_open("group/search", $attributes); ?>
 
 		<div class="form-group">
-				<input type="search" class="form-control" id="zip" name="zip" placeholder="Enter a city, state, or zip">
+				<input type="search" class="form-control" id="groupQuery" name="groupQuery" placeholder="Enter a city or zip">
 		</div>
 		<div class="form-group">
 			<button type="submit" id="searchButton" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> </button>
@@ -31,7 +31,7 @@
 								displayTiles($groups);
 							}
 							else{
-								if($this->input->get('zip')){
+								if($this->input->get('groupQuery')){
 									echo "<h1>0 Groups Found</h1>";
 								}
 								else{
