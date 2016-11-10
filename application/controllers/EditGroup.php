@@ -44,6 +44,8 @@ class EditGroup extends CI_Controller {
 		} else {
 			$data['oldGroupData']['org_title'] = "";
 			$data['oldGroupData']['zipcode'] = "";
+			//No group id --> redirect user after displaying error flash data 
+			header("refresh:3; url=".base_url()."/index.php/myGroups/index");
 		}
 
 		//dynamically populate the tag_list for the dropdown
@@ -54,7 +56,7 @@ class EditGroup extends CI_Controller {
 
 		// set form validation rules
 		$this->form_validation->set_rules('groupName', 'Group Name', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[30]|xss_clean');
-		$this->form_validation->set_rules('zip', 'Group Zip Code', 'trim|required|numeric|min_length[5]|max_length[10]|xss_clean');
+		$this->form_validation->set_rules('zip', 'Group Zip Code', 'trim|required|numeric|min_length[5]|max_length[5]|xss_clean');
 		$this->form_validation->set_rules('description', 'Group Description', 'required|max_length[200]|xss_clean');
 		if (!empty($_FILES['imageUpload']['tmp_name'])) {
 			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'callback_ext_check');
@@ -152,7 +154,7 @@ class EditGroup extends CI_Controller {
 				redirect('editGroup/index');
 			} else {
 				// error
-				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error.  Please try again later!!!</div>');
+				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error. Please try again later!!!</div>');
 				redirect('editGroup/index');
 			}
 		}
