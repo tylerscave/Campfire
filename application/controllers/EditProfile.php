@@ -28,19 +28,17 @@ class EditProfile extends CI_Controller {
 		$user_id = $this->session->userdata('uid');
 		$tempUserData = $this->user_model->get_user_by_id($user_id);
 		$data['user_data'] = array('user_fname' => $tempUserData[0]->user_fname,'user_lname' => $tempUserData[0]->user_lname,
-				'user_email' => $tempUserData[0]->user_email, 'zipcode' => $tempUserData[0]->zipcode);
+				'user_email' => $tempUserData[0]->user_email);
 		
 		// set form validation rules
 		$this->form_validation->set_rules('fname', 'First Name', 'trim|required|regex_match[#^[a-zA-Z\'-]+$#]|min_length[2]|max_length[30]|xss_clean');
 		$this->form_validation->set_rules('lname', 'Last Name', 'trim|required|regex_match[#^[a-zA-Z\'-]+$#]|min_length[2]|max_length[30]|xss_clean');
-		$this->form_validation->set_rules('zip', 'Zip Code', 'trim|required|numeric|min_length[5]|max_length[10]|xss_clean');
 		$this->form_validation->set_rules('email', 'Email ID', 'trim|required|valid_email|callback_email_check');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|matches[cpassword]');
 		$this->form_validation->set_rules('cpassword', 'Confirm Password', 'trim|required');
 		
 		
 		if ($this->form_validation->run() == FALSE) {
-	
 			// if it fails just load the view again
 			$this->load->view('editProfile_view', $data);
  			
@@ -52,14 +50,8 @@ class EditProfile extends CI_Controller {
 				'user_email' => $this->input->post('email'),
 				'User_password' => md5($this->input->post('password', TRUE))
 			);
-			//prepare to update user location details into location table
-			$location_data = array(
-				'address_one' => '',
-				'address_two' => '',
-				'zipcode' => $this->input->post('zip')
-			);
 			
-			if ($this->user_model->update_user($user_id, $user_data, $location_data)) {
+			if ($this->user_model->update_user($user_id, $user_data)) {
 				// success!!!
 				$this->session->set_userdata('fname', $user_data['user_fname']);
 				$this->session->set_userdata('lname', $user_data['user_lname']);

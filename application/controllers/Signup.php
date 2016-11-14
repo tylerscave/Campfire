@@ -22,7 +22,6 @@ class Signup extends CI_Controller {
 		// set form validation rules
 		$this->form_validation->set_rules('fname', 'First Name', 'trim|required|regex_match[#^[a-zA-Z\'-]+$#]|min_length[1]|max_length[30]|xss_clean');
 		$this->form_validation->set_rules('lname', 'Last Name', 'trim|required|regex_match[#^[a-zA-Z\'-]+$#]|min_length[1]|max_length[30]|xss_clean');
-		$this->form_validation->set_rules('zip', 'Zip Code', 'trim|required|numeric|min_length[5]|max_length[10]|xss_clean');
 		$this->form_validation->set_rules('email', 'Email ID', 'trim|required|valid_email|is_unique[user.user_email]');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required|matches[cpassword]');
 		$this->form_validation->set_rules('cpassword', 'Confirm Password', 'trim|required');
@@ -39,14 +38,8 @@ class Signup extends CI_Controller {
 				'user_email' => $this->input->post('email'),
 				'User_password' => md5($this->input->post('password', TRUE))
 			);
-			//prepare to insert user location details into location table
-			$location_data = array(
-				'address_one' => '',
-				'address_two' => '',
-				'zipcode' => $this->input->post('zip')
-			);
 			
-			if ($this->user_model->insert_user($user_data, $location_data)) {
+			if ($this->user_model->insert_user($user_data)) {
 				// success!!!
 				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">You are Successfully Registered! Please login to access your Profile!</div>');
 				redirect('signup/index');
