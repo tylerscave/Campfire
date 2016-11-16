@@ -26,7 +26,8 @@ class CreateGroup extends CI_Controller {
 	function index() {
 		//dynamically populate the tag_list for the dropdown
 		$data['tag_list'] = $this->group_model->get_dropdown_list();
-
+		//set last entered description to be displayed if error occurred
+		$data['description'] = $this->input->post('description');
 		//new directory for images
 		$targetDir = './uploads/';
 
@@ -117,12 +118,12 @@ class CreateGroup extends CI_Controller {
 
 			if ($this->group_model->insert_group($group_data, $location_data, $tag_data, $owner_data) && $image_success) {
 				// success!!!
-				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Group has been successfully created!</div>');
+				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Group has been successfully created! Please click Cancel if you are finished creating groups.</div>');
 				redirect('createGroup/index');
 			} else {
 				// error!!!
 				$this->removeImage($simpleNewFileName); // Remove image upload if group was not created
-				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error.  Please try again later!!!</div>');
+				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error. Please try again later!!!</div>');
 				redirect('createGroup/index');
 			}
 		}
