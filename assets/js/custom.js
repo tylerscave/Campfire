@@ -94,7 +94,6 @@ $(function () {
     $('#startDate').datetimepicker({
     startDate,
     format: 'mm/dd/yyyy h:i', 
-    // format: 'yyyy-mm-dd h:i:s', 
     minuteStep: 15,
     autoclose: true,
     });
@@ -112,6 +111,15 @@ $(function () {
         $('#startDate').data("DateTimePicker").setMaxDate(e.date);
     });
 });
+
+function initialize() {
+
+var input = document.getElementById('searchTextField');
+var autocomplete = new google.maps.places.Autocomplete(input);
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+// end of custom.js
+
 
 // $(function () {
 //         $('#startDate').datetimepicker();
@@ -137,4 +145,4 @@ $(function () {
 //   });
 // };
 
-// end of custom.js
+

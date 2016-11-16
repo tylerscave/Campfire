@@ -43,6 +43,7 @@
 
 	<script type="text/javascript" src="<?php echo base_url("assets/js/bootbox.min.js"); ?>"></script>
 	<script type="text/javascript" src="<?php echo base_url("assets/js/custom.js"); ?>"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
 
 </head>
 <body data-spy="scroll" data-target=".navbar" data-offset="80">

@@ -47,18 +47,19 @@ class CreateEvent extends CI_Controller {
 
 		//Event form
 		//set form validations
-		// $this->form_validation->set_rules('eventTitle', 'Event Title', 'trim|required|regex_match[	#]|min_length[1]|max_length[30]|xss_clean');
 		$this->form_validation->set_rules('eventTitle', 'Event Title', 'trim|required|callback_check_text|min_length[1]|max_length[30]|xss_clean');
 			// array('check_text' => 'This text is not allowed.')
-		
+
+		$this->form_validation->set_rules('address1','Street address', 'trim|required|xss_clean'); 
+		$this->form_validation->set_rules('address2','Street address', 'trim|xss_clean'); 
+		$this->form_validation->set_rules('eventCity','City', 'trim|required|xss_clean'); 
+		$this->form_validation->set_rules('eventState','State', 'trim|required|min_length[2]|max_length[2]|xss_clean');
 		$this->form_validation->set_rules('eventZip','Event Zip Code', 
 			'trim|required|numeric|min_length[5]|max_length[10]|xss_clean');
-		$this->form_validation->set_rules('eventDTStart', 'Event Start', 'trim|required|xss_clean');
-			// array(	'trim' => 'trim.',
-			// 		'required'=> 'required.'
-			// 	);
 
+		$this->form_validation->set_rules('eventDTStart', 'Event Start', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('eventDTEnd', 'Event End', 'trim|xss_clean');
+
 		$this->form_validation->set_rules('eventDescription', 'Event Description', 'trim|required|max_length[200]|xss_clean');
 
 		// submit the form and validate
@@ -74,43 +75,8 @@ class CreateEvent extends CI_Controller {
 
 	    $enddate = $this->input->post('eventDTEnd');
 		$eventData["endTime"] = date('Y-m-d H:i:s', strtotime($enddate));
-		// print_r($eventData["startTime"]);
 		//works
-
-		// $date = date("Y-m-d H:i:s", $myTime);
-		// $format = "MM/DD/YY HH:II";
-		// $dateobj = DateTime::createFromFormat($format, $eventData["startTime"]);
-		// print_r($dateobj);	
-
 		//put back in post
-
-		// $date = 'date('Y-m-d', strtotime($when));
-		// print_r($date);
-		// $startDT = date_format($date,"Y-m-d H:i:s");
-		// $startDT = human_to_unix('eventDTStart');
-		// print_r($startDT);
-		// $datestring = 'Year: %Y Month: %m Day: %d - %h:%i %a';
-		// $time = human_to_unix('eventDTStart');
-		// $startDT1 = mdate($datestring, $time);
-		// print_r($startDT1);
-
-		// $myTime = strtotime("eventDTStart"); 
-		// $myTime = unix_to_human($time = 'eventDTStart', $fmt = 'us')
-		// print_r(eventDTStart);
-		// $myTime = now(); 
-		// print_r($myTime);
-		// $myTime = strtotime("08/19/2014 1:45 pm"); 
-		// echo date("Y-m-d H:i:s", $myTime);
-
-		// $startT= date("Y-m-d H:i:s", $myTime);
-		// print_r($startDT);
-		// $format = "MM/DD/YY HH:II";
-		// $dateobj = DateTime::createFromFormat($format, now());
-		// print_r($dateobj);		
-
-		// $dateobj = DateTime::createFromFormat($format, $myTime);
-		// print_r($dateobj);
-
 
 		//prepare to insert group details into event table
 		$event_data = array(
@@ -118,16 +84,20 @@ class CreateEvent extends CI_Controller {
 			'event_description' => $this->input->post('eventDescription'),
 			'event_begin_datetime' => $eventData["startTime"],
 			'event_end_datetime' => $eventData["endTime"],
-			'event_picture' => "this is a test"
+			'event_picture' => "test picture"
 		);
 		// print_r($event_data);
 
-		// //prepare to insert user location details into location table
-		// 	$location_data = array(
-		// 		'address_one' => '',
-		// 		'address_two' => '',
-		// 		'zipcode' => $this->input->post('zip')
-		// 	);
+		//prepare to insert user location details into location table
+			$location_data = array(
+				'address_one' => $this->input->post('address1'),
+				'address_two' => $this->input->post('address2'),
+				'city' => $this->input->post('eventCity'),
+				'state' => $this->input->post('eventState'),
+				'zipcode' => $this->input->post('eventZip'),
+			  	'geolat' =>'',
+				'geolng' =>''
+			);
 
 		// //prepare to insert group tag details into tag table
 		// $eventtag_data = array(
@@ -139,9 +109,9 @@ class CreateEvent extends CI_Controller {
 		// 	'user_id' => $this->session->userdata('uid')
 		// );	
 
-		if ($this->event_model->insert_event($event_data) /*$eventlocation_data, $eventtag_data, $eventowner_data*/){
+		if ($this->event_model->insert_event($event_data, $location_data/*, $eventtag_data, $eventowner_data*/)){
 			// success!!!
-			echo "event success";
+			// echo "event success";
 
 			$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Event has been successfully created!</div>');
 			redirect('createEvent/index');
@@ -151,21 +121,11 @@ class CreateEvent extends CI_Controller {
 				// $this->removeImage($simpleNewFileName); // Remove image upload if group was not created
 				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error.  Please try again later!!!</div>');
 				echo "event error";
-				redirect('createEvent/index');
+				// redirect('createEvent/index');
 
 			}
 		} //else	
 	}//createEvent
-	// function checkDateFormat($date) {
-	// 	if (preg_match("/[0-31]{2}\/[0-12]{2}\/[0-9]{4}/", $date)) {
-	// 		if(checkdate(substr($date, 3, 2), substr($date, 0, 2), substr($date, 6, 4)))
-	// 			return true;
-	// 		else
-	// 			return false;
-	// 	} else {
-	// 		return false;
-	// 	}
-	// }//function
 
 	/*
 	* used to check description & title text
@@ -183,6 +143,110 @@ class CreateEvent extends CI_Controller {
 		// regex_match[#^[ \'a-zA-Z0-9]-]+$#]
 
 	}
+/**
+ * States Dropdown 
+ *
+ * @uses check_select
+ * @param string $post, the one to make "selected"
+ * @param string $type, by default it shows abbreviations. 'abbrev', 'name' or 'mixed'
+ * @return string
+ */
+function StateDropdown($post=null, $type='abbrev') {
+	$states = array(
+		array('AK', 'Alaska'),
+		array('AL', 'Alabama'),
+		array('AR', 'Arkansas'),
+		array('AZ', 'Arizona'),
+		array('CA', 'California'),
+		array('CO', 'Colorado'),
+		array('CT', 'Connecticut'),
+		array('DC', 'District of Columbia'),
+		array('DE', 'Delaware'),
+		array('FL', 'Florida'),
+		array('GA', 'Georgia'),
+		array('HI', 'Hawaii'),
+		array('IA', 'Iowa'),
+		array('ID', 'Idaho'),
+		array('IL', 'Illinois'),
+		array('IN', 'Indiana'),
+		array('KS', 'Kansas'),
+		array('KY', 'Kentucky'),
+		array('LA', 'Louisiana'),
+		array('MA', 'Massachusetts'),
+		array('MD', 'Maryland'),
+		array('ME', 'Maine'),
+		array('MI', 'Michigan'),
+		array('MN', 'Minnesota'),
+		array('MO', 'Missouri'),
+		array('MS', 'Mississippi'),
+		array('MT', 'Montana'),
+		array('NC', 'North Carolina'),
+		array('ND', 'North Dakota'),
+		array('NE', 'Nebraska'),
+		array('NH', 'New Hampshire'),
+		array('NJ', 'New Jersey'),
+		array('NM', 'New Mexico'),
+		array('NV', 'Nevada'),
+		array('NY', 'New York'),
+		array('OH', 'Ohio'),
+		array('OK', 'Oklahoma'),
+		array('OR', 'Oregon'),
+		array('PA', 'Pennsylvania'),
+		array('PR', 'Puerto Rico'),
+		array('RI', 'Rhode Island'),
+		array('SC', 'South Carolina'),
+		array('SD', 'South Dakota'),
+		array('TN', 'Tennessee'),
+		array('TX', 'Texas'),
+		array('UT', 'Utah'),
+		array('VA', 'Virginia'),
+		array('VT', 'Vermont'),
+		array('WA', 'Washington'),
+		array('WI', 'Wisconsin'),
+		array('WV', 'West Virginia'),
+		array('WY', 'Wyoming')
+	);
+	
+	$options = '<option value=""></option>';
+	
+	foreach ($states as $state) {
+		if ($type == 'abbrev') {
+    	$options .= '<option value="'.$state[0].'" '. check_select($post, $state[0], false) .' >'.$state[0].'</option>'."\n";
+    } elseif($type == 'name') {
+    	$options .= '<option value="'.$state[1].'" '. check_select($post, $state[1], false) .' >'.$state[1].'</option>'."\n";
+    } elseif($type == 'mixed') {
+    	$options .= '<option value="'.$state[0].'" '. check_select($post, $state[0], false) .' >'.$state[1].'</option>'."\n";
+    }
+	}
+		
+	echo $options;
+}
+
+/**
+ * Check Select Element 
+ *
+ * @param string $i, POST value
+ * @param string $m, input element's value
+ * @param string $e, return=false, echo=true 
+ * @return string 
+ */
+function check_select($i,$m,$e=true) {
+	if ($i != null) { 
+		if ( $i == $m ) { 
+			$var = ' selected="selected" '; 
+		} else {
+			$var = '';
+		}
+	} else {
+		$var = '';	
+	}
+	if(!$e) {
+		return $var;
+	} else {
+		echo $var;
+	}
+}
+
 }//controller
 
 

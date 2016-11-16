@@ -29,12 +29,48 @@
 					<?php echo $uname; ?></h4>
 				</div>	
 			</div>
+			<!-- address -->
+<!-- 			<div class="form -group row">
+ --><!-- 	 			<div class="col-sm-8 ">
+ -->					<!-- <label>Address</label> -->
+	<!-- 				 <div id="locationField">
+   		 				<input id="autocomplete" placeholder="Enter your address"
+           				  onFocus="geolocate()" type="text"></input>
+					 </div>
+					<input id="searchTextField" class ="form-control" name = "address" type="text" placeholder="Address" value="<?php //echo set_value('address'); ?>" />
+					<span id="eventCity_error" class="text-danger"><?php //echo form_error('event address'); ?></span>
+				</div>
+			</div> -->
+			<!-- <div class="form -group row "></div> -->
 
-			<!-- Zip Code -->
+			<!--Street address  -->
 			<div class="form -group row">
-				<div class="col-sm-6">
-					<!-- <label for="name">Event Zip Code</label> -->
-					<input id="eventZip" class="form-control" name="eventZip" placeholder="Location" type="text" value="<?php echo set_value('eventZip'); ?>" />
+				<div class="col-sm-10 ">
+					<input id="address1" class="form-control" name="address1" placeholder="Address" type="text" value="<?php echo set_value('address1'); ?>" />
+					<span id="eventAddress1_error" class="text-danger"><?php echo form_error('address1'); ?></span>
+				</div>
+			</div>
+			<div class="form -group row">
+				<div class="col-sm-10 ">
+					<input id="address2" class="form-control" name="address2" placeholder="Address 2" type="text" value="<?php echo set_value('address2'); ?>" />
+					<span id="eventAddress2_error" class="text-danger"><?php echo form_error('address2'); ?></span>
+				</div>
+			</div>
+
+			<!-- City, State, Zip -->
+			<div class="form -group row">
+				<div class="col-sm-5">
+					<input id="eventCity" class="form-control" name="eventCity" placeholder="City" type="text" value="<?php echo set_value('eventCity'); ?>" />
+					<span id="eventCity_error" class="text-danger"><?php echo form_error('eventCity'); ?></span>
+				</div>
+				<div class="col-sm-2">
+				<!-- Drop down list to select from(inactive) -->
+				<!-- 	<select id="eventState" class="form-control" name="eventState"><?php //echo StateDropdown('New Hampshire', 'name'); ?></select> -->
+					<input id="eventState" class="form-control" name="eventState" placeholder="--" value="<?php echo set_value('eventState'); ?>" />
+					<span id="eventState_error" class="text-danger"><?php echo form_error('eventState'); ?></span>	
+				</div>
+				<div class="col-sm-5">
+					<input id="eventZip" class="form-control" name="eventZip" placeholder="Zip Code" type="text" value="<?php echo set_value('eventZip'); ?>" />
 					<span id="eventZip_error" class="text-danger"><?php echo form_error('eventZip'); ?></span>
 				</div>
 			</div>
@@ -43,8 +79,8 @@
 			<!--Event End Date  -->
 			<div class="form -group row">
 				<div class='col-sm-6'>
-<!-- 					<div class="form-group">
- -->						<div class='input-group date', id='startDate'> 
+					<!-- <div class="form-group"> -->
+						<div class='input-group date', id='startDate'> 
 							<input type='datetime'  class="form-control" name='eventDTStart' placeholder = "Start Date" value="<?php echo set_value('eventDTStart'); ?>" />
 							<span id="eventDTStart_error" class="text-danger"><?php echo form_error('eventDTStart'); ?></span>
 						</span>
