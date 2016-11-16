@@ -208,7 +208,8 @@ class Group_model extends CI_Model {
 
 	//output: array of random groups information
 	function get_random_groups(){
-		$query	= $this->db->query("SELECT t1.*, t3.tag_title FROM organization t1, organization_tag t2, tag t3 WHERE t1.org_id = t2.org_id AND t2.tag_id = t3.tag_id ORDER BY RAND() LIMIT 0,12;");
+		$query	= $this->db->query("SELECT t1.*, t3.tag_title, (SELECT COUNT(member.member_id) FROM member WHERE t1.org_id = member.org_id) as members_count
+		 														FROM organization t1, organization_tag t2, tag t3 WHERE t1.org_id = t2.org_id AND t2.tag_id = t3.tag_id ORDER BY RAND() LIMIT 0,12;");
 		return $query->result_array();
 	}
 
