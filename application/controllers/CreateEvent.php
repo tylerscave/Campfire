@@ -99,17 +99,15 @@ class CreateEvent extends CI_Controller {
 				'geolng' =>''
 			);
 
-		// //prepare to insert group tag details into tag table
-		// $eventtag_data = array(
-		// 	'tag_title' => $this->input->post('tag')
-		// );
+			//prepare to tag title into tag table
+			$tag_title = $this->input->post('tag');
 
-		// //prepare to insert owner id into owner table
-		// $eventowner_data = array(
-		// 	'user_id' => $this->session->userdata('uid')
-		// );	
+		//prepare to insert owner id into owner table
+		$eventowner_data = array(
+			'owner_id' => $this->session->userdata('uid')
+		);	
 
-		if ($this->event_model->insert_event($event_data, $location_data/*, $eventtag_data, $eventowner_data*/)){
+		if ($this->event_model->insert_event($event_data, $location_data, $tag_title, $eventowner_data)){
 			// success!!!
 			// echo "event success";
 
