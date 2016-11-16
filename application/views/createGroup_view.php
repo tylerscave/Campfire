@@ -31,7 +31,7 @@
 			</div>
 			<div class="form-group">
 				<label for="description">Group Description</label>
-				<textarea id="groupDescription" class="form-control" rows="5" name="description" value="<?php echo set_value('description'); ?>"></textarea>
+				<textarea id="groupDescription" class="form-control" rows="5" name="description" value="<?php echo set_value('description'); ?>"><?php echo (isset($description) ? $description : ''); ?></textarea>
 				<span id="groupDescription_error" class="text-danger"><?php echo form_error('description'); ?></span>
 			</div>
 			<div class="form-group">
