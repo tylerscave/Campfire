@@ -26,7 +26,7 @@
 									}
 								}
 							} ?>
-							<div class="col-md-1 well" style="min-height: 100px;">
+							<div class="col-md-2 well" style="min-height: 100px;">
 								<div class="form-group">
 								  <label for="select-tag">Filter:</label>
 								  <select class="form-control" id="select-tag">
@@ -47,9 +47,13 @@
 								}else{
 										if(isset($random)){
 											displayTiles($random);
+
 										}
 									}
 									?>
+									<div class="col-md-12">
+										<?php $ci =& get_instance(); echo $ci->pagination->create_links(); ?>
+								</div>
 							</div>
 						</div>
 	    </div>
@@ -63,7 +67,14 @@
 <?php
 
 function displayTiles($groups){
-	for ($x = 0; $x < count($groups); $x++) {
+	$ci =& get_instance();
+	$per_page = $ci->input->get('per_page');
+	$index = 12 * $per_page;
+	$max = $index + 12;
+	if($max > count($groups)-1){
+		$max = count($groups); //in case of out of range error
+	}
+	for ($x = $index; $x < $max; $x++) {
 		echo "<div class='col-md-3 card filter ".$groups[$x]['tag_title']."'>";
 		echo "<a id='".$groups[$x]['org_id']."' href='".base_url()."index.php/Group/display/".$groups[$x]['org_id']."'><img class='img-responsive' src='";
 		echo base_url()."uploads/".$groups[$x]['org_picture']."' alt='".$groups[$x]['org_title']."'></a>";
