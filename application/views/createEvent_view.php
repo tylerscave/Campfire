@@ -25,8 +25,8 @@
 
 				<!-- hosted by "username" -->
 				<div class="col-sm-6">
-					<label for="name"><h4> hosted by </label>
-					<?php echo $uname; ?></h4>
+					<label for="name"><h5> hosted by </label>
+					<?php echo $uname; ?></h5>
 				</div>	
 			</div>
 			<!-- address -->
@@ -128,11 +128,11 @@
 		</div>
 
 		<div class="form-group row">
-			<div class="col-sm-4 col-md-offset-2">
+			<div class="col-md-6">
 				<button id="bReset" type="reset" class="btn btn-info">Reset</button>
 				<button id="bCancel" type="button" class="btn btn-danger" onclick="location.href='<?php echo base_url();?>index.php/home/index'">Cancel</button>
 			</div>
-			<div class="col-sm-4">
+			<div class="col-md-6">
 				<button id="bSubmit" type="submit" name="submit" action="controllers/CreateEvent/createEvent" class="btn btn-info">Create Event</button>
 			</div>
 		</div>

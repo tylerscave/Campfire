@@ -119,7 +119,7 @@ class CreateEvent extends CI_Controller {
 				// $this->removeImage($simpleNewFileName); // Remove image upload if group was not created
 				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error.  Please try again later!!!</div>');
 				echo "event error";
-				// redirect('createEvent/index');
+				redirect('createEvent/index');
 
 			}
 		} //else	
