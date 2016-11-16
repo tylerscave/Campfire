@@ -3,26 +3,22 @@
 <!-- End Header -->
 <!-- Body -->
 <div class="container custom-body">
-	<?php $attributes = array("class" => "form-inline global-search", "method" => "get");
+	<?php $attributes = array("class" => "form-wrapper cf", "method" => "get");
 				echo form_open("group/search", $attributes); ?>
-
-		<div class="form-group">
-				<input type="search" class="form-control" id="groupQuery" name="groupQuery" placeholder="Enter a city or zip">
-		</div>
-		<div class="form-group">
-			<button type="submit" id="searchButton" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> </button>
-		</div>
-
-<br/>
+				<div class="form-group">
+					<input type="text" class="form-control" id="groupQuery" name="groupQuery" placeholder="Enter a city or zip..." required>
+					<button type="submit" id="searchButton">Search </button>
+				</div>
 	<?php echo form_close(); ?>
-	    <div class="col-md-10 col-md-offset-1">
+
+	    <div class="col-md-10 col-md-offset-1 well" id="search-group-well">
 						<?php
 							if(isset($groups)) {
-								echo "<h3>".count($groups)." Group(s) Found:</h3>";
+								echo "<h5>".count($groups)." Group(s) Found:</h5>";
 							}
 							else{
 								if($this->input->get('groupQuery')){
-									echo "<h3>0 Groups Found</h3></div>";
+									echo "<h5>0 Groups Found</h5></div>";
 								}
 								else{
 									if(isset($random)){
@@ -34,16 +30,16 @@
 								<div class="form-group">
 								  <label for="select-tag">Filter:</label>
 								  <select class="form-control" id="select-tag">
-								    <option id="all-opt" data-filter="all">All</option>
+								    <option id="all-opt" data-filter="All">All</option>
 								    <option id="movies-opt" data-filter="Movies">Movies</option>
 								    <option id="education-opt" data-filter="Education">Education</option>
 								    <option id="sports-opt" data-filter="Sports">Sports</option>
 										<option id="food-opt" data-filter="Food">Food</option>
-										<option id="coffe-opt" data-filter="Coffee">Coffee</option>
+										<option id="coffee-opt" data-filter="Coffee">Coffee</option>
 								  </select>
 								</div>
 							</div>
-							<div class="col-md-10 well">
+							<div class="col-md-10 well" id="groups-found-well">
 								<div class="card-group">
 							<?php
 								if(isset($groups)) {
