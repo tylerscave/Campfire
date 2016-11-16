@@ -25,6 +25,14 @@ class EditGroup extends CI_Controller {
 	function index($gID = NULL) {
 		$groupsOwned = $this->group_model->get_owned_by_uid($this->session->userdata('uid'));
 		$owned = FALSE;
+		// if there was an error on last edit, recapture group id
+		if ($gID == NULL) {
+			$gID = $this->session->flashdata('gID');
+		}
+		// if the group was successfully edited redirect after delay to show success
+		if ($this->session->flashdata('editSuccess')) {
+			header("refresh:3; url=".base_url()."/index.php/myGroups/index");
+		}
 		if ($gID != NULL) {
 			// Check if user is owner of this group
 			foreach ($groupsOwned as &$value) {
@@ -44,8 +52,6 @@ class EditGroup extends CI_Controller {
 		} else {
 			$data['oldGroupData']['org_title'] = "";
 			$data['oldGroupData']['zipcode'] = "";
-			//No group id --> redirect user after displaying error flash data 
-			header("refresh:3; url=".base_url()."/index.php/myGroups/index");
 		}
 
 		//dynamically populate the tag_list for the dropdown
@@ -131,7 +137,6 @@ class EditGroup extends CI_Controller {
 				'org_picture' => $simpleNewFileName,
 				'org_tag' => $this->input->post('tag')
 			);
-			$this->session->unset_userdata('gID');
 			//prepare to insert user location details into location table
 			$location_data = array(
 				'address_one' => '',
@@ -150,11 +155,15 @@ class EditGroup extends CI_Controller {
 			// Set error/success messages
 			if ($this->group_model->update_group($group_data, $location_data, $tag_data)) {
 				// success!!!
-				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Group has been successfully updated with the new information!</div>');
+				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Group has been successfully updated with the new information! You will be redirected shortly.</div>');
+				$this->session->set_flashdata('editSuccess', true);
+				$this->session->unset_userdata('gID');
 				redirect('editGroup/index');
 			} else {
 				// error
 				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error. Please try again later!!!</div>');
+				$this->session->set_flashdata('gID', $this->session->userdata('gID'));
+				$this->session->unset_userdata('gID');
 				redirect('editGroup/index');
 			}
 		}
