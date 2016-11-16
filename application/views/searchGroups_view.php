@@ -82,7 +82,7 @@ function displayTiles($groups){
 		echo"<h4 class='card-title' id='card-title'>".$groups[$x]['org_title']."</h4>";
 		echo "<p class='card-text'>".$groups[$x]['org_description']."</p>
 		<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Group/display/".$groups[$x]['org_id']."'>See More</a>
-		<p class='card-text'><small class='text-muted'>Last updated 3 mins ago</small></p></div></div>";
+		<p class='card-text'><small class='text-muted'>Members:".$groups[$x]['members_count']."</small></p></div></div>";
 	}
 }
 ?>

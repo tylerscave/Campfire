@@ -70,8 +70,6 @@ class Group extends CI_Controller {
 				$config['first_tag_close'] = '</span></a></li>';
 
 				$this->pagination->initialize($config);
-
-
 			}
 			$arr['groups'] = $group_search_info;
 			$this->load->view('searchGroups_view', $arr);

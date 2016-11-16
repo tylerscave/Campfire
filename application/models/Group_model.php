@@ -196,7 +196,7 @@ class Group_model extends CI_Model {
 		$maxLng = (float) $lng + rad2deg($distance / $radius / cos(deg2rad((float) $lat)));
 		$minLng = (float) $lng - rad2deg($distance / $radius / cos(deg2rad((float) $lat)));
 
-		$query = $this->db->query("SELECT t2.*, t5.tag_title from location t1, organization t2, organization_location t3, organization_tag t4, tag t5
+		$query = $this->db->query("SELECT t2.*, t5.tag_title, (SELECT COUNT(member.member_id) FROM member WHERE t2.org_id = member.org_id) as members_count FROM location t1, organization t2, organization_location t3, organization_tag t4, tag t5
 			WHERE t1.location_id = t3.location_id AND t2.org_id = t3.org_id
 			AND t2.org_id = t4.org_id AND  t4.tag_id = t5.tag_id
 			AND t1.geolat > $minLat AND t1.geolat < $maxLat AND t1.geolng > $minLng AND t1.geolng < $maxLng
