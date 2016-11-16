@@ -90,5 +90,51 @@ function confirmDelete() {
 	    }
 	});
 }
+$(function () {
+    $('#startDate').datetimepicker({
+    startDate,
+    format: 'mm/dd/yyyy h:i', 
+    // format: 'yyyy-mm-dd h:i:s', 
+    minuteStep: 15,
+    autoclose: true,
+    });
+   
+    $('#endDate').datetimepicker({ 
+    format: 'mm/dd/yyyy h:i', 
+    minuteStep: 15,
+    autoclose: true 
+    });
+
+    $("#startDate").on("dp.change",function (e) {
+        $('#endDate').data("DateTimePicker").setMinDate(e.date);
+    });
+    $("#endDate").on("dp.change",function (e) {
+        $('#startDate').data("DateTimePicker").setMaxDate(e.date);
+    });
+});
+
+// $(function () {
+//         $('#startDate').datetimepicker();
+//         $('#endDate').datetimepicker({
+//             useCurrent: false //Important! See issue #1075
+//         });
+//         $("#startDate").on("dp.change", function (e) {
+//             $('#endDate').data("DateTimePicker").minDate(e.date);
+//         });
+//         $("#endDate").on("dp.change", function (e) {
+//             $('#startDate').data("DateTimePicker").maxDate(e.date);
+//         });
+//     });
+
+// function testJS() {
+//   jQuery('#eventDateTimeStart').datetimepicker();
+//   jQuery('#eventDateTimeEnd').datetimepicker();
+//   jQuery("#eventDateTimeStart").on("dp.change",function (e) {
+//         jQuery('#eventDateTimeEnd').data("DateTimePicker").setMinDate(e.date);
+//   });
+//   jQuery("#eventDateTimeEnd").on("dp.change",function (e) {
+//         jQuery('#eventDateTimeStart').data("DateTimePicker").setMaxDate(e.date);
+//   });
+// };
 
 // end of custom.js
