@@ -9,6 +9,7 @@
 			<?php $attributes = array("name" => "editgroupform");
 			echo form_open_multipart("editGroup/index", $attributes);?>
 			<legend>Edit Group</legend>
+			<?php echo $this->session->flashdata('msg'); ?>
 			<div class="form-group">
 				<label for="groupName">Group Name</label>
 				<input class="form-control" name="groupName" id="groupName"placeholder="Group Name" type="text" value="<?php echo set_value('groupName', $oldGroupData['org_title']); ?>" />
@@ -45,11 +46,10 @@
 				<?php if(isset($oldGroupData['org_id'])) : ?>
 					<a href="<?php echo base_url();?>index.php/editGroup/deleteGroup/<?php echo $oldGroupData['org_id'];?>"
 						onclick="return confirm('Are you sure you want to delete the group: <?php echo $oldGroupData['org_title'];?>?');">
-						<button name="delete" id="bDelete" type="button" class="btn btn-danger pull-right">Delete Group</button>
+						<button name="delete" id="bDelete" type="button" class="btn btn-danger">Delete Group</button>
 				<?php endif; ?>
 			</div>
 			<?php echo form_close(); ?>
-			<?php echo $this->session->flashdata('msg'); ?>
 		</div>
 	</div>
 </div>
