@@ -53,21 +53,21 @@ class Group extends CI_Controller {
 				$config['full_tag_open'] = '<nav><ul class="pagination">';
 				$config['full_tag_close'] = '</ul></nav>';
 				$config['prev_link'] = 'Previous';
-				$config['prev_tag_open'] = '<li class="page-item" id="prev"> <a class="page-link"> <span aria-hidden="true">';
-				$config['prev_tag_close'] = '</span></a></li>';
+				$config['prev_tag_open'] = '<li class="page-item" id="prev"> <span aria-hidden="true">';
+				$config['prev_tag_close'] = '</span></li>';
 				$config['cur_tag_open'] = '<li class="page-item active"><a class="page-link">';
 				$config['cur_tag_close'] = '</a></li>';
-				$config['num_tag_open'] =  '<li class="page-item"><a class="page-link">';
-				$config['num_tag_close'] =  '</a></li>';
+				$config['num_tag_open'] =  '<li class="page-item">';
+				$config['num_tag_close'] =  '</li>';
 				$config['next_link'] = 'Next';
-				$config['next_tag_open'] = '<li class="page-item" id="next"> <a class="page-link"> <span aria-hidden="true">';
-				$config['next_tag_close'] = '</span></a></li>';
+				$config['next_tag_open'] = '<li class="page-item" id="next"> <span aria-hidden="true">';
+				$config['next_tag_close'] = '</span></li>';
 				$config['last_link'] = '&raquo;';
-				$config['last_tag_open'] = '<li class="page-item"><a class="page-link" aria-label="Next"><span aria-hidden="true">';
-				$config['last_tag_close'] = '</span></a></li>';
+				$config['last_tag_open'] = '<li class="page-item"><span aria-hidden="true">';
+				$config['last_tag_close'] = '</span></li>';
 				$config['first_link'] = '&laquo;';
-				$config['first_tag_open'] = '<li class="page-item"><a class="page-link" aria-label="Previous"><span aria-hidden="true">';
-				$config['first_tag_close'] = '</span></a></li>';
+				$config['first_tag_open'] = '<li class="page-item"><span aria-hidden="true">';
+				$config['first_tag_close'] = '</span></li>';
 
 				$this->pagination->initialize($config);
 			}
