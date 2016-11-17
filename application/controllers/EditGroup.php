@@ -25,13 +25,16 @@ class EditGroup extends CI_Controller {
 	function index($gID = NULL) {
 		$groupsOwned = $this->group_model->get_owned_by_uid($this->session->userdata('uid'));
 		$owned = FALSE;
+		print("top groupID is ".$gID." ");
 		// if there was an error on last edit, recapture group id
 		if ($gID == NULL) {
 			$gID = $this->session->flashdata('gID');
+			print("middle groupID is ".$gID." ");
 		}
 		// if the group was successfully edited redirect after delay to show success
 		if ($this->session->flashdata('editSuccess')) {
-			header("refresh:3; url=".base_url()."/index.php/myGroups/index");
+			print("bottom groupID is ".$gID."");
+			header("refresh:3; url=".base_url()."/index.php/group/display/".$gID." ");
 		}
 		if ($gID != NULL) {
 			// Check if user is owner of this group
