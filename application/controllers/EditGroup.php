@@ -25,16 +25,14 @@ class EditGroup extends CI_Controller {
 	function index($gID = NULL) {
 		$groupsOwned = $this->group_model->get_owned_by_uid($this->session->userdata('uid'));
 		$owned = FALSE;
-		print("top groupID is ".$gID." ");
 		// if there was an error on last edit, recapture group id
 		if ($gID == NULL) {
 			$gID = $this->session->flashdata('gID');
-			print("middle groupID is ".$gID." ");
 		}
 		// if the group was successfully edited redirect after delay to show success
 		if ($this->session->flashdata('editSuccess')) {
 			print("bottom groupID is ".$gID."");
-			header("refresh:3; url=".base_url()."/index.php/group/display/".$gID." ");
+			header("refresh:5; url=".base_url()."/index.php/group/display/".$gID);
 		}
 		if ($gID != NULL) {
 			// Check if user is owner of this group
@@ -59,10 +57,8 @@ class EditGroup extends CI_Controller {
 
 		//dynamically populate the tag_list for the dropdown
 		$data['tag_list'] = $this->group_model->get_dropdown_list();
-
 		//new directory for images
 		$targetDir = './uploads/';
-
 		// set form validation rules
 		$this->form_validation->set_rules('groupName', 'Group Name', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[30]|xss_clean');
 		$this->form_validation->set_rules('zip', 'Group Zip Code', 'trim|required|numeric|min_length[5]|max_length[5]|xss_clean');
@@ -160,13 +156,11 @@ class EditGroup extends CI_Controller {
 				// success!!!
 				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Group has been successfully updated with the new information! You will be redirected shortly.</div>');
 				$this->session->set_flashdata('editSuccess', true);
-				$this->session->unset_userdata('gID');
+				$this->session->set_flashdata('gID', $this->session->userdata('gID'));
 				redirect('editGroup/index');
 			} else {
 				// error
 				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error. Please try again later!!!</div>');
-				$this->session->set_flashdata('gID', $this->session->userdata('gID'));
-				$this->session->unset_userdata('gID');
 				redirect('editGroup/index');
 			}
 		}
