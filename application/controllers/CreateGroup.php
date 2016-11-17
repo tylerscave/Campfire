@@ -35,6 +35,7 @@ class CreateGroup extends CI_Controller {
 		$this->form_validation->set_rules('groupName', 'Group Name', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[30]|xss_clean');
 		$this->form_validation->set_rules('zip', 'Group Zip Code', 'trim|required|numeric|min_length[5]|max_length[5]|xss_clean');
 		$this->form_validation->set_rules('description', 'Group Description', 'required|max_length[200]|xss_clean');
+		$this->form_validation->set_rules('description', 'Group Description', 'callback_badWord_check');
 		if (empty($_FILES['imageUpload']['tmp_name'])) {
 			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'required');
 		} else {
@@ -138,6 +139,20 @@ class CreateGroup extends CI_Controller {
 			$this->form_validation->set_message('ext_check', 'Must be a jpg, jpeg, or png file.');
 			return FALSE;
 		}
+	}
+	
+	function badWord_check($input) {
+		$fh = fopen(base_url().'assets/text_input/badWords.txt', 'r') or die($php_errormsg);
+		while (!feof($fh)) {
+			$line = fgets($fh, 1024);
+			if (preg_match("/".$line."/i", $input)) {
+				$this->form_validation->set_message('badWord_check', 'You have entered an inappropriate word! Lets keep it clean!!!.');
+				return FALSE;
+			} else {
+				return TRUE;
+			}
+		}
+		fclose($fh);
 	}
 	
 	function removeImage($fileName) {
