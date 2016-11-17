@@ -33,6 +33,7 @@ class CreateGroup extends CI_Controller {
 
 		// set form validation rules
 		$this->form_validation->set_rules('groupName', 'Group Name', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[30]|xss_clean');
+		$this->form_validation->set_rules('groupName', 'Group Name', 'callback_badWord_check');
 		$this->form_validation->set_rules('zip', 'Group Zip Code', 'trim|required|numeric|min_length[5]|max_length[5]|xss_clean');
 		$this->form_validation->set_rules('description', 'Group Description', 'required|max_length[200]|xss_clean');
 		$this->form_validation->set_rules('description', 'Group Description', 'callback_badWord_check');
@@ -144,8 +145,8 @@ class CreateGroup extends CI_Controller {
 	function badWord_check($input) {
 		$fh = fopen(base_url().'assets/text_input/badWords.txt', 'r') or die($php_errormsg);
 		while (!feof($fh)) {
-			$line = fgets($fh, 1024);
-			if (preg_match("/".$line."/i", $input)) {
+			$line = fgets($fh, 4096);
+			if (preg_match($line, $input)) {
 				$this->form_validation->set_message('badWord_check', 'You have entered an inappropriate word! Lets keep it clean!!!.');
 				return FALSE;
 			} else {
