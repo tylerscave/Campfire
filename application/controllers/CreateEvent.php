@@ -49,7 +49,7 @@ class CreateEvent extends CI_Controller {
 		//set form validations
 		$this->form_validation->set_rules('eventTitle', 'Event Title', 'trim|required|callback_check_text|min_length[1]|max_length[30]|xss_clean');
 			// array('check_text' => 'This text is not allowed.')
-
+		$this->form_validation->set_rules('eventTitle', 'Event Title', 'callback_badWord_check');
 		$this->form_validation->set_rules('address1','Street address', 'trim|required|xss_clean'); 
 		$this->form_validation->set_rules('address2','Street address', 'trim|xss_clean'); 
 		$this->form_validation->set_rules('eventCity','City', 'trim|required|xss_clean'); 
@@ -61,6 +61,7 @@ class CreateEvent extends CI_Controller {
 		$this->form_validation->set_rules('eventDTEnd', 'Event End', 'trim|xss_clean');
 
 		$this->form_validation->set_rules('eventDescription', 'Event Description', 'trim|required|max_length[200]|xss_clean');
+		$this->form_validation->set_rules('eventDescription', 'Event Description', 'callback_badWord_check');
 
 		// submit the form and validate
 		if ($this->form_validation->run() == FALSE) {
@@ -140,6 +141,23 @@ class CreateEvent extends CI_Controller {
 		// $this->form_validation->set_rules('eventTitle', 'Event Title', 'trim|required|regex_match[#^[ \'a-zA-Z0-9]-]+$#]|min_length[1]|max_length[30]|xss_clean');
 		// regex_match[#^[ \'a-zA-Z0-9]-]+$#]
 
+	}
+	
+	/**
+	* used for validation check on event title and description
+	*/
+	function badWord_check($input) {
+		$fh = fopen(base_url().'assets/text_input/badWords.txt', 'r') or die($php_errormsg);
+		while (!feof($fh)) {
+			$line = fgets($fh, 4096);
+			if (preg_match($line, strtolower($input))) {
+				$this->form_validation->set_message('badWord_check', 'You have entered an inappropriate word! Lets keep it clean!!!.');
+				return FALSE;
+			} else {
+				return TRUE;
+			}
+		}
+		fclose($fh);
 	}
 /**
  * States Dropdown 
