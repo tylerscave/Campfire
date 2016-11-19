@@ -19,6 +19,10 @@ class Signup extends CI_Controller {
 	}
 	
 	function index() {
+		// if the account was successfully created, redirect after delay to show success
+		if ($this->session->flashdata('editSuccess')) {
+			header("refresh:5; url=".base_url()."/index.php/login");
+		}
 		// set form validation rules
 		$this->form_validation->set_rules('fname', 'First Name', 'trim|required|regex_match[#^[a-zA-Z\'-]+$#]|min_length[1]|max_length[30]|xss_clean');
 		$this->form_validation->set_rules('lname', 'Last Name', 'trim|required|regex_match[#^[a-zA-Z\'-]+$#]|min_length[1]|max_length[30]|xss_clean');
@@ -41,7 +45,8 @@ class Signup extends CI_Controller {
 			
 			if ($this->user_model->insert_user($user_data)) {
 				// success!!!
-				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">You are Successfully Registered! Please login to access your Profile!</div>');
+				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">You are Successfully Registered! You are being redirected... Please login to access your Profile!</div>');
+				$this->session->set_flashdata('editSuccess', true);
 				redirect('signup/index');
 			} else {
 				// error
