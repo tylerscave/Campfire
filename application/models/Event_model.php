@@ -43,7 +43,7 @@ class Event_model extends CI_Model {
 			// //If location isnt in database yet
 			if ($loc_query->num_rows() == 0){
 				//get geocode from google if not in db
-		
+
 				// Get geocode for this address
 				$geocode = $this->getGeo(
 					$location_data['address_one'] . " " .
@@ -80,7 +80,7 @@ class Event_model extends CI_Model {
 			$event_id = $this->db->insert_id();
 			// print_r($loc_query);
 
-			//event_location	
+			//event_location
 			$event_location['event_id'] = $event_id;
 			$event_location['location_id'] = $location_id;
 			$event_location_success = $this->db->insert('event_location',$event_location);
@@ -110,10 +110,10 @@ class Event_model extends CI_Model {
 			echo $owner_data;
 
 			// return true only if all inserts were successful
-			return ($event_success && 
-				$event_location_success && 
-				$event_owner_success && 
-				$attendee_success && 
+			return ($event_success &&
+				$event_location_success &&
+				$event_owner_success &&
+				$attendee_success &&
 				$event_tag_success);
 		} else {
 			return false;
@@ -165,17 +165,17 @@ class Event_model extends CI_Model {
 		}
 	}
 
-	
+
 	// get event by event id and return information
 	function get_event_by_id($event_id) {
-		$event_result = $this->db->query('SELECT a.event_id, a.event_title, a.event_description, a.event_begin_datetime, 
-											a.event_end_datetime, a.event_picture, d.user_fname, d.user_id, d.user_lname, d.user_email, 
-											e.address_one, e.address_two, e.zipcode, e.city, e.state, e.geolat, e.geolng 
-											FROM event a, event_owner b, event_location c, user d, location e 
-											WHERE a.event_id = '.$event_id.' 
-											AND a.event_id = b.event_id 
-											AND a.event_id = c.event_id 
-											AND b.owner_id = d.user_id 
+		$event_result = $this->db->query('SELECT a.event_id, a.event_title, a.event_description, a.event_begin_datetime,
+											a.event_end_datetime, a.event_picture, d.user_fname, d.user_id, d.user_lname, d.user_email,
+											e.address_one, e.address_two, e.zipcode, e.city, e.state, e.geolat, e.geolng
+											FROM event a, event_owner b, event_location c, user d, location e
+											WHERE a.event_id = '.$event_id.'
+											AND a.event_id = b.event_id
+											AND a.event_id = c.event_id
+											AND b.owner_id = d.user_id
 											AND c.location_id = e.location_id');
 		$query = $event_result->result_array();
 		if ($query != null) {
@@ -186,7 +186,7 @@ class Event_model extends CI_Model {
 		}
 		return NULL;
 	}
-	
+
 	// get first and last name of members in a group
 	function get_event_members($event_id) {
 		$query = $this->db->query('SELECT user.user_id, user.user_fname, user.user_lname
@@ -203,20 +203,20 @@ class Event_model extends CI_Model {
 	// get events created by or RSVP'd for
 	function get_events_by_user_id($id, $retrieval_type) {
 
-		
-		if ($retrieval_type == 'owned') 
+
+		if ($retrieval_type == 'owned')
 		{
-			$data = $this->db->query('SELECT * FROM event ev JOIN 
-										(SELECT event_id FROM event_owner ow 
-											WHERE ow.owner_id = (SELECT owner_id FROM user u JOIN owner o WHERE u.user_id = '.$id.'o.user_id = u.user_id)) AS f 
+			$data = $this->db->query('SELECT * FROM event ev JOIN
+										(SELECT event_id FROM event_owner ow
+											WHERE ow.owner_id = (SELECT owner_id FROM user u JOIN owner o WHERE u.user_id = '.$id.'o.user_id = u.user_id)) AS f
 										USING(event_id)');
-			
+
 		}
-		else if ($retrieval_type == 'rsvp') 
+		else if ($retrieval_type == 'rsvp')
 		{
-			$data = $this->db->query('SELECT * FROM event ev JOIN 
-										(SELECT event_id FROM attendee a 
-											WHERE a.user_id = (SELECT user_id FROM user u WHERE u.user_id = '.$id.')) AS f 
+			$data = $this->db->query('SELECT * FROM event ev JOIN
+										(SELECT event_id FROM attendee a
+											WHERE a.user_id = (SELECT user_id FROM user u WHERE u.user_id = '.$id.')) AS f
 										USING(event_id)');
 		}
 		else {
@@ -225,7 +225,7 @@ class Event_model extends CI_Model {
 
 		return $data->result();
 	}
-	
+
 	// gets bulletin message for group
 	function get_bulletins($eventId) {
 		$query = $this->db->query('SELECT bulletin_message, bulletin_datetime, user_fname, user_lname
@@ -306,7 +306,7 @@ class Event_model extends CI_Model {
 		$data = array('user_id' => $uid, 'event_id' => $eventId);
 		$this->db->insert('attendee', $data);
 	}
-	
+
 	// leave a group
 	function leave_event($uid, $eventId) {
 		$this->db->delete('attendee', array('user_id' =>$uid, 'event_id' =>$eventId));
@@ -320,12 +320,33 @@ class Event_model extends CI_Model {
 		$this->db->delete('event_location', array('event_id' => $event_id));
 		$this->db->delete('event_tag', array('event_id' => $event_id));
 	}
+
+	//generate list of nearby event
+	function get_nearby_events($lat, $lng, $dist){
+		$radius = 3958.761; //earth mean radius, in miles
+		$distance = $dist; //miles radius for search
+
+		// latitude boundaries
+		$maxLat = (float) $lat + rad2deg($distance / $radius);
+		$minLat = (float) $lat - rad2deg($distance / $radius);
+
+		// longitude boundaries (longitude gets smaller when latitude increases)
+		$maxLng = (float) $lng + rad2deg($distance / $radius / cos(deg2rad((float) $lat)));
+		$minLng = (float) $lng - rad2deg($distance / $radius / cos(deg2rad((float) $lat)));
+
+		$query = $this->db->query("SELECT t2.*, t5.tag_title, t1.geolat, t1.geolng, (SELECT COUNT(attendee.attendee_id) FROM attendee WHERE t2.event_id = attendee.event_id) as attendee_count FROM location t1, event t2, event_location t3, event_tag t4, tag t5
+			WHERE t1.location_id = t3.location_id AND t2.event_id = t3.event_id
+			AND t2.event_id = t4.event_id AND  t4.tag_id = t5.tag_id
+			AND t1.geolat > $minLat AND t1.geolat < $maxLat AND t1.geolng > $minLng AND t1.geolng < $maxLng;");
+
+		return $query->result_array();
+	}
 }
 
 // insert values into location and get the location ID
 			//get geocode
 			//address preperation
-				// $addr = 
+				// $addr =
 				// $location_data['address_one'] . " " .
 				// $location_data['address_two'] . " ".
 				// $location_data['city'] . " ".
