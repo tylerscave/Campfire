@@ -123,6 +123,7 @@
 				<div class="col-sm-10 col-md-offset-1">
 					<label for="eventDescription">Event Description:</label>
 					<textarea class="form-control" rows="4" id="eventDescription" name="eventDescription"></textarea>
+					<span id="eventDescription_error" class="text-danger"><?php echo form_error('eventDescription'); ?></span>
 				</div>
 			</div>
 		</div>
