@@ -2,6 +2,7 @@
 <?php $this->load->view('template/header.php'); ?>
 <!-- End Header -->
 <!-- Body -->
+
 <div class="container custom-body">
 	<?php $attributes = array("class" => "form-wrapper cf", "method" => "get");
 				echo form_open("group/search", $attributes); ?>
@@ -39,7 +40,7 @@
 								  </select>
 								</div>
 							</div>
-							<div class="col-md-10 well" id="groups-found-well">
+							<div class="col-md-10 well">
 								<div class="card-group">
 							<?php
 								if(isset($groups)) {
@@ -53,7 +54,7 @@
 									?>
 									<div class="col-md-12">
 										<?php $ci =& get_instance(); echo $ci->pagination->create_links(); ?>
-								</div>
+									</div>
 							</div>
 						</div>
 	    </div>
@@ -76,7 +77,7 @@ function displayTiles($groups){
 	}
 	for ($x = $index; $x < $max; $x++) {
 		echo "<div class='col-md-3 card filter ".$groups[$x]['tag_title']."'>";
-		echo "<a id='".$groups[$x]['org_id']."' href='".base_url()."index.php/Group/display/".$groups[$x]['org_id']."'><img class='img-responsive' src='";
+		echo "<a id='".$groups[$x]['org_id']."' href='".base_url()."index.php/Group/display/".$groups[$x]['org_id']."'><img class='img-responsive center-cropped' src='";
 		echo base_url()."uploads/".$groups[$x]['org_picture']."' alt='".$groups[$x]['org_title']."'></a>";
 		echo "<div class='card-block'>";
 		echo"<h4 class='card-title' id='card-title'>".$groups[$x]['org_title']."</h4>";
@@ -85,6 +86,7 @@ function displayTiles($groups){
 		<p class='card-text'><small class='text-muted'>Members:".$groups[$x]['members_count']."</small></p></div></div>";
 	}
 }
+
 ?>
 
 <script>

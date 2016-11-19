@@ -23,7 +23,16 @@ class Event extends CI_Controller {
 	function search(){
 		$this->load->view('searchEvents_view');
 	}
-	
+	function search_nearby(){
+		$lat = $this->input->post('current_lat');
+		$lng = $this->input->post('current_lng');
+		$dist = $this->input->post('dist');
+		$result = $this->event_model->get_nearby_events($lat, $lng, $dist);
+
+		echo json_encode($result);
+
+	}
+
 	function display($eventID = NULL){
 		if ($eventID != NULL) {
 			$uid = $this->session->userdata('uid');
@@ -31,7 +40,7 @@ class Event extends CI_Controller {
 			$data['info'] = $this->event_model->get_event_by_id($eventID);
 			$data['members'] = $this->event_model->get_event_members($eventID);
 			$data['bulletins'] = $this->event_model->get_bulletins($eventID);
-	
+
 			$member_status = 'nonmember';
 			if ($this->session->userdata('login') == FALSE) {
 				$member_status = 'notlogged';
@@ -46,7 +55,7 @@ class Event extends CI_Controller {
 					}
 				}
 			}
-	
+
 			$data['status'] = $member_status;
 			if ($data != NULL) {
 				$this->load->view('event_view', $data);
@@ -56,10 +65,10 @@ class Event extends CI_Controller {
 		} else {
 			redirect('event/search');
 		}
-	
-	
+
+
 	}
-	
+
 	function join_event($eventID = NULL) {
 		if ($eventID != NULL) {
 			$arr['eventID'] = $eventID;
@@ -68,7 +77,7 @@ class Event extends CI_Controller {
 		}
 		redirect('event/display/'.$eventID);
 	}
-	
+
 	function leave_event($eventID = NULL) {
 		if ($eventID != NULL) {
 			$arr['eventID'] = $eventID;

@@ -93,12 +93,11 @@ body > .container {
   margin-bottom: 10px;
   border: 10px solid transparent;
 }
+
 .center-cropped {
-  object-fit: none; /* Do not scale the image */
   object-position: center; /* Center the image within the element */
   height: 275px;
   width: 400px;
-  padding:15px;
 }
 
 .center-cropped:hover{
@@ -111,11 +110,6 @@ form{
   color: black;
 }
 
-.org-title{
-  font-weight: bold;
-  padding:0;
-  margin:0;
-}
 /*
 Hover Effects
 -------------------------------------------------------------
