@@ -26,14 +26,17 @@ class CreateGroup extends CI_Controller {
 	function index() {
 		//dynamically populate the tag_list for the dropdown
 		$data['tag_list'] = $this->group_model->get_dropdown_list();
-
+		//set last entered description to be displayed if error occurred
+		$data['description'] = $this->input->post('description');
 		//new directory for images
 		$targetDir = './uploads/';
 
 		// set form validation rules
 		$this->form_validation->set_rules('groupName', 'Group Name', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[30]|xss_clean');
-		$this->form_validation->set_rules('zip', 'Group Zip Code', 'trim|required|numeric|min_length[5]|max_length[10]|xss_clean');
+		$this->form_validation->set_rules('groupName', 'Group Name', 'callback_badWord_check');
+		$this->form_validation->set_rules('zip', 'Group Zip Code', 'trim|required|numeric|min_length[5]|max_length[5]|xss_clean');
 		$this->form_validation->set_rules('description', 'Group Description', 'required|max_length[200]|xss_clean');
+		$this->form_validation->set_rules('description', 'Group Description', 'callback_badWord_check');
 		if (empty($_FILES['imageUpload']['tmp_name'])) {
 			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'required');
 		} else {
@@ -117,11 +120,12 @@ class CreateGroup extends CI_Controller {
 
 			if ($this->group_model->insert_group($group_data, $location_data, $tag_data, $owner_data) && $image_success) {
 				// success!!!
-				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Group has been successfully created!</div>');
+				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Group has been successfully created! Please click Cancel if you are finished creating groups.</div>');
 				redirect('createGroup/index');
 			} else {
-				// error
-				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error.  Please try again later!!!</div>');
+				// error!!!
+				$this->removeImage($simpleNewFileName); // Remove image upload if group was not created
+				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error. Please try again later!!!</div>');
 				redirect('createGroup/index');
 			}
 		}
@@ -134,6 +138,29 @@ class CreateGroup extends CI_Controller {
 			return TRUE;
 		} else {
 			$this->form_validation->set_message('ext_check', 'Must be a jpg, jpeg, or png file.');
+			return FALSE;
+		}
+	}
+	
+	function badWord_check($input) {
+		$fh = fopen(base_url().'assets/text_input/badWords.txt', 'r') or die($php_errormsg);
+		while (!feof($fh)) {
+			$line = fgets($fh, 4096);
+			if (preg_match($line, strtolower($input))) {
+				$this->form_validation->set_message('badWord_check', 'You have entered an inappropriate word! Lets keep it clean!!!.');
+				return FALSE;
+			} else {
+				return TRUE;
+			}
+		}
+		fclose($fh);
+	}
+	
+	function removeImage($fileName) {
+		$path = './uploads/'.$fileName;
+		if(unlink($path)) {
+			return TRUE;
+		} else {
 			return FALSE;
 		}
 	}

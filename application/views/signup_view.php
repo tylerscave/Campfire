@@ -21,11 +21,6 @@
 				<span id = 'lname_error' class="text-danger"><?php echo form_error('lname'); ?></span>
 			</div>
 			<div class="form-group">
-				<label for="name">Zip Code</label>
-				<input id = 'zip' class="form-control" name="zip" placeholder="Zip Code" type="text" value="<?php echo set_value('zip'); ?>" />
-				<span id = 'zip_error' class="text-danger"><?php echo form_error('zip'); ?></span>
-			</div>
-			<div class="form-group">
 				<label for="email">Email</label>
 				<input id = 'email' class="form-control" name="email" placeholder="Email" type="text" value="<?php echo set_value('email'); ?>" />
 				<span id = 'email_error' class="text-danger"><?php echo form_error('email'); ?></span>

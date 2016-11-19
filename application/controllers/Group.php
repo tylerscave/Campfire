@@ -12,7 +12,7 @@ class Group extends CI_Controller {
 	public function __construct() {
 		parent::__construct();
 		$this->load->helper(array('form', 'url', 'html'));
-		$this->load->library('session');
+		$this->load->library(array('session', 'pagination'));
 		$this->load->database();
 		$this->load->model('group_model');
 	}
@@ -23,26 +23,58 @@ class Group extends CI_Controller {
 
 	function search(){
 		// get form input from the view
-		$zip = $this->input->get('zip');
+		$query = $this->input->get('groupQuery');
 
-		if($zip){
-			$json = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($zip));
-			$match = json_decode($json);
-			$group_search_info = $this->group_model->search_groups_zip($match->results[0]->geometry->location->lat, $match->results[0]->geometry->location->lng);
-			$random_group_query = '';
+		if($query){
+
+			$json = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($query)); //http request, output is a json object
+			$match = json_decode($json);//decode json object into a php variable
+
+			//if search is valid
+			if(empty($match->results) == false){
+				$group_search_info = $this->group_model->search_groups_query($match->results[0]->geometry->location->lat, $match->results[0]->geometry->location->lng); //input first geolocation
+			}
 		}
 		else{
-			$group_search_info = '';
 			$random_group_query = $this->group_model->get_random_groups();
 		}
 
 
-		if($group_search_info){//for displaying searched groups
+		if(isset($group_search_info)){//for displaying searched groups
 
+			if(count($group_search_info) > 12){
+
+				//Configuring for pagination to echo properly in searchGroups_view
+				$config['total_rows'] = count($group_search_info)/12 ;
+				$config['per_page'] = 1;
+				$config['num_links'] = 3;
+				$config['page_query_string'] = TRUE;
+				$config['reuse_query_string'] = TRUE;
+				$config['full_tag_open'] = '<nav><ul class="pagination">';
+				$config['full_tag_close'] = '</ul></nav>';
+				$config['prev_link'] = 'Previous';
+				$config['prev_tag_open'] = '<li class="page-item" id="prev"> <span aria-hidden="true">';
+				$config['prev_tag_close'] = '</span></li>';
+				$config['cur_tag_open'] = '<li class="page-item active"><a class="page-link">';
+				$config['cur_tag_close'] = '</a></li>';
+				$config['num_tag_open'] =  '<li class="page-item">';
+				$config['num_tag_close'] =  '</li>';
+				$config['next_link'] = 'Next';
+				$config['next_tag_open'] = '<li class="page-item" id="next"> <span aria-hidden="true">';
+				$config['next_tag_close'] = '</span></li>';
+				$config['last_link'] = '&raquo;';
+				$config['last_tag_open'] = '<li class="page-item"><span aria-hidden="true">';
+				$config['last_tag_close'] = '</span></li>';
+				$config['first_link'] = '&laquo;';
+				$config['first_tag_open'] = '<li class="page-item"><span aria-hidden="true">';
+				$config['first_tag_close'] = '</span></li>';
+
+				$this->pagination->initialize($config);
+			}
 			$arr['groups'] = $group_search_info;
 			$this->load->view('searchGroups_view', $arr);
 		}
-		else if($random_group_query){ //for displaying random groups
+		else if(isset($random_group_query)){ //for displaying random groups
 
 			$arr['random'] = $random_group_query;
 			$this->load->view('searchGroups_view', $arr);

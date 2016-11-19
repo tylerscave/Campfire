@@ -242,19 +242,6 @@ CREATE TABLE `user` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_location`
---
-
-CREATE TABLE `user_location` (
-  `user_id` bigint(20) NOT NULL,
-  `location_id` bigint(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Indexes for dumped tables
---
-
---
 -- Indexes for table `attendee`
 --
 ALTER TABLE `attendee`

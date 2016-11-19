@@ -1,6 +1,10 @@
 //Google Map Stuff
+
+var infowindows = [];
+var markers = [];
+var map;
 function initMap() {
-  var map = new google.maps.Map(document.getElementById('map'), {
+  map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 37.3352, lng: -121.8811},
     zoom: 5
   });
@@ -24,21 +28,13 @@ function initMap() {
 
   map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
 
-  var infowindow = new google.maps.InfoWindow();
-  var marker = new google.maps.Marker({
-    map: map
-  });
-  marker.addListener('click', function() {
-    infowindow.open(map, marker);
-  });
-
   autocomplete.addListener('place_changed', function() {
-    infowindow.close();
+    removeMarkers();
+    removeInfoWindows();
     var place = autocomplete.getPlace();
     if (!place.geometry) {
       return;
     }
-
     if (place.geometry.viewport) {
       map.fitBounds(place.geometry.viewport);
     } else {
@@ -46,17 +42,56 @@ function initMap() {
       map.setZoom(18);
     }
 
-    // Set the position of the marker using the place ID and location.
-    marker.setPlace({
-      placeId: place.place_id,
-      location: place.geometry.location
+    $.ajax({
+        type: "POST",
+        url: "http://localhost/Campfire/Event/search_nearby",
+        data: {current_lat: place.geometry.location.lat, current_lng: place.geometry.location.lng, dist: 10},
+        success: function(data){
+            var result = $.parseJSON(data);
+            displayEvents(result);
+        }
     });
+
+  });
+}
+function displayEvents(events){
+  events.forEach(function(event){
+
+    var infowindow = new google.maps.InfoWindow();
+    var marker = new google.maps.Marker({
+      map: map
+    });
+
+    marker.addListener('click', function() {
+      infowindow.open(map, marker);
+    });
+
+    marker.setPosition(new google.maps.LatLng(event['geolat'], event['geolng']));
     marker.setVisible(true);
+    var url = 'http://localhost/Campfire/Event/display/' + event['event_id'];
+    var content =
+    '<strong>' + event['event_title'] + '</strong><br>' +
+    '<em>Description:</em> ' + event['event_description']  + '<br>' +
+    '<em>Date/Time:</em> ' + event['event_begin_datetime']  + ' to ' +  event['event_end_datetime']  + '<br>' +
+    '<em>Tag:</em> '  + '-' +  event['tag_title']  + '<br>' +
+    '<em>Members:</em> '  + '-' +  event['attendee_count']  + '<br>' +
+    '<em>Link:</em> '  + '<a href="'+ url +'">Go to </a>';
 
-    infowindow.setContent('<div><strong>' + place.formatted_address + '</strong><br>');
+    infowindow.setContent(content);
 
-    infowindow.open(map, marker);
+    infowindows.push(infowindow);
+    markers.push(marker);
+  });
+}
+function removeMarkers(){
+  markers.forEach(function(marker){
+    marker.setMap(null);
+  });
+}
 
+function removeInfoWindows(){
+  infowindows.forEach(function(iw){
+    iw.close();
   });
 }
 
@@ -90,5 +125,59 @@ function confirmDelete() {
 	    }
 	});
 }
+$(function () {
+    $('#startDate').datetimepicker({
+    startDate,
+    format: 'mm/dd/yyyy h:i',
+    minuteStep: 15,
+    autoclose: true,
+    });
 
+    $('#endDate').datetimepicker({
+    format: 'mm/dd/yyyy h:i',
+    minuteStep: 15,
+    autoclose: true
+    });
+
+    $("#startDate").on("dp.change",function (e) {
+        $('#endDate').data("DateTimePicker").setMinDate(e.date);
+    });
+    $("#endDate").on("dp.change",function (e) {
+        $('#startDate').data("DateTimePicker").setMaxDate(e.date);
+    });
+});
+
+/*
+function initialize() {
+
+var input = document.getElementById('searchTextField');
+var autocomplete = new google.maps.places.Autocomplete(input);
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+*/
 // end of custom.js
+
+
+// $(function () {
+//         $('#startDate').datetimepicker();
+//         $('#endDate').datetimepicker({
+//             useCurrent: false //Important! See issue #1075
+//         });
+//         $("#startDate").on("dp.change", function (e) {
+//             $('#endDate').data("DateTimePicker").minDate(e.date);
+//         });
+//         $("#endDate").on("dp.change", function (e) {
+//             $('#startDate').data("DateTimePicker").maxDate(e.date);
+//         });
+//     });
+
+// function testJS() {
+//   jQuery('#eventDateTimeStart').datetimepicker();
+//   jQuery('#eventDateTimeEnd').datetimepicker();
+//   jQuery("#eventDateTimeStart").on("dp.change",function (e) {
+//         jQuery('#eventDateTimeEnd').data("DateTimePicker").setMinDate(e.date);
+//   });
+//   jQuery("#eventDateTimeEnd").on("dp.change",function (e) {
+//         jQuery('#eventDateTimeStart').data("DateTimePicker").setMaxDate(e.date);
+//   });
+// };
