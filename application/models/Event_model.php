@@ -86,10 +86,8 @@ class Event_model extends CI_Model {
 			$query = $this->db->get('tag');
 			$tag_id_array = $query->result();
 			$tag_id = $tag_id_array[0]->tag_id;
-
 			$tag_data['event_id'] = $event_id;
 			$tag_data['tag_id'] = $tag_id;
-
 			$event_tag_success = $this->db->insert('event_tag', $tag_data);
 			
 			// return true only if all inserts were successful
