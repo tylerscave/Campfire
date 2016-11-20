@@ -45,6 +45,11 @@ class CreateEvent extends CI_Controller {
 		$this->form_validation->set_rules('endTime', 'Event End', 'trim|xss_clean');
 		$this->form_validation->set_rules('description', 'Event Description', 'trim|required|max_length[200]|xss_clean');
 		$this->form_validation->set_rules('description', 'Event Description', 'callback_badWord_check');
+		if (empty($_FILES['imageUpload']['tmp_name'])) {
+			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'required');
+		} else {
+			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'callback_ext_check');
+		}
 
 		// submit the form and validate
 		if ($this->form_validation->run() == FALSE) {
