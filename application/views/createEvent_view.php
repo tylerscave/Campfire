@@ -16,8 +16,8 @@
 					<span id="eventTitle_error" class="text-danger"><?php echo form_error('eventTitle'); ?></span>
 				</div>
 				<div class="col-sm-6">
-					<label for="name"><h5> hosted by </label>
-					<?php echo $uname; ?></h5>
+					<label><h5> Hosted by </br>
+					<?php echo $uname; ?></h5></label>
 				</div>
 			</div>
 			<div class="form-group">
@@ -88,7 +88,29 @@
 	</div>
 </div>
 <!-- End Body -->
+<script>
+$(function () {
+    $('#startDate').datetimepicker({
+    startDate,
+    format: 'mm/dd/yyyy h:i',
+    minuteStep: 15,
+    autoclose: true,
+    });
 
+    $('#endDate').datetimepicker({
+    format: 'mm/dd/yyyy h:i',
+    minuteStep: 15,
+    autoclose: true
+    });
+
+    $("#startDate").on("dp.change",function (e) {
+        $('#endDate').data("DateTimePicker").setMinDate(e.date);
+    });
+    $("#endDate").on("dp.change",function (e) {
+        $('#startDate').data("DateTimePicker").setMaxDate(e.date);
+    });
+});
+</script>
 <!-- Footer -->
 <?php $this->load->view('template/footer.php'); ?>
 <!-- End Footer -->

@@ -32,11 +32,9 @@ class CreateGroup extends CI_Controller {
 		$targetDir = './uploads/';
 
 		// set form validation rules
-		$this->form_validation->set_rules('groupName', 'Group Name', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[30]|xss_clean');
-		$this->form_validation->set_rules('groupName', 'Group Name', 'callback_badWord_check');
+		$this->form_validation->set_rules('groupName', 'Group Name', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[30]|callback_badWord_check|xss_clean');
 		$this->form_validation->set_rules('zip', 'Group Zip Code', 'trim|required|numeric|min_length[5]|max_length[5]|xss_clean');
-		$this->form_validation->set_rules('description', 'Group Description', 'required|max_length[200]|xss_clean');
-		$this->form_validation->set_rules('description', 'Group Description', 'callback_badWord_check');
+		$this->form_validation->set_rules('description', 'Group Description', 'required|max_length[200]|callback_badWord_check|xss_clean');
 		if (empty($_FILES['imageUpload']['tmp_name'])) {
 			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'required');
 		} else {
