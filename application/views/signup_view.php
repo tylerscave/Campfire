@@ -9,7 +9,7 @@
 			<?php $attributes = array("name" => "signupform");
 			echo form_open("signup/index", $attributes);?>
 			<legend>Signup</legend>
-
+			<?php echo $this->session->flashdata('msg'); ?>
 			<div class="form-group">
 				<label for="name">First Name</label>
 				<input id = 'fname' class="form-control" name="fname" placeholder="First Name" type="text" value="<?php echo set_value('fname'); ?>" />
@@ -45,7 +45,6 @@
 				<button id = 'bClear'  name="cancel" type="reset" class="btn btn-info">Clear</button>
 			</div>
 			<?php echo form_close(); ?>
-			<?php echo $this->session->flashdata('msg'); ?>
 		</div>
 	</div>
 	<div class="row">
