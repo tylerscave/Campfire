@@ -16,8 +16,8 @@
 					<span id="eventTitle_error" class="text-danger"><?php echo form_error('eventTitle'); ?></span>
 				</div>
 				<div class="col-sm-6">
-					<label for="name"><h5> hosted by </label>
-					<?php echo $uname; ?></h5>
+					<label><h5> Hosted by </br>
+					<?php echo $uname; ?></h5></label>
 				</div>
 			</div>
 			<div class="form-group">
