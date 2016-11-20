@@ -174,22 +174,22 @@ class Event_model extends CI_Model {
 
 	// get events created by or RSVP'd for
 	function get_events_by_user_id($id, $retrieval_type) {
-
-
-		if ($retrieval_type == 'owned')
+										
+		if ($retrieval_type == 'owned') 
 		{
-			$data = $this->db->query('SELECT * FROM event ev JOIN
-										(SELECT event_id FROM event_owner ow
-											WHERE ow.owner_id = (SELECT owner_id FROM user u JOIN owner o WHERE u.user_id = '.$id.'o.user_id = u.user_id)) AS f
-										USING(event_id)');
-
+			$data = $this->db->query('SELECT * FROM event ev JOIN 
+										(SELECT event_id FROM event_owner ow 
+											WHERE ow.owner_id = '.$id.') AS f 
+											USING(event_id)');
+			
 		}
-		else if ($retrieval_type == 'rsvp')
+		else if ($retrieval_type == 'rsvp') 
 		{
-			$data = $this->db->query('SELECT * FROM event ev JOIN
-										(SELECT event_id FROM attendee a
-											WHERE a.user_id = (SELECT user_id FROM user u WHERE u.user_id = '.$id.')) AS f
-										USING(event_id)');
+			$query = 'SELECT event_title FROM event ev JOIN (SELECT event_id FROM event_owner ow WHERE ow.owner_id = '.$id.') AS f USING(event_id)';
+			$data = $this->db->query('SELECT * FROM event ev JOIN 
+										(SELECT event_id FROM attendee a 
+											WHERE a.user_id = '.$id.') AS f 
+										USING(event_id) WHERE event_title NOT IN ('.$query.')');
 		}
 		else {
 			return null;
