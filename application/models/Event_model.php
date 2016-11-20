@@ -27,7 +27,7 @@ class Event_model extends CI_Model {
 	}
 
 	// insert new event into DB
-	function insert_event($event_data, $location_data, $eventtag_title, $event_owner_data) {
+	function insert_event($event_data, $location_data, $tag_data, $event_owner_data) {
 		//Check if location is in database
 		$this->db->start_cache();
 		$this->db->where('address_one', $location_data['address_one']);
@@ -86,9 +86,9 @@ class Event_model extends CI_Model {
 			$query = $this->db->get('tag');
 			$tag_id_array = $query->result();
 			$tag_id = $tag_id_array[0]->tag_id;
-			$tag_data['event_id'] = $event_id;
-			$tag_data['tag_id'] = $tag_id;
-			$event_tag_success = $this->db->insert('event_tag', $tag_data);
+			$event_tag_data['event_id'] = $event_id;
+			$event_tag_data['tag_id'] = $tag_id;
+			$event_tag_success = $this->db->insert('event_tag', $event_tag_data);
 			
 			// return true only if all inserts were successful
 			return ($event_success &&

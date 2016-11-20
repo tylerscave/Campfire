@@ -125,15 +125,17 @@ class CreateEvent extends CI_Controller {
 				'zipcode' => $this->input->post('zip')
 			);
 
-			//prepare to tag title into tag table
-			$tag_title = $this->input->post('tag');
+			//prepare to insert group tag details into tag table
+			$tag_data = array(
+				'tag_title' => $this->input->post('tag')
+			);
 
 			//prepare to insert owner id into owner table
 			$eventowner_data = array(
 				'owner_id' => $this->session->userdata('uid')
 			);	
 
-			if ($this->event_model->insert_event($event_data, $location_data, $tag_title, $eventowner_data)  && $image_success){
+			if ($this->event_model->insert_event($event_data, $location_data, $tag_data, $eventowner_data)  && $image_success){
 				// success!!!
 				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Event has been successfully created! Please click Cancel if you are finished creating events</div>');
 				redirect('createEvent/index');
