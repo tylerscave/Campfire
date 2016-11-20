@@ -16,19 +16,27 @@ class EditEvent extends CI_Controller {
 		$this->load->library(array('session', 'form_validation'));
 		$this->load->database();
 		$this->load->model('user_model');
-		$this->load->model('group_model');
+		$this->load->model('event_model');
 		if (!$this->session->userdata('login')) {
 			redirect('home/index');
 		}
 	}
 
-	function index($gID = NULL) {
-		$groupsOwned = $this->group_model->get_owned_by_uid($this->session->userdata('uid'));
+	function index($event_id = NULL) {
+		$eventsOwned = $this->event_model->get_event_by_id($this->session->userdata('event_id'));
 		$owned = FALSE;
-		if ($gID != NULL) {
+		// if there was an error on last edit, recapture group id
+		if ($event_id == NULL) {
+			$event_id = $this->session->flashdata('event_id');
+		}
+		// if the group was successfully edited redirect after delay to show success
+		if ($this->session->flashdata('editSuccess')) {
+			header("refresh:5; url=".base_url()."/index.php/event/display/".$event_id);
+		}
+		if ($event_id != NULL) {
 			// Check if user is owner of this group
-			foreach ($groupsOwned as &$value) {
-				if ($gID == $value->org_id) {
+			foreach ($eventsOwned as &$value) {
+				if ($event_id == $value->event_id) {
 					$owned = TRUE;
 					break;
 				}
@@ -38,24 +46,24 @@ class EditEvent extends CI_Controller {
 				redirect('home/index');
 			}
 			// Get the old group data before update
-			$data['oldGroupData'] = $this->group_model->get_group_by_id($gID);
-			$sess_data = array('gID' => $gID, 'oldPhoto' => $data['oldGroupData']['org_picture']);
+			$data['oldEventData'] = $this->event_model->get_event_by_id($event_id);
+			$sess_data = array('event_id' => $event_id, 'oldPhoto' => $data['oldEventData']['event_picture']);
 			$this->session->set_userdata($sess_data);
 		} else {
-			$data['oldGroupData']['org_title'] = "";
-			$data['oldGroupData']['zipcode'] = "";
+			$data['oldEventData']['event_title'] = "";
+			$data['oldEventData']['zipcode'] = "";
 		}
 
 		//dynamically populate the tag_list for the dropdown
-		$data['tag_list'] = $this->group_model->get_dropdown_list();
-
+		$data['tag_list'] = $this->event_model->get_dropdown_list();
 		//new directory for images
 		$targetDir = './uploads/';
-
 		// set form validation rules
-		$this->form_validation->set_rules('groupName', 'Group Name', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[30]|xss_clean');
-		$this->form_validation->set_rules('zip', 'Group Zip Code', 'trim|required|numeric|min_length[5]|max_length[10]|xss_clean');
-		$this->form_validation->set_rules('description', 'Group Description', 'required|max_length[200]|xss_clean');
+		$this->form_validation->set_rules('eventName', 'Event Name', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[30]|xss_clean');
+		$this->form_validation->set_rules('eventName', 'Event Name', 'callback_badWord_check');
+		$this->form_validation->set_rules('zip', 'Event Zip Code', 'trim|required|numeric|min_length[5]|max_length[5]|xss_clean');
+		$this->form_validation->set_rules('description', 'Event Description', 'required|max_length[200]|xss_clean');
+		$this->form_validation->set_rules('description', 'Event Description', 'callback_badWord_check');
 		if (!empty($_FILES['imageUpload']['tmp_name'])) {
 			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'callback_ext_check');
 		}
@@ -63,7 +71,7 @@ class EditEvent extends CI_Controller {
 		// submit the form and validate
 		if ($this->form_validation->run() == FALSE) {
 			// if it fails just load the view again
-			$this->load->view('editGroup_view', $data);
+			$this->load->view('editEvent_view', $data);
 		} else {
 			//Upload a new image if it exists
 			if (!empty($_FILES['imageUpload']['tmp_name'])) {
@@ -122,14 +130,13 @@ class EditEvent extends CI_Controller {
 			// unset the session variable
 			$this->session->unset_userdata('oldPhoto');
 			//prepare to insert group details into organization table
-			$group_data = array(
-				'org_id' => $this->session->userdata('gID'),
-				'org_title' => $this->input->post('groupName'),
-				'org_description' => $this->input->post('description'),
-				'org_picture' => $simpleNewFileName,
-				'org_tag' => $this->input->post('tag')
+			$event_data = array(
+				'event_id' => $this->session->userdata('event_id'),
+				'event_title' => $this->input->post('eventName'),
+				'event_description' => $this->input->post('description'),
+				'event_picture' => $simpleNewFileName,
+				'event_tag' => $this->input->post('tag')
 			);
-			$this->session->unset_userdata('gID');
 			//prepare to insert user location details into location table
 			$location_data = array(
 				'address_one' => '',
@@ -146,18 +153,21 @@ class EditEvent extends CI_Controller {
 			);
 			
 			// Set error/success messages
-			if ($this->group_model->update_group($group_data, $location_data, $tag_data)) {
+			if ($this->event_model->update_event($event_data, $location_data, $tag_data)) {
 				// success!!!
-				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Group has been successfully updated with the new information!</div>');
-				redirect('editGroup/index');
+				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Event has been successfully updated with the new information! You will be redirected shortly.</div>');
+				$this->session->set_flashdata('editSuccess', true);
+				$this->session->set_flashdata('edit_id', $this->session->userdata('edit_id'));
+				redirect('editEvent/index');
 			} else {
 				// error
-				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error.  Please try again later!!!</div>');
-				redirect('editGroup/index');
+				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error. Please try again later!!!</div>');
+				redirect('editEvent/index');
 			}
 		}
 	}
 	
+    //DONE
 	function ext_check() {
 		$filename = $_FILES['imageUpload']['name'];
 		$ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
@@ -169,6 +179,22 @@ class EditEvent extends CI_Controller {
 		}
 	}
 	
+    //DONE
+	function badWord_check($input) {
+		$fh = fopen(base_url().'assets/text_input/badWords.txt', 'r') or die($php_errormsg);
+		while (!feof($fh)) {
+			$line = fgets($fh, 4096);
+			if (preg_match($line, strtolower($input))) {
+				$this->form_validation->set_message('badWord_check', 'You have entered an inappropriate word! Lets keep it clean!!!.');
+				return FALSE;
+			} else {
+				return TRUE;
+			}
+		}
+		fclose($fh);
+	}
+	
+    //DONE
 	function removeImage($fileName) {
 		$path = './uploads/'.$fileName;
 		if(unlink($path)) {
@@ -178,12 +204,13 @@ class EditEvent extends CI_Controller {
 		}
 	}
 	
-	function deleteGroup($gID) {
+    //DONE
+	function deleteEvent($event_id) {
 		//Delete the image from the uploads folder
-		$data['oldGroupData'] = $this->group_model->get_group_by_id($gID);
-		$this->removeImage($data['oldGroupData']['org_picture']);
+		$data['oldEventData'] = $this->event_model->get_event_by_id($event_id);
+		$this->removeImage($data['oldEventData']['event_picture']);
 		//Delete from the database using the org_ID
-		$this->group_model->delete_group($gID);
-		redirect('myGroups/index');
+		$this->event_model->delete_event($event_id);
+		redirect('myEvents/index');
 	}
 }
