@@ -54,11 +54,11 @@ class Event_model extends CI_Model {
 				//new location in db
 				$location_success = $this->db->insert('location', $location_data);
 				$location_id = $this->db->insert_id();
-			} else { //old location
-				$locResult = $loc_query->result();
-				$location_id = $locResult[0]->location_id;
-				$location_success = true;
-			}
+			} 
+		} else { //old location
+			$locResult = $loc_query->result();
+			$location_id = $locResult[0]->location_id;
+			$location_success = true;
 		}
 		// Check that we have a valid location before updating db
 		if ($location_success) {
@@ -128,7 +128,7 @@ class Event_model extends CI_Model {
 				}
 			}
 			//Return latitude, longitude, city, and state of the given address
-			if(!empty($geocode)){
+			if(!empty($geocode) && !empty($geocode['city']) && !empty($geocode['state'])){
 				return $geocode;
 			}else{
 				return false;
