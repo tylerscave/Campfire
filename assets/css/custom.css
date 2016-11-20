@@ -82,6 +82,7 @@ body > .container {
   -o-background-size: cover;
   color: black;
 }
+
 .custom-body .well{
   min-height: 500px;
 }
