@@ -34,8 +34,10 @@ function initMap() {
 
   autocomplete.bindTo('bounds', map);
   autocomplete.setTypes(['(regions)']);
+  var inputGroup = document.getElementById('inputGroup');
 
-  map.controls[google.maps.ControlPosition.TOP_CENTER].push(input);
+
+  map.controls[google.maps.ControlPosition.TOP_CENTER].push(inputGroup);
 
   autocomplete.addListener('place_changed', function() {
     removeMarkers();
@@ -78,30 +80,51 @@ function displayEvents(events){
     marker.setPosition(new google.maps.LatLng(event['geolat'], event['geolng']));
     marker.setVisible(true);
     var url = 'http://localhost/Campfire/Event/display/' + event['event_id'];
+    var truncatedDesc = event['event_description'].length > 150? event['event_description'].substring(150, 0) + "..." : event['event_description'];
     var content =
-    '<strong>' + event['event_title'] + '</strong><br>' +
-    '<em>Description:</em> ' + event['event_description']  + '<br>' +
-    '<em>Date/Time:</em> ' + event['event_begin_datetime']  + ' to ' +  event['event_end_datetime']  + '<br>' +
-    '<em>Tag:</em> '  + '-' +  event['tag_title']  + '<br>' +
-    '<em>Members:</em> '  + '-' +  event['attendee_count']  + '<br>' +
-    '<em>Link:</em> '  + '<a href="'+ url +'">Go to </a>';
+    '<h2>'+ event['event_title']+ '</h2></div>' +
+    '<h6>Description:</h6>' + truncatedDesc +
+    '<h6>Date/Time:</h6> ' + new Date(event['event_begin_datetime'])  + '<br> to <br>' +  new Date(event['event_end_datetime'])  +
+    '<h6>Tag:</h6> '   +  event['tag_title']  +
+    "<h6>Attendees:</h6> "  +  event['attendee_count'] +
+     '<br><a class="btn btn-primary" href="'+ url +'">See More </a>';
 
     infowindow.setContent(content);
 
-    infowindows.push(infowindow);
-    markers.push(marker);
+    infowindows.push({window:infowindow, tag:event['tag_title']});
+    markers.push({marker:marker, tag:event['tag_title']});
   });
 }
+
 function removeMarkers(){
   markers.forEach(function(marker){
-    marker.setMap(null);
+    marker['marker'].setMap(null);
   });
+  markers=[];
 }
 
 function removeInfoWindows(){
   infowindows.forEach(function(iw){
-    iw.close();
+    iw['window'].close();
   });
+  infowindows=[];
+}
+
+function filterMarkers(tag){
+
+  if(tag === 'All'){
+    markers.forEach(function(marker){
+      marker['marker'].setVisible(true);
+    });
+  }else{
+    markers.forEach(function(marker){
+    if(marker['tag'].toLowerCase() !== tag.toLowerCase()){
+      marker['marker'].setVisible(false);
+    }else{
+        marker['marker'].setVisible(true);
+    }
+    });
+  }
 }
 
 function confirmDelete() {
