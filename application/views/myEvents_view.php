@@ -58,7 +58,6 @@
 							else
 							{
 								$ci =& get_instance();
-								$ci->set_config($memberedevents);
 								$per_page = $ci->input->get('per_page');
 								$index = 12 * $per_page;
 								$max = $index + 12;
@@ -75,11 +74,6 @@
 									<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Event/display/".$memberedevents[$x]->event_id."'>See More</a>
 									</div></div>";
 								}
-								
-								echo "<div class='col-md-12'>";
-								echo $ci->pagination->create_links();
-								echo "</div>";
-								
 							}
 						?>
 					</div>
