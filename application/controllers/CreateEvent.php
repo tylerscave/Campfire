@@ -36,13 +36,14 @@ class CreateEvent extends CI_Controller {
 		$data['uemail'] = $details[0]->user_email;
 
 		//set form validations
+		//$date_regex = "/^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/";
 		$this->form_validation->set_rules('eventTitle', 'Event Title', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[30]|callback_badWord_check|xss_clean');
 		$this->form_validation->set_rules('address1','Street Address 1', 'trim|required|min_length[1]|max_length[30]|xss_clean'); 
 		$this->form_validation->set_rules('address2','Street Address 2', 'trim|min_length[1]|max_length[30]|xss_clean'); 
 		$this->form_validation->set_rules('zip','Event Zip Code', 'trim|required|numeric|min_length[5]|max_length[5]|xss_clean');
 		$this->form_validation->set_rules('startTime', 'Event Start', 'trim|required|xss_clean');
 		$this->form_validation->set_rules('endTime', 'Event End', 'trim|required|xss_clean');
-		$this->form_validation->set_rules('description', 'Event Description', 'trim|required|max_length[200]|callback_badWord_check|xss_clean');
+		$this->form_validation->set_rules('description', 'Event Description', 'trim|required|max_length[1000]|callback_badWord_check|xss_clean');
 		if (empty($_FILES['imageUpload']['tmp_name'])) {
 			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'required');
 		} else {
