@@ -20,6 +20,15 @@ function initMap() {
     };
     map.setCenter(pos);
     map.setZoom(13);
+    $.ajax({
+        type: "POST",
+        url: "http://localhost/Campfire/Event/search_nearby",
+        data: {current_lat: position.coords.latitude, current_lng: position.coords.longitude, dist: 10},
+        success: function(data){
+            var result = $.parseJSON(data);
+            displayEvents(result);
+        }
+    });
   });
   }
 
@@ -147,14 +156,14 @@ $(function () {
     });
 });
 
-/*
+
 function initialize() {
 
 var input = document.getElementById('searchTextField');
 var autocomplete = new google.maps.places.Autocomplete(input);
 }
 google.maps.event.addDomListener(window, 'load', initialize);
-*/
+
 // end of custom.js
 
 
