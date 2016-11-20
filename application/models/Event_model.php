@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  *COPYRIGHT (C) 2016 Campfire. All Rights Reserved.
- * Group_model.php is the model for a group
+ * Event_model.php is the model for an event
  * Solves SE165 Semester Project Fall 2016
  * @author Peter Curtis, Tyler Jones, Troy Nguyen, Marshall Cargle,
  *     Luis Otero, Jorge Aguiniga, Stephen Piazza, Jatinder Verma
@@ -26,59 +26,46 @@ class Event_model extends CI_Model {
 		return $return;
 	}
 
-	// insert new group into DB
+	// insert new event into DB
 	function insert_event($event_data, $location_data, $eventtag_title, $event_owner_data) {
-			//Check if location is in database
-			$this->db->start_cache();
-			$this->db->where('address_one', $location_data['address_one']);
-			$this->db->where('address_two', $location_data['address_two']);
-			$this->db->where('state', $location_data['state']);
-			$this->db->where('zipcode', $location_data['zipcode']);
-			$this->db->where('city', $location_data['city']);
-			$loc_query = $this->db->get('location');
-			// print_r($loc_query);
-			$this->db->stop_cache();
-			$this->db->flush_cache();
+		//Check if location is in database
+		$this->db->start_cache();
+		$this->db->where('address_one', $location_data['address_one']);
+		$this->db->where('address_two', $location_data['address_two']);
+		$this->db->where('zipcode', $location_data['zipcode']);
+		$loc_query = $this->db->get('location');
+		$this->db->stop_cache();
+		$this->db->flush_cache();
 
-			// //If location isnt in database yet
-			if ($loc_query->num_rows() == 0){
-				//get geocode from google if not in db
-
-				// Get geocode for this address
-				$geocode = $this->getGeo(
-					$location_data['address_one'] . " " .
-					$location_data['address_two'] . " ".
-					$location_data['city'] . " ".
-					$location_data['state'] . " ".
-					$location_data['zipcode']
-					);
+		//If location isnt in database yet
+		if ($loc_query->num_rows() == 0){
+			//get geocode from google if not in db
+			$geocode = $this->getGeo(
+				$location_data['address_one'] . " " .
+				$location_data['address_two'] . " ".
+				$location_data['zipcode']
+				);
+			if (isset($geocode) && $geocode) {
 				//add geocodes to address before insert
 				$location_data['geolat'] = $geocode['lat'];
 				$location_data['geolng'] = $geocode['lng'];
+				$location_data['city'] = $geocode['city'];
+				$location_data['state'] = $geocode['state'];
 				//new location in db
 				$location_success = $this->db->insert('location', $location_data);
 				$location_id = $this->db->insert_id();
-			} else { //old location
-				$locResult = $loc_query->result();
-				$location_id = $locResult[0]->location_id;
-				$location_success = true;
-			}
-			print_r('outside geo location');
-			print_r('geocode');
-			// print_r($geocode);
-
-		// Check that we have a valid geocode before updating db
+			} 
+		} else { //old location
+			$locResult = $loc_query->result();
+			$location_id = $locResult[0]->location_id;
+			$location_success = true;
+		}
+		// Check that we have a valid location before updating db
 		if ($location_success) {
-		print_r('inside geo location');
-
 			// insert values into organization
 			$event_success = $this->db->insert('event', $event_data);
-			print_r('event_success');
-			var_dump($event_success);
-
 			// Get the group ID and add it to the owner_data array
 			$event_id = $this->db->insert_id();
-			// print_r($loc_query);
 
 			//event_location
 			$event_location['event_id'] = $event_id;
@@ -91,24 +78,18 @@ class Event_model extends CI_Model {
 
 			//attendee
 			$attendee_data['user_id'] = $event_owner_data['owner_id'];
-			$attendee_data['event_id'] = $event_owner_data['event_id'];
+			$attendee_data['event_id'] = $event_id;
 			$attendee_success = $this->db->insert('attendee', $attendee_data);
 
-			//tags
-
-			// // Get the tag ID
+			// Get the tag ID
 			$this->db->like('tag_title', $tag_data['tag_title']);
 			$query = $this->db->get('tag');
 			$tag_id_array = $query->result();
 			$tag_id = $tag_id_array[0]->tag_id;
-
 			$tag_data['event_id'] = $event_id;
 			$tag_data['tag_id'] = $tag_id;
-
 			$event_tag_success = $this->db->insert('event_tag', $tag_data);
-
-			echo $owner_data;
-
+			
 			// return true only if all inserts were successful
 			return ($event_success &&
 				$event_location_success &&
@@ -120,25 +101,15 @@ class Event_model extends CI_Model {
 		}
 	}
 
-	// insert ids into organization_location and organization_tag
-	// function insert_ids($location_id_data, $tag_id_data) {
-	// 	$location_success = $this->db->insert('organization_location', $location_id_data);
-	// 	$tag_success = $this->db->insert('organization_tag', $tag_id_data);
-	// 	return ($location_success && $tag_success);
-
 	// Get lattitude and longitude from address
 	function getGeo($address) {
-		print_r('event_success');
-
 		if(!empty($address)){
 			//build a string with each part of the address
 	        $formattedAddress = str_replace(' ','+',$address);
 			//Send request and receive json data by address
-			$geocodeFromAddr = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($formattedAddress).'&sensor=false'
-				// .'&key=AIzaSyBb5XuPwjAupT6sS7LBDkXwnLTvN8fUk6U'
-				);
+			$geocodeFromAddr = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($formattedAddress).'&sensor=false');
 			$output = json_decode($geocodeFromAddr);
-			//Check if it was a valid zipcode
+			//Check if it was a valid address
 			if(empty($output->results)) {
 				return false;
 			}
@@ -154,8 +125,8 @@ class Event_model extends CI_Model {
 					$geocode['state'] = $address_data[$i]->long_name;
 				}
 			}
-			//Return latitude and longitude of the given address
-			if(!empty($geocode)){
+			//Return latitude, longitude, city, and state of the given address
+			if(!empty($geocode) && !empty($geocode['city']) && !empty($geocode['state'])){
 				return $geocode;
 			}else{
 				return false;
@@ -164,7 +135,6 @@ class Event_model extends CI_Model {
 			return false;
 		}
 	}
-
 
 	// get event by event id and return information
 	function get_event_by_id($event_id) {
@@ -242,64 +212,6 @@ class Event_model extends CI_Model {
 		}
 		return $event_bulletins;
 	}
-	// insert new group into DB
-	function insert_group($group_data, $location_data, $tag_data, $owner_data) {
-		// Get geocode for this zipcode
-		$geocode = $this->getGeo($location_data['zipcode']);
-		// Check that we have a valid geocode before updating db
-		if (isset($geocode) && $geocode) {
-			// insert values into organization
-			$group_success = $this->db->insert('organization', $group_data);
-			// Get the group ID and add it to the owner_data array
-			$group_id = $this->db->insert_id();
-			$owner_data['org_id'] = $group_id;
-			//Check if location is in database
-			$this->db->start_cache();
-			$this->db->where('zipcode', $location_data['zipcode']);
-			$this->db->where('address_one', '');
-			$this->db->where('address_two', '');
-			$loc_query = $this->db->get('location');
-			$this->db->stop_cache();
-			$this->db->flush_cache();
-			//If location isnt in database yet
-			if ($loc_query->num_rows() == 0){
-				// insert values into location and get the location ID
-				$location_success = $this->db->insert('location', $location_data);
-				$location_id = $this->db->insert_id();
-			} else {
-				$locResult = $loc_query->result();
-				$location_id = $locResult[0]->location_id;
-				$location_success = true;
-			}
-			$geo_success = $this->db->query('UPDATE location
-								SET city = "'.$geocode['city'].'", state = "'.$geocode['state'].'", geolat = '.$geocode['lat'].', geolng = '.$geocode['lng'].'
-								WHERE location_id = '.$location_id.'');
-			// Get the tag ID
-			$this->db->like('tag_title', $tag_data['tag_title']);
-			$query = $this->db->get('tag');
-			$tag_id_array = $query->result();
-			$tag_id = $tag_id_array[0]->tag_id;
-			// insert this user into owner and member
-			$owner_success = $this->db->insert('owner', $owner_data);
-			$member_success = $this->db->insert('member', $owner_data);
-			// Create arrays of id_data to insert in DB
-			$location_id_data = array(
-				'org_id' => $group_id,
-				'location_id' => $location_id
-			);
-			$tag_id_data = array(
-				'org_id' => $group_id,
-				'tag_id' => $tag_id
-			);
-			// Call function to insert ids into organization_location and organization_tag
-			$id_success = $this->insert_ids($location_id_data, $tag_id_data);
-			// return true only if all inserts were successful
-			return ($group_success && $location_success && $owner_success &&
-					$member_success && $id_success && $geo_success);
-		} else {
-			return false;
-		}
-	}
 
 	// join an event
 	function join_event($uid, $eventId) {
@@ -307,7 +219,7 @@ class Event_model extends CI_Model {
 		$this->db->insert('attendee', $data);
 	}
 
-	// leave a group
+	// leave an event
 	function leave_event($uid, $eventId) {
 		$this->db->delete('attendee', array('user_id' =>$uid, 'event_id' =>$eventId));
 	}

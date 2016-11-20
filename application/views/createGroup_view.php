@@ -15,7 +15,7 @@
 				<span id="groupName_error" class="text-danger"><?php echo form_error('groupName'); ?></span>
 			</div>
 			<div class="form-group">
-				<label for="name">Group Zip Code</label>
+				<label for="zip">Group Zip Code</label>
 				<input id="groupZip" class="form-control" name="zip" placeholder="Group Zip Code" type="text" value="<?php echo set_value('zip'); ?>" />
 				<span id="groupZip_error" class="text-danger"><?php echo form_error('zip'); ?></span>
 			</div>
