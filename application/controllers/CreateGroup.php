@@ -142,16 +142,17 @@ class CreateGroup extends CI_Controller {
 	
 	function badWord_check($input) {
 		$fh = fopen(base_url().'assets/text_input/badWords.txt', 'r') or die($php_errormsg);
-		while (!feof($fh)) {
-			$line = fgets($fh, 4096);
+		//while (!feof($fh)) {
+			$line = fgets($fh);
+			fclose($fh);
 			if (preg_match($line, strtolower($input))) {
 				$this->form_validation->set_message('badWord_check', 'You have entered an inappropriate word! Lets keep it clean!!!.');
 				return FALSE;
 			} else {
 				return TRUE;
 			}
-		}
-		fclose($fh);
+		//}
+		//fclose($fh);
 	}
 	
 	function removeImage($fileName) {
