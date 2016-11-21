@@ -32,19 +32,18 @@ class CreateEvent extends CI_Controller {
 
 		// get user information from session data to create basic profile
 		$details = $this->user_model->get_user_by_id($this->session->userdata('uid'));
-		$data['uname'] = $details[0]->user_fname . " " . $details[0]->user_lname;
+		$data['uname'] = $details[0]->user_fname . " " . substr($details[0]->user_lname, 0,1);
 		$data['uemail'] = $details[0]->user_email;
 
 		//set form validations
-		$this->form_validation->set_rules('eventTitle', 'Event Title', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[30]|xss_clean');
-		$this->form_validation->set_rules('eventTitle', 'Event Title', 'callback_badWord_check');
+		//$date_regex = "/^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}$/";
+		$this->form_validation->set_rules('eventTitle', 'Event Title', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[30]|callback_badWord_check|xss_clean');
 		$this->form_validation->set_rules('address1','Street Address 1', 'trim|required|min_length[1]|max_length[30]|xss_clean'); 
 		$this->form_validation->set_rules('address2','Street Address 2', 'trim|min_length[1]|max_length[30]|xss_clean'); 
 		$this->form_validation->set_rules('zip','Event Zip Code', 'trim|required|numeric|min_length[5]|max_length[5]|xss_clean');
 		$this->form_validation->set_rules('startTime', 'Event Start', 'trim|required|xss_clean');
-		$this->form_validation->set_rules('endTime', 'Event End', 'trim|xss_clean');
-		$this->form_validation->set_rules('description', 'Event Description', 'trim|required|max_length[200]|xss_clean');
-		$this->form_validation->set_rules('description', 'Event Description', 'callback_badWord_check');
+		$this->form_validation->set_rules('endTime', 'Event End', 'trim|required|xss_clean');
+		$this->form_validation->set_rules('description', 'Event Description', 'trim|required|max_length[1000]|callback_badWord_check|xss_clean');
 		if (empty($_FILES['imageUpload']['tmp_name'])) {
 			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'required');
 		} else {
@@ -127,15 +126,17 @@ class CreateEvent extends CI_Controller {
 				'zipcode' => $this->input->post('zip')
 			);
 
-			//prepare to tag title into tag table
-			$tag_title = $this->input->post('tag');
+			//prepare to insert group tag details into tag table
+			$tag_data = array(
+				'tag_title' => $this->input->post('tag')
+			);
 
 			//prepare to insert owner id into owner table
 			$eventowner_data = array(
 				'owner_id' => $this->session->userdata('uid')
 			);	
 
-			if ($this->event_model->insert_event($event_data, $location_data, $tag_title, $eventowner_data)  && $image_success){
+			if ($this->event_model->insert_event($event_data, $location_data, $tag_data, $eventowner_data)  && $image_success){
 				// success!!!
 				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Event has been successfully created! Please click Cancel if you are finished creating events</div>');
 				redirect('createEvent/index');
@@ -165,16 +166,14 @@ class CreateEvent extends CI_Controller {
 	*/
 	function badWord_check($input) {
 		$fh = fopen(base_url().'assets/text_input/badWords.txt', 'r') or die($php_errormsg);
-		while (!feof($fh)) {
-			$line = fgets($fh, 4096);
-			if (preg_match($line, strtolower($input))) {
-				$this->form_validation->set_message('badWord_check', 'You have entered an inappropriate word! Lets keep it clean!!!.');
-				return FALSE;
-			} else {
-				return TRUE;
-			}
-		}
+		$line = fgets($fh);
 		fclose($fh);
+		if (preg_match($line, strtolower($input))) {
+			$this->form_validation->set_message('badWord_check', 'You have entered an inappropriate word! Lets keep it clean!!!.');
+			return FALSE;
+		} else {
+			return TRUE;
+		}
 	}
 	
 	function removeImage($fileName) {

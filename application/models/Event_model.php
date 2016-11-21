@@ -27,7 +27,7 @@ class Event_model extends CI_Model {
 	}
 
 	// insert new event into DB
-	function insert_event($event_data, $location_data, $eventtag_title, $event_owner_data) {
+	function insert_event($event_data, $location_data, $tag_data, $event_owner_data) {
 		//Check if location is in database
 		$this->db->start_cache();
 		$this->db->where('address_one', $location_data['address_one']);
@@ -64,7 +64,7 @@ class Event_model extends CI_Model {
 		if ($location_success) {
 			// insert values into organization
 			$event_success = $this->db->insert('event', $event_data);
-			// Get the group ID and add it to the owner_data array
+			// Get the event ID and add it to the owner_data array
 			$event_id = $this->db->insert_id();
 
 			//event_location
@@ -86,9 +86,9 @@ class Event_model extends CI_Model {
 			$query = $this->db->get('tag');
 			$tag_id_array = $query->result();
 			$tag_id = $tag_id_array[0]->tag_id;
-			$tag_data['event_id'] = $event_id;
-			$tag_data['tag_id'] = $tag_id;
-			$event_tag_success = $this->db->insert('event_tag', $tag_data);
+			$event_tag_data['event_id'] = $event_id;
+			$event_tag_data['tag_id'] = $tag_id;
+			$event_tag_success = $this->db->insert('event_tag', $event_tag_data);
 			
 			// return true only if all inserts were successful
 			return ($event_success &&
@@ -157,7 +157,7 @@ class Event_model extends CI_Model {
 		return NULL;
 	}
 
-	// get first and last name of members in a group
+	// get first and last name of members in a event
 	function get_event_members($event_id) {
 		$query = $this->db->query('SELECT user.user_id, user.user_fname, user.user_lname
 											FROM user, attendee
@@ -196,7 +196,7 @@ class Event_model extends CI_Model {
 		return $data->result();
 	}
 
-	// gets bulletin message for group
+	// gets bulletin message for event
 	function get_bulletins($eventId) {
 		$query = $this->db->query('SELECT bulletin_message, bulletin_datetime, user_fname, user_lname
 									FROM bulletin
