@@ -31,12 +31,12 @@
 								}
 								for ($x = $index; $x < $max; $x++) {
 									echo "<div class='col-md-3 card'>";
-									echo "<a id='".$ownedgroups[$x]->org_id."' href='".base_url()."index.php/Event/display/".$ownedgroups[$x]->org_id."'><img class='img-responsive center-cropped' src='";
+									echo "<a id='".$ownedgroups[$x]->org_id."' href='".base_url()."index.php/Group/display/".$ownedgroups[$x]->org_id."'><img class='img-responsive center-cropped' src='";
 									echo base_url()."uploads/".$ownedgroups[$x]->org_picture."' alt='".$ownedgroups[$x]->org_title."'></a>";
 									echo "<div class='card-block'>";
 									echo"<h4 class='card-title' id='card-title'>".$ownedgroups[$x]->org_title."</h4>";
 									echo "<p class='card-text'>".$ownedgroups[$x]->org_description."</p>
-									<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Event/display/".$ownedgroups[$x]->org_id."'>See More</a>
+									<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Group/display/".$ownedgroups[$x]->org_id."'>See More</a>
 									</div></div>";
 								}
 								
@@ -66,12 +66,12 @@
 								}										
 								for ($x = $index; $x < $max; $x++) {
 									echo "<div class='col-md-3 card'>";
-									echo "<a id='".$memberedgroups[$x]->org_id."' href='".base_url()."index.php/Event/display/".$memberedgroups[$x]->org_id."'><img class='img-responsive center-cropped' src='";
+									echo "<a id='".$memberedgroups[$x]->org_id."' href='".base_url()."index.php/Group/display/".$memberedgroups[$x]->org_id."'><img class='img-responsive center-cropped' src='";
 									echo base_url()."uploads/".$memberedgroups[$x]->org_picture."' alt='".$memberedgroups[$x]->org_title."'></a>";
 									echo "<div class='card-block'>";
 									echo"<h4 class='card-title' id='card-title'>".$memberedgroups[$x]->org_title."</h4>";
 									echo "<p class='card-text'>".$memberedgroups[$x]->org_description."</p>
-									<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Event/display/".$memberedgroups[$x]->org_id."'>See More</a>
+									<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Group/display/".$memberedgroups[$x]->org_id."'>See More</a>
 									</div></div>";
 								}
 							}

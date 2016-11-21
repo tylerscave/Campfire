@@ -35,8 +35,8 @@
 									echo base_url()."uploads/".$ownedevents[$x]->event_picture."' alt='".$ownedevents[$x]->event_title."'></a>";
 									echo "<div class='card-block'>";
 									echo"<h4 class='card-title' id='card-title'>".$ownedevents[$x]->event_title."</h4>";
-									echo "<p class='card-text'>".$ownedevents[$x]->event_description."</p>
-									<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Event/display/".$ownedevents[$x]->event_id."'>See More</a>
+									/*echo "<p class='card-text'>".$ownedevents[$x]->event_description."</p>*/
+									echo "<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Event/display/".$ownedevents[$x]->event_id."'>See More</a>
 									</div></div>";
 								}
 								
@@ -70,8 +70,8 @@
 									echo base_url()."uploads/".$memberedevents[$x]->event_picture."' alt='".$memberedevents[$x]->event_title."'></a>";
 									echo "<div class='card-block'>";
 									echo"<h4 class='card-title' id='card-title'>".$memberedevents[$x]->event_title."</h4>";
-									echo "<p class='card-text'>".$memberedevents[$x]->event_description."</p>
-									<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Event/display/".$memberedevents[$x]->event_id."'>See More</a>
+									/*echo "<p class='card-text'>".$memberedevents[$x]->event_description."</p>*/
+									echo "<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Event/display/".$memberedevents[$x]->event_id."'>See More</a>
 									</div></div>";
 								}
 							}
