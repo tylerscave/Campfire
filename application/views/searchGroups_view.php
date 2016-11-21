@@ -27,20 +27,15 @@
 									}
 								}
 							} ?>
-							<div class="col-md-2 well" style="min-height: 100px;">
+							<div class="col-md-2 col-sm-2 col-lg-2 well" style="min-height: 100px;">
 								<div class="form-group">
 								  <label for="select-tag">Filter:</label>
-								  <select class="form-control" id="select-tag">
-								    <option id="all-opt" data-filter="All">All</option>
-								    <option id="movies-opt" data-filter="Movies">Movies</option>
-								    <option id="education-opt" data-filter="Education">Education</option>
-								    <option id="sports-opt" data-filter="Sports">Sports</option>
-										<option id="food-opt" data-filter="Food">Food</option>
-										<option id="coffee-opt" data-filter="Coffee">Coffee</option>
-								  </select>
+									<?php	$options = array('All'=> 'All','Movies' => 'Movies','Education' => 'Education','Sports' => 'Sports','Food' => 'Food','Coffee'=> 'Coffee');
+									$extra = 'class="form-control" id="select-tag" method="POST"';
+									echo form_dropdown('tag', $options, 'large', $extra);?>
 								</div>
 							</div>
-							<div class="col-md-10 well">
+							<div class="col-md-10 col-sm-10 col-lg-10 well">
 								<div class="card-group">
 							<?php
 								if(isset($groups)) {
@@ -52,7 +47,7 @@
 										}
 									}
 									?>
-									<div class="col-md-12">
+									<div class="col-md-12 col-sm-12 col-lg-12">
 										<?php $ci =& get_instance(); echo $ci->pagination->create_links(); ?>
 									</div>
 							</div>
@@ -76,12 +71,13 @@ function displayTiles($groups){
 		$max = count($groups); //in case of out of range error
 	}
 	for ($x = $index; $x < $max; $x++) {
+		$truncatedDesc = strlen($groups[$x]['org_description']) > 25 ? substr($groups[$x]['org_description'], 0, 25).'...' : $groups[$x]['org_description'];
 		echo "<div class='col-md-3 card filter ".$groups[$x]['tag_title']."'>";
 		echo "<a id='".$groups[$x]['org_id']."' href='".base_url()."index.php/Group/display/".$groups[$x]['org_id']."'><img class='img-responsive center-cropped' src='";
 		echo base_url()."uploads/".$groups[$x]['org_picture']."' alt='".$groups[$x]['org_title']."'></a>";
 		echo "<div class='card-block'>";
 		echo"<h4 class='card-title' id='card-title'>".$groups[$x]['org_title']."</h4>";
-		echo "<p class='card-text'>".$groups[$x]['org_description']."</p>
+		echo "<p class='card-text'>".$truncatedDesc."</p>
 		<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Group/display/".$groups[$x]['org_id']."'>See More</a>
 		<p class='card-text'><small class='text-muted'>Members:".$groups[$x]['members_count']."</small></p></div></div>";
 	}
