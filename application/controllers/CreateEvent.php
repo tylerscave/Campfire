@@ -3,7 +3,7 @@
  *COPYRIGHT (C) 2016 Campfire. All Rights Reserved.
  * CreateEvent.php is the controller for createEvent_view.php
  * Solves SE165 Semester Project Fall 2016
- * @author Peter Curtis, Tyler Jones, Troy Nguyen, Marshall Cargle, 
+ * @author Peter Curtis, Tyler Jones, Troy Nguyen, Marshall Cargle,
  *     Luis Otero, Jorge Aguiniga, Stephen Piazza, Jatinder Verma
 */
 class CreateEvent extends CI_Controller {
@@ -37,8 +37,8 @@ class CreateEvent extends CI_Controller {
 
 		//set form validations
 		$this->form_validation->set_rules('eventTitle', 'Event Title', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[30]|callback_badWord_check|xss_clean');
-		$this->form_validation->set_rules('address1','Street Address 1', 'trim|required|min_length[1]|max_length[30]|xss_clean'); 
-		$this->form_validation->set_rules('address2','Street Address 2', 'trim|min_length[1]|max_length[30]|xss_clean'); 
+		$this->form_validation->set_rules('address1','Street Address 1', 'trim|required|min_length[1]|max_length[30]|xss_clean');
+		$this->form_validation->set_rules('address2','Street Address 2', 'trim|min_length[1]|max_length[30]|xss_clean');
 		$this->form_validation->set_rules('zip','Event Zip Code', 'trim|required|numeric|min_length[5]|max_length[5]|xss_clean');
 		$this->form_validation->set_rules('startTime', 'Event Start', 'trim|required|callback_date_check|xss_clean');
 		$this->form_validation->set_rules('endTime', 'Event End', 'trim|required|callback_date_check|xss_clean');
@@ -102,7 +102,7 @@ class CreateEvent extends CI_Controller {
 			//cleanup
 			imagedestroy($image);
 			imagedestroy($tmp);
-			
+
 			//translate user dates to "yyyy-mm-dd hh:mm:ss format"
 			$startInput = $this->input->post('startTime');
 			$startDateTime = date('Y-m-d H:i:s', strtotime($startInput));
@@ -133,7 +133,7 @@ class CreateEvent extends CI_Controller {
 			//prepare to insert owner id into owner table
 			$eventowner_data = array(
 				'owner_id' => $this->session->userdata('uid')
-			);	
+			);
 
 			if ($this->event_model->insert_event($event_data, $location_data, $tag_data, $eventowner_data)  && $image_success){
 				// success!!!
@@ -148,7 +148,7 @@ class CreateEvent extends CI_Controller {
 			}
 		}
 	}
-	
+
 	function ext_check() {
 		$filename = $_FILES['imageUpload']['name'];
 		$ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
@@ -174,7 +174,7 @@ class CreateEvent extends CI_Controller {
 			return TRUE;
 		}
 	}
-	
+
 	function date_check($input) {
 		$date_regex = "/^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}[ ]([0-9]|0[0-9]|1?[0-9]|2[0-3]):[0-5]?[0-9]+$/";
 		if (preg_match($date_regex, $input)) {
@@ -184,7 +184,7 @@ class CreateEvent extends CI_Controller {
 			return FALSE;
 		}
 	}
-	
+
 	function removeImage($fileName) {
 		$path = './uploads/'.$fileName;
 		if(unlink($path)) {
