@@ -5,11 +5,13 @@
 <!-- Body -->
 <div class="container custom-body">
 	<div class="row" style="padding-top:50px">
-	<div class="container-fluid">
+	<div class="col-md-4" align="center">
 		<ul class="nav nav-pills nav-justified" style="background-color:white">
 		<li id="owned_groupsTab" class="active"><a data-toggle="tab" href="#owned_groups">Owned</a></li>
 		<li id="joined_groupsTab"><a data-toggle="tab" href="#joined_groups">Joined</a></li>
 		</ul>
+	</div>
+	<div class="container-fluid">
 		<div style="padding-top:50px"></div>
 		<div class="col-md-12 well" id="group_view_layout">
 			<div class="col-md-10">

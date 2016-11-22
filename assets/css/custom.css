@@ -433,3 +433,19 @@ button:focus { outline:0 !important; }
     min-height: 20px;
     background-color: rgba(0, 0, 0, 0);
 }
+
+/* Navbar pills*/
+
+.navbar {
+  background-color: #3a2665;
+  color: #ffffff;
+}
+
+.navbar .nav {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.navbar .nav-pills {
+	color: #ffffff;
+}
