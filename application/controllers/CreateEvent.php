@@ -23,7 +23,7 @@ class CreateEvent extends CI_Controller {
 	}
 
 	function index($gID = NULL) {
-
+// currently not doing anything with gID until this page is linked to group page
 		// if returning from an error, get gID from flashdata
 		if ($gID == NULL) {
 			$gID = $this->session->flashdata('gID');
@@ -146,12 +146,17 @@ class CreateEvent extends CI_Controller {
 				'tag_title' => $this->input->post('tag')
 			);
 
+			//prepare to insert group details into  table
+			$group_data = array(
+				'org_id' => array_search($this->input->post('eventGroup'), $group_list)
+			);
+
 			//prepare to insert owner id into owner table
 			$eventowner_data = array(
 				'owner_id' => $this->session->userdata('uid')
 			);
 
-			if ($this->event_model->insert_event($event_data, $location_data, $tag_data, $eventowner_data)  && $image_success){
+			if ($this->event_model->insert_event($event_data, $location_data, $tag_data, $group_data, $eventowner_data)  && $image_success){
 				// success!!!
 				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Event has been successfully created! Please click Cancel if you are finished creating events</div>');
 				redirect('createEvent/index');
