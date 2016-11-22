@@ -68,6 +68,17 @@
 				</select>
 			</div>
 			<div class="form-group">
+				<label for="eventGroup">Associate the Event with a Group</label>
+				<select id="eventGroup" class="form-control" name="eventGroup">
+					<?php
+					foreach($group_list as $row) {
+						echo '<option>'.$row.'</option>';
+					}
+					echo '<option>This event does not involve a group</option>';
+					?>
+				</select>
+			</div>
+			<div class="form-group">
 				<label for="description">Event Description</label>
 				<textarea id="eventDescription" class="form-control" rows="5" name="description" value="<?php echo set_value('description'); ?>"><?php echo (isset($description) ? $description : ''); ?></textarea>
 				<span id="eventDescription_error" class="text-danger"><?php echo form_error('description'); ?></span>
