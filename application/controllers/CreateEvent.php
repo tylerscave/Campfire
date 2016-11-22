@@ -22,11 +22,27 @@ class CreateEvent extends CI_Controller {
 		}
 	}
 
-	function index() {
+	function index($gID = NULL) {
+
+		// if returning from an error, get gID from flashdata
+		if ($gID == NULL) {
+			$gID = $this->session->flashdata('gID');
+		}
+		
 		//dynamically populate the tag_list for the dropdown
 		$data['tag_list'] = $this->group_model->get_dropdown_list();
+		
+		//dynamically populate a list of groups owned by this user in the dropdown list
+		$groupsOwned = $this->group_model->get_groups($this->session->userdata('uid'), "owner");
+		$group_list = array();
+		foreach ($groupsOwned as $group) {
+			$group_list[$group->org_id] = $group->org_title;
+		}
+		$data['group_list'] = $group_list;
+		
 		//set last entered description to be displayed if error occurred
 		$data['description'] = $this->input->post('description');
+		
 		//new directory for images
 		$targetDir = './uploads/';
 
