@@ -37,25 +37,24 @@
 			</div>
 			<div class="form-group row">
 				<div class="col-sm-6">
+					<label for="startTime">Event Start</label>
 					<div class="input-group date" id="startDate">
-						<label for="startTime">Event Start</label>
 						<input id="startTime" type="datetime" class="form-control" name="startTime" placeholder="Event Start" value="<?php echo set_value('startTime'); ?>" />
-						<span id="startTime_error" class="text-danger"><?php echo form_error('startTime'); ?></span>
 						<span class="input-group-addon">
 							<span class="glyphicon glyphicon-calendar"></span>
 						</span>
 					</div>
+					<span id="startTime_error" class="text-danger"><?php echo form_error('startTime'); ?></span>
 				</div>
 				<div class="col-sm-6">
+					<label for="endTime">Event End</label>
 					<div class="input-group date" id="endDate">
-						<label for="endTime">Event End</label>
 						<input id="endTime" type="datetime" class="form-control" name="endTime" placeholder="Event End" value="<?php echo set_value('endTime'); ?>" />
-						<span id="endTime_error" class="text-danger"><?php echo form_error('endTime'); ?>
-						</span>
 						<span class="input-group-addon">
 							<span class="glyphicon glyphicon-calendar"></span>
 						</span>
 					</div>
+					<span id="endTime_error" class="text-danger"><?php echo form_error('endTime'); ?></span>
 				</div>
 			</div>
 			<div class="form-group">
@@ -65,6 +64,17 @@
 					foreach($tag_list as $row) {
 						echo '<option>'.$row.'</option>';
 					}
+					?>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="eventGroup">Associate the Event with a Group</label>
+				<select id="eventGroup" class="form-control" name="eventGroup">
+					<?php
+					foreach($group_list as $row) {
+						echo '<option>'.$row.'</option>';
+					}
+					echo '<option>This event does not involve a group</option>';
 					?>
 				</select>
 			</div>

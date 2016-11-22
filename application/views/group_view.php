@@ -1,31 +1,53 @@
+<div class="modal fade" id="bulletinModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Enter Bulletin Message</h4>
+      </div>
+	    <div class="modal-body">
+	    	<?php $attributes = array("name" => "bulletinform");
+			echo form_open("group/display/".$info['org_id'], $attributes);?>
+	    	<textarea id="bulletinDescription" class="form-control" rows="5" name="bulletinDescription" ></textarea>
+				<span id="bulletinDescription_error" class="text-danger"><?php echo form_error('description'); ?></span>
+      	</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <input type="submit" name="submit" class="btn btn-primary" value="Submit Message"></input>
+        <?php echo form_close(); ?>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <!-- Header -->
 <?php $this->load->view('template/header.php'); ?>
 <!-- End Header -->
 
 <!-- Body -->
 	<div class="container custom-body" style="color: black">
-	
+
 		<div class="row">
-			<div class="col-md-8 col-md-offset-2 ">
+			<div class="col-md-8 col-md-offset-2 well">
 				<div class="row">
-					<div class="col-md-3">
-				      	<img id="groupPicture" height="200" width="200" src="<?php echo base_url().'uploads/'.$info['org_picture']?>" alt="...">
+					<div class="col-md-4">
+				      	<img id="groupPicture" height="300" width="300" src="<?php echo base_url().'uploads/'.$info['org_picture']?>" alt="...">
 				  	</div>
-			  		<div class="col-md-9">
+			  		<div class="col-md-8">
 						<div class="row">
 							<div class=" col-md-12 panel panel-default">
-								<div class="panel-body" id="groupTitleText"><?php echo $info['org_title'];?>
+								<div class="panel-body text-left" id="groupTitleText"><h4><strong><?php echo $info['org_title'];?></strong>
 								<?php 
 								if ($status == 'owner') {
-									echo '<a class="btn btn-info pull-right" id="editGroupButton" href="'.base_url().'index.php/EditGroup/index/'.$info['org_id'].'">Edit Group</a>';
+									echo '<a class="btn btn-info btn-sm pull-right" id="editGroupButton" href="'.base_url().'index.php/EditGroup/index/'.$info['org_id'].'">Edit Group</a>';
 								} else if ($status == 'member') {
-									echo '<a class="btn btn-info pull-right" id="leaveGroupButton" href="'.base_url().'index.php/Group/leave_group/'.$info['org_id'].'">Leave</a>';
+									echo '<a class="btn btn-info btn-sm pull-right" id="leaveGroupButton" href="'.base_url().'index.php/Group/leave_group/'.$info['org_id'].'">Leave</a>';
 								} else  if ($status == 'nonmember'){
-									echo '<a class="btn btn-info pull-right" id="joinGroupButton" href="'.base_url().'index.php/Group/join_group/'.$info['org_id'].'">Join</a>';
+									echo '<a class="btn btn-info btn-sm pull-right" id="joinGroupButton" href="'.base_url().'index.php/Group/join_group/'.$info['org_id'].'">Join</a>';
 								} else {
-									echo '<a class="btn btn-info pull-right" id="joinGroupButton" href="'.base_url().'index.php/Login">Login to Join</a>';
+									echo '<a class="btn btn-info btn-sm pull-right" id="joinGroupButton" href="'.base_url().'index.php/Login">Login to Join</a>';
 								}
-								?></div>
+								?></h4></div>
 								<table class="table">
 									<tr>
 										<td id="groupOwnerName"><?php echo $info['user_fname'].' '.$info['user_lname'];?></td>
@@ -34,42 +56,86 @@
 								</table>
 							</div>
 						</div>
-						<div class="row" style="padding: 1em 0em">
+						<div class="row text-left">
 							<div class="panel panel-default">
-								<div class="panel-heading">
-									<div class="row">
-										<div class="col-md-10 col-md-offset-1"><h5 class="panel-title">Members</h5></div>
-										<div class="col-md-1">
-											<button  type="button" class="btn btn-default" data-toggle="collapse" data-target="#member-table">
-										  		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-											</button>
-										</div>
-									</div>
-								</div>
-								<div class="pre-scrollable collapse" id="member-table">
-									<table class="table">
-										<?php 
-											foreach ($members as $row) {
-												echo '<tr><td>'.$row['user_fname'].' '.substr($row['user_lname'], 0,1).'.</td><tr>';
-											}
-										?>
-									</table>
+								<div class="panel-heading"><h5 class="panel-title">Description</h5></div>
+								<div class="panel-body" id="groupDescriptionText">
+									<?php echo $info['org_description'];?>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="row">
+				<div class="row top-buffer">
 					<div class="panel panel-default">
-						<div class="panel-heading"><h5 class="panel-title">Description</h5></div>
-						<div class="panel-body" id="groupDescriptionText">
-							<?php echo $info['org_description'];?>
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-md-10 col-md-offset-1"><h5 class="panel-title">Members (<?php echo count($members)?>)</h5></div>
+								<div class="col-md-1">
+									<button  type="button" class="btn btn-default" data-toggle="collapse" data-target="#member-table">
+							  			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="pre-scrollable collapse" id="member-table">
+							<table class="table">
+								<?php 
+									$count = 0;
+									foreach ($members as $row) {
+										if ($count % 4 == 0) {
+											echo '<tr>';
+										}
+										echo '<td style=\'width:25%\'>'.$row['user_fname'].' '.substr($row['user_lname'], 0,1).'.</td>';
+										$count++;
+			  							if ($count % 4 == 4) {
+											echo '</tr>';
+										}
+									}
+									while ($count % 4 != 0) {
+										echo '<td style=\'width:25%\'> </td>';
+										$count++;
+									}
+									echo '</tr>';
+								?>
+							</table>
 						</div>
 					</div>
 				</div>
 				<div class="row">
 					<div class="panel panel-default">
-						<div class="panel-heading"><h5 class="panel-title">Bulletin Board</h5></div>
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-md-8 col-md-offset-2"><h5 class="panel-title">Event List</h5></div>
+								<div class="col-md-2">
+								<?php if ($status == 'owner') {
+									echo '<button id="createEventButton" class="btn btn-info btn-sm pull-right">Create Event</button>';
+								}?>
+									
+								</div>
+							</div>
+						</div>
+						<div class="panel-body">
+							<table class="table table-responsive">
+							<?php 
+							?>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-md-8 col-md-offset-2"><h5 class="panel-title">Bulletin Board</h5></div>
+								<div class="col-md-2">
+								<?php if ($status == 'owner') {
+									echo '<button id="bulletinButton" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#bulletinModal">Add Message</button>';
+								}?>
+									
+								</div>
+							</div>
+						</div>
 						<div class="panel-body">
 							<table class="table table-responsive">
 							<?php 
@@ -96,6 +162,10 @@
 <!-- End Footer -->
 
 <script>
+$('#myModal').on('shown.bs.modal', function () {
+	  $('#myInput').focus()
+	})
+
 function toggler(divId) {
     $("#" + divId).toggle();
 }

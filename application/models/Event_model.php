@@ -27,7 +27,7 @@ class Event_model extends CI_Model {
 	}
 
 	// insert new event into DB
-	function insert_event($event_data, $location_data, $tag_data, $event_owner_data) {
+	function insert_event($event_data, $location_data, $tag_data, $group_data, $event_owner_data) {
 		//Check if location is in database
 		$this->db->start_cache();
 		$this->db->where('address_one', $location_data['address_one']);
@@ -90,12 +90,21 @@ class Event_model extends CI_Model {
 			$event_tag_data['tag_id'] = $tag_id;
 			$event_tag_success = $this->db->insert('event_tag', $event_tag_data);
 			
+			// organization_event
+			if (is_numeric($group_data['org_id'])) {
+				$group_data['event_id'] = $event_id;
+				$group_success = $this->db->insert('organization_event', $group_data);
+			} else {
+				$group_success = true;
+			}
+			
 			// return true only if all inserts were successful
 			return ($event_success &&
 				$event_location_success &&
 				$event_owner_success &&
 				$attendee_success &&
-				$event_tag_success);
+				$event_tag_success &&
+				$group_success);
 		} else {
 			return false;
 		}
@@ -196,6 +205,14 @@ class Event_model extends CI_Model {
 		return $data->result();
 	}
 
+	function insert_event_bulletin($bulletin_data) {
+		$bulletin_insert = $this->db->insert('bulletin', array('bulletin_message' => $bulletin_data['bulletin_message'], 'bulletin_datetime' => date('Y-m-d H:i:s'),
+				'bulletin_user_id' => $bulletin_data['user_id']));
+		$bulletin_id = $this->db->insert_id();
+		$bulletin_event = $this->db->insert('event_bulletin', array('event_id' => $bulletin_data['event_id'], 'bulletin_id' => $bulletin_id));
+		return $bulletin_insert && $bulletin_event;
+	}
+	
 	// gets bulletin message for event
 	function get_bulletins($eventId) {
 		$query = $this->db->query('SELECT bulletin_message, bulletin_datetime, user_fname, user_lname

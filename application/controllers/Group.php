@@ -11,8 +11,8 @@ class Group extends CI_Controller {
 	// constructor used for needed initialization
 	public function __construct() {
 		parent::__construct();
-		$this->load->helper(array('form', 'url', 'html'));
-		$this->load->library(array('session', 'pagination'));
+		$this->load->helper(array('form', 'url', 'html', 'security'));
+		$this->load->library(array('session', 'pagination', 'form_validation'));
 		$this->load->database();
 		$this->load->model('group_model');
 	}
@@ -117,6 +117,32 @@ class Group extends CI_Controller {
 			redirect('group/search');
 		}
 
+		// set form validation rules
+		$this->form_validation->set_rules('bulletinDescription', 'Bulletin Description', 'trim|required|min_length[1]|max_length[255]|callback_badWord_check');
+		
+		// submit the form and validate
+		if ($this->form_validation->run() == FALSE) {
+			// if it fails just load the view again
+			//$this->load->view('group_view', $data);
+		} else {
+
+			$bulletin_data = array();
+			$bulletin_data['org_id'] = $gID;
+			$bulletin_data['user_id'] = $this->session->userdata('uid');
+			$bulletin_data['bulletin_message'] = $this->input->post('bulletinDescription');
+ 
+			if ($this->group_model->insert_group_bulletin($bulletin_data)) {
+				// success!!!
+				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Bulletin Message successfully added!</div>');
+				
+				redirect('group/display/'.$gID);
+			} else {
+				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error. Please try again later!!!</div>');
+				
+				redirect('group/display/'.$gID);
+			}
+		}
+
 
 	}
 
@@ -136,5 +162,18 @@ class Group extends CI_Controller {
 			$this->group_model->leave_group($uid, $gID);
 		}
 		redirect('group/display/'.$gID);
+	}
+
+	
+	function badWord_check($input) {
+		$fh = fopen(base_url().'assets/text_input/badWords.txt', 'r') or die($php_errormsg);
+		$line = fgets($fh);
+		fclose($fh);
+		if (preg_match($line, strtolower($input))) {
+			$this->form_validation->set_message('badWord_check', 'You have entered an inappropriate word! Lets keep it clean!!!.');
+			return FALSE;
+		} else {
+			return TRUE;
+		}
 	}
 }

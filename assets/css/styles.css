@@ -18,7 +18,8 @@ body {
 body {
     font-family: 'Questrial','Helvetica Neue',Arial,sans-serif;
     background-color: #282828;
-    color: #d3d3d3;
+   /*  color: #d3d3d3; */
+   color: black;
     webkit-tap-highlight-color: #222;
 }
 
