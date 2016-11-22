@@ -155,7 +155,6 @@ class EditGroup extends CI_Controller {
 				// success!!!
 				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Group has been successfully updated with the new information! You will be redirected shortly.</div>');
 				$this->session->set_flashdata('editSuccess', true);
-				$this->session->set_flashdata('gID', $this->session->userdata('gID'));
 				redirect('editGroup/index');
 			} else {
 				// error
@@ -163,6 +162,9 @@ class EditGroup extends CI_Controller {
 				redirect('editGroup/index');
 			}
 		}
+		// Set flash data to recapture group id on next page load
+		$this->session->set_flashdata('gID', $this->session->userdata('gID'));
+		print("gID is: ".$this->session->userdata('gID'));
 	}
 	
 	function ext_check() {
