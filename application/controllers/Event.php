@@ -11,8 +11,8 @@ class Event extends CI_Controller {
 	// constructor used for needed initialization
 	public function __construct() {
 		parent::__construct();
-		$this->load->helper(array('url', 'html'));
-		$this->load->library('session');
+		$this->load->helper(array('form', 'url', 'html', 'security'));
+		$this->load->library(array('session', 'pagination', 'form_validation'));
 		$this->load->database();
 		$this->load->model('event_model');
 	}
@@ -65,7 +65,31 @@ class Event extends CI_Controller {
 		} else {
 			redirect('event/search');
 		}
-
+		
+		// set form validation rules
+		$this->form_validation->set_rules('bulletinDescription', 'Bulletin Description', 'trim|required|min_length[1]|max_length[255]|callback_badWord_check');
+		
+		// submit the form and validate
+		if ($this->form_validation->run() == FALSE) {
+			// if it fails just load the view again
+		} else {
+		
+			$bulletin_data = array();
+			$bulletin_data['event_id'] = $eventID;
+			$bulletin_data['user_id'] = $this->session->userdata('uid');
+			$bulletin_data['bulletin_message'] = $this->input->post('bulletinDescription');
+		
+			if ($this->event_model->insert_event_bulletin($bulletin_data)) {
+				// success!!!
+				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Bulletin Message successfully added!</div>');
+		
+				redirect('event/display/'.$eventID);
+			} else {
+				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error. Please try again later!!!</div>');
+		
+				redirect('event/display/'.$eventID);
+			}
+		}
 
 	}
 
@@ -85,5 +109,18 @@ class Event extends CI_Controller {
 			$this->event_model->leave_event($uid, $eventID);
 		}
 		redirect('event/display/'.$eventID);
+	}
+	
+
+	function badWord_check($input) {
+		$fh = fopen(base_url().'assets/text_input/badWords.txt', 'r') or die($php_errormsg);
+		$line = fgets($fh);
+		fclose($fh);
+		if (preg_match($line, strtolower($input))) {
+			$this->form_validation->set_message('badWord_check', 'You have entered an inappropriate word! Lets keep it clean!!!.');
+			return FALSE;
+		} else {
+			return TRUE;
+		}
 	}
 }

@@ -196,6 +196,14 @@ class Event_model extends CI_Model {
 		return $data->result();
 	}
 
+	function insert_event_bulletin($bulletin_data) {
+		$bulletin_insert = $this->db->insert('bulletin', array('bulletin_message' => $bulletin_data['bulletin_message'], 'bulletin_datetime' => date('Y-m-d H:i:s'),
+				'bulletin_user_id' => $bulletin_data['user_id']));
+		$bulletin_id = $this->db->insert_id();
+		$bulletin_event = $this->db->insert('event_bulletin', array('event_id' => $bulletin_data['event_id'], 'bulletin_id' => $bulletin_id));
+		return $bulletin_insert && $bulletin_event;
+	}
+	
 	// gets bulletin message for event
 	function get_bulletins($eventId) {
 		$query = $this->db->query('SELECT bulletin_message, bulletin_datetime, user_fname, user_lname

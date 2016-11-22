@@ -275,15 +275,25 @@ class Group_model extends CI_Model {
 			return false;
 		}
 	}
+	
+	
+	function insert_group_bulletin($bulletin_data) {
+		$bulletin_insert = $this->db->insert('bulletin', array('bulletin_message' => $bulletin_data['bulletin_message'], 'bulletin_datetime' => date('Y-m-d H:i:s'),
+				'bulletin_user_id' => $bulletin_data['user_id']));
+		$bulletin_id = $this->db->insert_id();
+		$bulletin_group = $this->db->insert('organization_bulletin', array('org_id' => $bulletin_data['org_id'], 'bulletin_id' => $bulletin_id));
+		return $bulletin_insert && $bulletin_group;
+	}
 
 	// gets bulletin message for group
 	function get_bulletins($gid) {
-		$query = $this->db->query('SELECT t1.user_fname, t1.user_lname, t3.bulletin_message, t3.bulletin_datetime
-									FROM user t1, organization_bulletin t2, bulletin t3
-									WHERE t2.org_id = '.$gid.'
-									AND t2.bulletin_id = t3.bulletin_id
-									AND t3.bulletin_datetime >= DATE_ADD(NOW(), INTERVAL -30 DAY)
-									ORDER BY t3.bulletin_datetime DESC');
+		$query = $this->db->query('SELECT bulletin_message, bulletin_datetime, user_fname, user_lname
+										FROM bulletin
+										LEFT JOIN user ON bulletin_user_id  = user_id
+										WHERE bulletin_id IN (SELECT bulletin_id
+										                        FROM organization_bulletin
+										                        WHERE org_id = '.$gid.')
+										AND bulletin_datetime >= DATE_ADD(NOW(), INTERVAL -30 DAY)');
 		$group_bulletins = array();
 		foreach ($query->result_array() as $row) {
 			$group_bulletins[] = array('user_fname' => $row['user_fname'], 'user_lname' => $row['user_lname'],
