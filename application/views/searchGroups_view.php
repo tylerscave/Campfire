@@ -19,7 +19,7 @@
 							}
 							else{
 								if($this->input->get('groupQuery')){
-									echo "<h5>0 Groups Found</h5></div>";
+									echo "<h5>0 Groups Found</h5>";
 								}
 								else{
 									if(isset($random)){

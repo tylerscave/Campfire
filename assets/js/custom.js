@@ -6,7 +6,8 @@ var map;
 function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 37.3352, lng: -121.8811},
-    zoom: 5
+    zoom: 5,
+    clickableIcons: false	
   });
   var input = document.getElementById('pac-input');
   var autocomplete = new google.maps.places.Autocomplete(input);
@@ -67,13 +68,13 @@ function initMap() {
 }
 function displayEvents(events){
   events.forEach(function(event){
-
     var infowindow = new google.maps.InfoWindow();
     var marker = new google.maps.Marker({
-      map: map
+      map: map,
     });
 
     marker.addListener('click', function() {
+      removeInfoWindows();
       infowindow.open(map, marker);
     });
 
@@ -94,6 +95,7 @@ function displayEvents(events){
     infowindows.push({window:infowindow, tag:event['tag_title']});
     markers.push({marker:marker, tag:event['tag_title']});
   });
+
 }
 
 function removeMarkers(){
@@ -107,11 +109,12 @@ function removeInfoWindows(){
   infowindows.forEach(function(iw){
     iw['window'].close();
   });
-  infowindows=[];
 }
 
 function filterMarkers(tag){
-
+  infowindows.forEach(function(iw){
+    iw['window'].close();
+  });
   if(tag === 'All'){
     markers.forEach(function(marker){
       marker['marker'].setVisible(true);
