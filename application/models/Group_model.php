@@ -125,14 +125,21 @@ class Group_model extends CI_Model {
 		}
 	}
 
-	// get groups joined, owned, or admined
+	// get groups joined or owned
 	function get_groups($id, $user_type) {
 
 		if ($user_type == 'member') {
+			
+			$query = 'SELECT org_title FROM organization c JOIN
+											(SELECT org_id FROM owner ow
+												WHERE ow.user_id =(SELECT user_id FROM user u where u.user_id = '.$id.')) AS f
+											USING(org_id)';
+			
 			$data = $this->db->query('SELECT * FROM organization c JOIN
 											(SELECT org_id FROM member m
 												WHERE m.user_id =(SELECT user_id FROM user u where u.user_id = '.$id.')) AS f
-											USING(org_id)');
+											USING(org_id)
+											WHERE org_title NOT IN ('.$query.')');
 
 
 		}
