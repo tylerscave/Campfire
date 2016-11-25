@@ -71,13 +71,14 @@ function displayTiles($groups){
 		$max = count($groups); //in case of out of range error
 	}
 	for ($x = $index; $x < $max; $x++) {
-		$truncatedDesc = strlen($groups[$x]['org_description']) > 25 ? substr($groups[$x]['org_description'], 0, 25).'...' : $groups[$x]['org_description'];
+		$truncatedDesc = strlen($groups[$x]['org_description']) > 50 ? substr($groups[$x]['org_description'], 0, 50).'...' : $groups[$x]['org_description']."<br><br>";
+		$truncatedTitle = strlen($groups[$x]['org_title']) > 18 ? substr($groups[$x]['org_title'], 0, 18).'...' : $groups[$x]['org_title'];
 		echo "<div class='col-md-3 card filter ".$groups[$x]['tag_title']."'>";
 		echo "<a id='".$groups[$x]['org_id']."' href='".base_url()."index.php/Group/display/".$groups[$x]['org_id']."'><img class='img-responsive center-cropped' src='";
 		echo base_url()."uploads/".$groups[$x]['org_picture']."' alt='".$groups[$x]['org_title']."'></a>";
 		echo "<div class='card-block'>";
-		echo"<h4 class='card-title' id='card-title'>".$groups[$x]['org_title']."</h4>";
-		echo "<p class='card-text'>".$truncatedDesc."</p>
+		echo "<h5 data-toggle='tooltip' data-placement='top' title='".$groups[$x]['org_title']."' class='card-title' id='card-title' >".$truncatedTitle."</h5>";
+		echo "<p  data-toggle='tooltip' data-placement='top' title='".$groups[$x]['org_description']."' class='card-text'>".$truncatedDesc."</p>
 		<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Group/display/".$groups[$x]['org_id']."'>See More</a>
 		<p class='card-text'><small class='text-muted'>Members:".$groups[$x]['members_count']."</small></p></div></div>";
 	}

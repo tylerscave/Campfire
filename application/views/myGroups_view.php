@@ -18,7 +18,7 @@
 				<div class="tab-content">
 					<div id="owned_groups" class="tab-pane fade in active">
 						<?php
-							
+
 							if ($ownedgroups == NULL)
 							{
 								echo '<h4 style="padding-top:30px">No groups owned. Create a group? <a href="createGroup/index">click here</a></h4>';
@@ -42,7 +42,7 @@
 							}
 						?>
 					</div>
-				</div>		
+				</div>
 			</div>
 	    </div>
 	</div>
@@ -51,7 +51,7 @@
 <!-- End Body -->
 
 <?php
-	
+
 function make_tiles($set, $size, $groups)
 {
 	if ($set == "owned")
@@ -68,7 +68,7 @@ function make_tiles($set, $size, $groups)
 		}
 	}
 	else if ($set == "membered")
-	{								
+	{
 		for ($x = 0; $x < $size; $x++) {
 			echo "<div class='col-md-3 card'>";
 			echo "<a id='".$groups[$x]->org_id."' href='".base_url()."index.php/Group/display/".$groups[$x]->org_id."'><img class='img-responsive center-cropped' src='";

@@ -82,11 +82,11 @@ function displayEvents(events){
     var url = 'http://localhost/Campfire/Event/display/' + event['event_id'];
     var truncatedDesc = event['event_description'].length > 150? event['event_description'].substring(150, 0) + "..." : event['event_description'];
     var content =
-    '<h2>'+ event['event_title']+ '</h2></div>' +
-    '<h6>Description:</h6>' + truncatedDesc +
-    '<h6>Date/Time:</h6> ' + new Date(event['event_begin_datetime'])  + '<br> to <br>' +  new Date(event['event_end_datetime'])  +
-    '<h6>Tag:</h6> '   +  event['tag_title']  +
-    "<h6>Attendees:</h6> "  +  event['attendee_count'] +
+    '<h4>'+ event['event_title']+ '</h4></div>' +
+    '<h5>Description:</h5>' + truncatedDesc +
+    '<h5>Date/Time:</h5> ' + new Date(event['event_begin_datetime'])  + '<br> to <br>' +  new Date(event['event_end_datetime'])  +
+    '<h5>Tag:</h5> '   +  event['tag_title']  +
+    "<h5>Attendees:</h5> "  +  event['attendee_count'] +
      '<br><a class="btn btn-primary" href="'+ url +'">See More </a>';
 
     infowindow.setContent(content);
