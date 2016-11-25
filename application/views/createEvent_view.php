@@ -4,9 +4,11 @@
 
 <!-- Body -->
 <div class="container custom-body">
+
+
 	<div class="row">
 		<div class="col-md-4 col-md-offset-4 well">
-			<?php $attributes = array("name" => "createeventform");
+			<?php $attributes = array("name" => "createeventform", 'onsubmit' => 'return validateAddress()');
 			echo form_open_multipart("createEvent/index", $attributes);?>
 			<legend>Create Event</legend>
 			<div class="form-group row">
@@ -16,25 +18,18 @@
 					<span id="eventTitle_error" class="text-danger"><?php echo form_error('eventTitle'); ?></span>
 				</div>
 				<div class="col-sm-6">
-					<label><h5> Hosted by </br>
-					<?php echo $uname; ?></h5></label>
+					<label> Hosted by
+					<h5><?php echo $uname; ?>.</h5></label>
 				</div>
 			</div>
-			<div class="form-group">
-				<label for="address1">Street Address 1</label>
-				<input id="address1" class="form-control" name="address1" placeholder="Street Address 1" type="text" value="<?php echo set_value('address1'); ?>" />
-				<span id="address1_error" class="text-danger"><?php echo form_error('address1'); ?></span>
+			<div class="form-group" id="has-error">
+				<label for="address-input">Address</label>
+				<input id="address-input" type="text" class="form-control" placeholder="Address" required>
+				<span id="eventAddress_error" class="text-danger"></span>
+				<input type="hidden" id="address1" name="address1" value="" />
+				<input type="hidden" id="zip" name="zipcode" value="" />
 			</div>
-			<div class="form-group">
-				<label for="address2">Street Address 2</label>
-				<input id="address2" class="form-control" name="address2" placeholder="Street Address 2" type="text" value="<?php echo set_value('address2'); ?>" />
-				<span id="address2_error" class="text-danger"><?php echo form_error('address2'); ?></span>
-			</div>
-			<div class="form-group">
-				<label for="zip">Event Zip Code</label>
-				<input id="eventZip" class="form-control" name="zip" placeholder="Event Zip Code" type="text" value="<?php echo set_value('zip'); ?>" />
-				<span id="groupZip_error" class="text-danger"><?php echo form_error('zip'); ?></span>
-			</div>
+			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-6CzpsxPQPdiOV_3M0QhATgjyTqO7JQE&libraries=places&callback=initAutoComplete" async defer></script>
 			<div class="form-group row">
 				<div class="col-sm-6">
 					<label for="startTime">Event Start</label>
@@ -89,7 +84,7 @@
 				<span id="eventimage_error" class="text-danger"><?php echo form_error('imageUpload'); ?></span>
 			</div>
 			<div class="form-group">
-				<button id="bSubmit" name="submit" type="submit" class="btn btn-info">Create Event</button>
+				<button id="bSubmit" name="submit" type="submit" class="btn btn-info" onsubmit="return validateAddress();">Create Event</button>
 				<button id="bCancel" type="button" class="btn btn-info" onclick="location.href='<?php echo base_url();?>index.php/home/index'">Cancel</button>
 			</div>
 			<?php echo form_close(); ?>
@@ -99,6 +94,7 @@
 </div>
 <!-- End Body -->
 <script>
+
 $(function () {
     $('#startDate').datetimepicker({
     startDate,

@@ -1,5 +1,4 @@
 //Google Map Stuff
-
 var infowindows = [];
 var markers = [];
 var map;
@@ -7,7 +6,7 @@ function initMap() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 37.3352, lng: -121.8811},
     zoom: 5,
-    clickableIcons: false	
+    clickableIcons: false
   });
   var input = document.getElementById('pac-input');
   var autocomplete = new google.maps.places.Autocomplete(input);
@@ -196,3 +195,46 @@ google.maps.event.addDomListener(window, 'load', initialize);
 //         jQuery('#eventDateTimeStart').data("DateTimePicker").setMaxDate(e.date);
 //   });
 // };
+var place;
+function initAutoComplete(){
+	var input = document.getElementById('address-input');
+	var autocomplete = new google.maps.places.Autocomplete(input);
+	autocomplete.setTypes(['address']);
+
+  google.maps.event.addListener(autocomplete, 'place_changed', function () {
+            place = autocomplete.getPlace();
+            if(typeof place.geometry !== 'undefined'){
+              $('#eventAddress_error').html('');
+            }
+        });
+}
+function validateAddress(){
+  if(typeof place.geometry === 'undefined'){
+    $('#eventAddress_error').html('Error. Please select a dropdown address.');
+    return false;
+  }else{
+    var street = "";
+    var address = "";
+    var zip = "";
+    place.address_components.forEach(function(component){
+      if(component.types[0] === "postal_code"){
+        zip = component.short_name;
+      }
+      else if(component.types[0] === "street_number"){
+        street = component.long_name;
+      }
+      else if(component.types[0] === "route"){
+        address = component.long_name;
+      }
+    });
+    if(street === ""){
+      $('#address-input').val("");
+      $('#eventAddress_error').html('Error. Please enter valid street number.');
+      return false;
+    }else{
+      $('input#address1').val(street + " " + address);
+      $('input#zip').val(zip);
+    }
+    return true;
+  }
+}

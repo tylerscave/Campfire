@@ -28,10 +28,10 @@ class CreateEvent extends CI_Controller {
 		if ($gID == NULL) {
 			$gID = $this->session->flashdata('gID');
 		}
-		
+
 		//dynamically populate the tag_list for the dropdown
 		$data['tag_list'] = $this->group_model->get_dropdown_list();
-		
+
 		//dynamically populate a list of groups owned by this user in the dropdown list
 		$groupsOwned = $this->group_model->get_groups($this->session->userdata('uid'), "owner");
 		$group_list = array();
@@ -39,10 +39,10 @@ class CreateEvent extends CI_Controller {
 			$group_list[$group->org_id] = $group->org_title;
 		}
 		$data['group_list'] = $group_list;
-		
+
 		//set last entered description to be displayed if error occurred
 		$data['description'] = $this->input->post('description');
-		
+
 		//new directory for images
 		$targetDir = './uploads/';
 
@@ -53,9 +53,6 @@ class CreateEvent extends CI_Controller {
 
 		//set form validations
 		$this->form_validation->set_rules('eventTitle', 'Event Title', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[30]|callback_badWord_check|xss_clean');
-		$this->form_validation->set_rules('address1','Street Address 1', 'trim|required|min_length[1]|max_length[30]|xss_clean');
-		$this->form_validation->set_rules('address2','Street Address 2', 'trim|min_length[1]|max_length[30]|xss_clean');
-		$this->form_validation->set_rules('zip','Event Zip Code', 'trim|required|numeric|min_length[5]|max_length[5]|xss_clean');
 		$this->form_validation->set_rules('startTime', 'Event Start', 'trim|required|callback_date_check|xss_clean');
 		$this->form_validation->set_rules('endTime', 'Event End', 'trim|required|callback_date_check|xss_clean');
 		$this->form_validation->set_rules('description', 'Event Description', 'trim|required|max_length[1000]|callback_badWord_check|xss_clean');
@@ -137,8 +134,8 @@ class CreateEvent extends CI_Controller {
 			//prepare to insert user location details into location table
 			$location_data = array(
 				'address_one' => $this->input->post('address1'),
-				'address_two' => $this->input->post('address2'),
-				'zipcode' => $this->input->post('zip')
+				'address_two' => '',
+				'zipcode' => $this->input->post('zipcode')
 			);
 
 			//prepare to insert group tag details into tag table
@@ -215,34 +212,3 @@ class CreateEvent extends CI_Controller {
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
