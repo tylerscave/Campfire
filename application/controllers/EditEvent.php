@@ -1,7 +1,7 @@
 <?php
 /**
  *COPYRIGHT (C) 2016 Campfire. All Rights Reserved.
- * EditGroup.php is the controller for editGroup_view.php
+ * EditEvent.php is the controller for editEvent_view.php
  * Solves SE165 Semester Project Fall 2016
  * @author Peter Curtis, Tyler Jones, Troy Nguyen, Marshall Cargle,
  *     Luis Otero, Jorge Aguiniga, Stephen Piazza, Jatinder Verma
@@ -10,9 +10,7 @@ class EditEvent extends CI_Controller {
 	// constructor used for needed initialization
 	public function __construct() {
 		parent::__construct();
-		$this->load->helper(array('form', 'url'));
-		$this->load->helper(array('url','html'));
-		$this->load->helper('security');
+		$this->load->helper(array('form', 'url', 'html', 'security'));
 		$this->load->library(array('session', 'form_validation'));
 		$this->load->database();
 		$this->load->model('user_model');
@@ -59,7 +57,7 @@ class EditEvent extends CI_Controller {
 		//new directory for images
 		$targetDir = './uploads/';
 		// set form validation rules
-		$this->form_validation->set_rules('eventName', 'Event Name', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[30]|xss_clean');
+		$this->form_validation->set_rules('eventName', 'Event Name', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[100]|xss_clean');
 		$this->form_validation->set_rules('eventName', 'Event Name', 'callback_badWord_check');
 		$this->form_validation->set_rules('zip', 'Event Zip Code', 'trim|required|numeric|min_length[5]|max_length[5]|xss_clean');
 		$this->form_validation->set_rules('description', 'Event Description', 'required|max_length[200]|xss_clean');
@@ -183,16 +181,14 @@ class EditEvent extends CI_Controller {
     //DONE
 	function badWord_check($input) {
 		$fh = fopen(base_url().'assets/text_input/badWords.txt', 'r') or die($php_errormsg);
-		while (!feof($fh)) {
-			$line = fgets($fh, 4096);
-			if (preg_match($line, strtolower($input))) {
-				$this->form_validation->set_message('badWord_check', 'You have entered an inappropriate word! Lets keep it clean!!!.');
-				return FALSE;
-			} else {
-				return TRUE;
-			}
-		}
+		$line = fgets($fh);
 		fclose($fh);
+		if (preg_match($line, strtolower($input))) {
+			$this->form_validation->set_message('badWord_check', 'You have entered an inappropriate word! Lets keep it clean!!!.');
+			return FALSE;
+		} else {
+			return TRUE;
+		}
 	}
 	
     //DONE

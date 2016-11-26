@@ -29,6 +29,9 @@ class CreateEvent extends CI_Controller {
 			$gID = $this->session->flashdata('gID');
 		}
 
+		//new directory for images
+		$targetDir = './uploads/';
+		
 		//dynamically populate the tag_list for the dropdown
 		$data['tag_list'] = $this->group_model->get_dropdown_list();
 
@@ -43,16 +46,13 @@ class CreateEvent extends CI_Controller {
 		//set last entered description to be displayed if error occurred
 		$data['description'] = $this->input->post('description');
 
-		//new directory for images
-		$targetDir = './uploads/';
-
 		// get user information from session data to create basic profile
 		$details = $this->user_model->get_user_by_id($this->session->userdata('uid'));
 		$data['uname'] = $details[0]->user_fname . " " . substr($details[0]->user_lname, 0,1);
 		$data['uemail'] = $details[0]->user_email;
 
 		//set form validations
-		$this->form_validation->set_rules('eventTitle', 'Event Title', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[30]|callback_badWord_check|xss_clean');
+		$this->form_validation->set_rules('eventTitle', 'Event Title', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[100]|callback_badWord_check|xss_clean');
 		$this->form_validation->set_rules('startTime', 'Event Start', 'trim|required|callback_date_check|xss_clean');
 		$this->form_validation->set_rules('endTime', 'Event End', 'trim|required|callback_date_check|xss_clean');
 		$this->form_validation->set_rules('description', 'Event Description', 'trim|required|max_length[1000]|callback_badWord_check|xss_clean');
@@ -62,9 +62,8 @@ class CreateEvent extends CI_Controller {
 			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'callback_ext_check');
 		}
 
-		// submit the form and validate
+		// submit the form and validate, if it fails just load the view again
 		if ($this->form_validation->run() == FALSE) {
-			// if it fails just load the view again
 			$this->load->view('createEvent_view', $data);
 		} else {
 			//calculate new image height to preserve ratio
@@ -153,13 +152,11 @@ class CreateEvent extends CI_Controller {
 				'owner_id' => $this->session->userdata('uid')
 			);
 
-			if ($this->event_model->insert_event($event_data, $location_data, $tag_data, $group_data, $eventowner_data)  && $image_success){
-				// success!!!
+			// Set error/success messages
+			if ($this->event_model->insert_event($event_data, $location_data, $tag_data, $group_data, $eventowner_data)  && $image_success){ // success!!!
 				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Event has been successfully created! Please click Cancel if you are finished creating events</div>');
 				redirect('createEvent/index');
-
-			} else {
-				// error!!!
+			} else { // error!!!
 				$this->removeImage($simpleNewFileName); // Remove image upload if group was not created
 				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error.  Please try again later!!!</div>');
 				redirect('createEvent/index');
@@ -178,9 +175,6 @@ class CreateEvent extends CI_Controller {
 		}
 	}
 
-	/**
-	* used for validation check on event title and description
-	*/
 	function badWord_check($input) {
 		$fh = fopen(base_url().'assets/text_input/badWords.txt', 'r') or die($php_errormsg);
 		$line = fgets($fh);

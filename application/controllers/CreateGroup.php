@@ -11,9 +11,7 @@ class CreateGroup extends CI_Controller {
 	// constructor used for needed initialization
 	public function __construct() {
 		parent::__construct();
-		$this->load->helper(array('form', 'url'));
-		$this->load->helper(array('url','html'));
-		$this->load->helper('security');
+		$this->load->helper(array('form', 'url', 'html', 'security'));
 		$this->load->library(array('session', 'form_validation'));
 		$this->load->database();
 		$this->load->model('user_model');
@@ -24,15 +22,15 @@ class CreateGroup extends CI_Controller {
 	}
 
 	function index() {
+		//new directory for images
+		$targetDir = './uploads/';
 		//dynamically populate the tag_list for the dropdown
 		$data['tag_list'] = $this->group_model->get_dropdown_list();
 		//set last entered description to be displayed if error occurred
 		$data['description'] = $this->input->post('description');
-		//new directory for images
-		$targetDir = './uploads/';
 
 		// set form validation rules
-		$this->form_validation->set_rules('groupName', 'Group Name', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[30]|callback_badWord_check|xss_clean');
+		$this->form_validation->set_rules('groupName', 'Group Name', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[100]|callback_badWord_check|xss_clean');
 		$this->form_validation->set_rules('zip', 'Group Zip Code', 'trim|required|numeric|min_length[5]|max_length[5]|xss_clean');
 		$this->form_validation->set_rules('description', 'Group Description', 'required|max_length[1000]|callback_badWord_check|xss_clean');
 		if (empty($_FILES['imageUpload']['tmp_name'])) {
@@ -41,9 +39,8 @@ class CreateGroup extends CI_Controller {
 			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'callback_ext_check');
 		}
 
-		// submit the form and validate
+		// submit the form and validate, if it fails just load the view again
 		if ($this->form_validation->run() == FALSE) {
-			// if it fails just load the view again
 			$this->load->view('createGroup_view', $data);
 		} else {
 			//calculate new image height to preserve ratio
@@ -116,12 +113,11 @@ class CreateGroup extends CI_Controller {
 				'user_id' => $this->session->userdata('uid')
 			);
 
-			if ($this->group_model->insert_group($group_data, $location_data, $tag_data, $owner_data) && $image_success) {
-				// success!!!
+			// Set error/success messages
+			if ($this->group_model->insert_group($group_data, $location_data, $tag_data, $owner_data) && $image_success) { // success!!!
 				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Group has been successfully created! Please click Cancel if you are finished creating groups.</div>');
 				redirect('createGroup/index');
-			} else {
-				// error!!!
+			} else { // error!!!
 				$this->removeImage($simpleNewFileName); // Remove image upload if group was not created
 				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error. Please try again later!!!</div>');
 				redirect('createGroup/index');
