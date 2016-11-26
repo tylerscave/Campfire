@@ -164,7 +164,6 @@ class EditGroup extends CI_Controller {
 		}
 		// Set flash data to recapture group id on next page load
 		$this->session->set_flashdata('gID', $this->session->userdata('gID'));
-		print("gID is: ".$this->session->userdata('gID'));
 	}
 	
 	function ext_check() {
