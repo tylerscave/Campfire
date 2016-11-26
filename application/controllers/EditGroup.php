@@ -10,9 +10,7 @@ class EditGroup extends CI_Controller {
 	// constructor used for needed initialization
 	public function __construct() {
 		parent::__construct();
-		$this->load->helper(array('form', 'url'));
-		$this->load->helper(array('url','html'));
-		$this->load->helper('security');
+		$this->load->helper(array('form', 'url', 'html', 'security'));
 		$this->load->library(array('session', 'form_validation'));
 		$this->load->database();
 		$this->load->model('user_model');
@@ -23,17 +21,20 @@ class EditGroup extends CI_Controller {
 	}
 
 	function index($gID = NULL) {
-		$groupsOwned = $this->group_model->get_owned_by_uid($this->session->userdata('uid'));
-		$owned = FALSE;
+		//new directory for images
+		$targetDir = './uploads/';
 		// if there was an error on last edit, recapture group id
 		if ($gID == NULL) {
-			$gID = $this->session->flashdata('gID');
+			$gID = $this->session->userdata('gID');
 		}
 		// if the group was successfully edited redirect after delay to show success
 		if ($this->session->flashdata('editSuccess')) {
 			header("refresh:5; url=".base_url()."/index.php/group/display/".$gID);
 		}
 		if ($gID != NULL) {
+			// find all groups owned by this member 
+			$groupsOwned = $this->group_model->get_owned_by_uid($this->session->userdata('uid'));
+			$owned = FALSE;
 			// Check if user is owner of this group
 			foreach ($groupsOwned as &$value) {
 				if ($gID == $value->org_id) {
@@ -45,30 +46,28 @@ class EditGroup extends CI_Controller {
 			if (!$owned) {
 				redirect('home/index');
 			}
-			// Get the old group data before update
+			// Get the old group data before update and add to $data
 			$data['oldGroupData'] = $this->group_model->get_group_by_id($gID);
+			//dynamically populate the tag_list for the dropdown
+			$data['tag_list'] = $this->group_model->get_dropdown_list();
+			// update the session variables
 			$sess_data = array('gID' => $gID, 'oldPhoto' => $data['oldGroupData']['org_picture']);
 			$this->session->set_userdata($sess_data);
-		} else {
-			$data['oldGroupData']['org_title'] = "";
-			$data['oldGroupData']['zipcode'] = "";
+		} else { 
+			// something went wrong and cannot get gID -> so get out of here
+			redirect('home/index');
 		}
 
-		//dynamically populate the tag_list for the dropdown
-		$data['tag_list'] = $this->group_model->get_dropdown_list();
-		//new directory for images
-		$targetDir = './uploads/';
 		// set form validation rules
-		$this->form_validation->set_rules('groupName', 'Group Name', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[30]|callback_badWord_check|xss_clean');
+		$this->form_validation->set_rules('groupName', 'Group Name', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[100]|callback_badWord_check|xss_clean');
 		$this->form_validation->set_rules('zip', 'Group Zip Code', 'trim|required|numeric|min_length[5]|max_length[5]|xss_clean');
 		$this->form_validation->set_rules('description', 'Group Description', 'required|max_length[1000]|callback_badWord_check|xss_clean');
 		if (!empty($_FILES['imageUpload']['tmp_name'])) {
 			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'callback_ext_check');
 		}
 		
-		// submit the form and validate
+		// submit the form and validate, if it fails just load the view again
 		if ($this->form_validation->run() == FALSE) {
-			// if it fails just load the view again
 			$this->load->view('editGroup_view', $data);
 		} else {
 			//Upload a new image if it exists
@@ -125,8 +124,6 @@ class EditGroup extends CI_Controller {
 				//If no new image is selected, keep the old one
 				$simpleNewFileName = $this->session->userdata('oldPhoto');
 			}
-			// unset the session variable
-			$this->session->unset_userdata('oldPhoto');
 			//prepare to insert group details into organization table
 			$group_data = array(
 				'org_id' => $this->session->userdata('gID'),
@@ -151,19 +148,15 @@ class EditGroup extends CI_Controller {
 			);
 			
 			// Set error/success messages
-			if ($this->group_model->update_group($group_data, $location_data, $tag_data)) {
-				// success!!!
+			if ($this->group_model->update_group($group_data, $location_data, $tag_data)) { // success!!!
 				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Group has been successfully updated with the new information! You will be redirected shortly.</div>');
 				$this->session->set_flashdata('editSuccess', true);
 				redirect('editGroup/index');
-			} else {
-				// error
+			} else { // error!!!
 				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error. Please try again later!!!</div>');
 				redirect('editGroup/index');
 			}
 		}
-		// Set flash data to recapture group id on next page load
-		$this->session->set_flashdata('gID', $this->session->userdata('gID'));
 	}
 	
 	function ext_check() {
