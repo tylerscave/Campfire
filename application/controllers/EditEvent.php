@@ -157,7 +157,6 @@ class EditEvent extends CI_Controller {
 				// success!!!
 				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Event has been successfully updated with the new information! You will be redirected shortly.</div>');
 				$this->session->set_flashdata('editSuccess', true);
-				$this->session->set_flashdata('edit_id', $this->session->userdata('edit_id'));
 				redirect('editEvent/index');
 			} else {
 				// error
@@ -165,6 +164,8 @@ class EditEvent extends CI_Controller {
 				redirect('editEvent/index');
 			}
 		}
+		// Set flash data to recapture event id on next page load
+		$this->session->set_flashdata('event_id', $this->session->userdata('event_id'));
 	}
 	
     //DONE
