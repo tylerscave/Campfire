@@ -64,8 +64,9 @@ class EditEvent extends CI_Controller {
 
 		// set form validation rules
 		$this->form_validation->set_rules('eventTitle', 'Event Title', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[100]|callback_badWord_check|xss_clean');
-		$this->form_validation->set_rules('zip', 'Event Zip Code', 'trim|required|numeric|min_length[5]|max_length[5]|xss_clean');
-		$this->form_validation->set_rules('description', 'Event Description', 'required|max_length[200]|callback_badWord_check|xss_clean');
+		$this->form_validation->set_rules('startTime', 'Event Start', 'trim|required|callback_date_check|xss_clean');
+		$this->form_validation->set_rules('endTime', 'Event End', 'trim|required|callback_date_check|xss_clean');
+		$this->form_validation->set_rules('description', 'Event Description', 'trim|required|max_length[1000]|callback_badWord_check|xss_clean');
 		if (!empty($_FILES['imageUpload']['tmp_name'])) {
 			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'callback_ext_check');
 		}
@@ -128,13 +129,20 @@ class EditEvent extends CI_Controller {
 				//If no new image is selected, keep the old one
 				$simpleNewFileName = $this->session->userdata('oldPhoto');
 			}
-			//prepare to insert group details into organization table
+			
+			//translate user dates to "yyyy-mm-dd hh:mm:ss format"
+			$startInput = $this->input->post('startTime');
+			$startDateTime = date('Y-m-d H:i:s', strtotime($startInput));
+			$endInput = $this->input->post('endTime');
+			$endDateTime = date('Y-m-d H:i:s', strtotime($endInput));
+
+			//prepare to insert group details into event table
 			$event_data = array(
-				'event_id' => $this->session->userdata('event_id'),
 				'event_title' => $this->input->post('eventTitle'),
 				'event_description' => $this->input->post('description'),
-				'event_picture' => $simpleNewFileName,
-				'event_tag' => $this->input->post('tag')
+				'event_begin_datetime' => $startDateTime,
+				'event_end_datetime' => $endDateTime,
+				'event_picture' => $simpleNewFileName
 			);
 			//prepare to insert user location details into location table
 			$location_data = array(
@@ -146,13 +154,13 @@ class EditEvent extends CI_Controller {
 			$tag_data = array(
 				'tag_title' => $this->input->post('tag')
 			);
-			//prepare to insert owner id into owner table
-			$owner_data = array(
-				'user_id' => $this->session->userdata('uid')
+			//prepare to insert group details into  table
+			$group_data = array(
+				'org_id' => array_search($this->input->post('eventGroup'), $group_list)
 			);
 			
 			// Set error/success messages
-			if ($this->event_model->update_event($event_data, $location_data, $tag_data)) { // success!!!
+			if ($this->event_model->update_event($event_data, $location_data, $tag_data, $group_data)) { // success!!!
 				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Event has been successfully updated with the new information! You will be redirected shortly.</div>');
 				$this->session->set_flashdata('editSuccess', true);
 				redirect('editEvent/index');

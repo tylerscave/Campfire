@@ -109,6 +109,80 @@ class Event_model extends CI_Model {
 			return false;
 		}
 	}
+	
+	// update events in the DB
+	//TODO NOT COMPLETE YET, STILL WORKING ON THIS, MOSTLY COPY AND PASTED FOR NOW (TYLER)
+	function update_event($event_data, $location_data, $tag_data, $group_data) {
+		//Check if location is in database
+		$this->db->start_cache();
+		$this->db->where('address_one', $location_data['address_one']);
+		$this->db->where('address_two', $location_data['address_two']);
+		$this->db->where('zipcode', $location_data['zipcode']);
+		$loc_query = $this->db->get('location');
+		$this->db->stop_cache();
+		$this->db->flush_cache();
+
+		//If location isnt in database yet
+		if ($loc_query->num_rows() == 0){
+			//get geocode from google if not in db
+			$geocode = $this->getGeo(
+				$location_data['address_one'] . " " .
+				$location_data['address_two'] . " ".
+				$location_data['zipcode']
+				);
+			if (isset($geocode) && $geocode) {
+				//add geocodes to address before insert
+				$location_data['geolat'] = $geocode['lat'];
+				$location_data['geolng'] = $geocode['lng'];
+				$location_data['city'] = $geocode['city'];
+				$location_data['state'] = $geocode['state'];
+				//new location in db
+				$location_success = $this->db->insert('location', $location_data);
+				$location_id = $this->db->insert_id();
+			} 
+		} else { //old location
+			$locResult = $loc_query->result();
+			$location_id = $locResult[0]->location_id;
+			$location_success = true;
+		}
+		// Check that we have a valid location before updating db
+		if ($location_success) {
+			// insert values into organization
+			$event_success = $this->db->insert('event', $event_data);
+			// Get the event ID and add it to the owner_data array
+			$event_id = $this->db->insert_id();
+
+			//event_location
+			$event_location['event_id'] = $event_id;
+			$event_location['location_id'] = $location_id;
+			$event_location_success = $this->db->insert('event_location',$event_location);
+
+			// Get the tag ID
+			$this->db->like('tag_title', $tag_data['tag_title']);
+			$query = $this->db->get('tag');
+			$tag_id_array = $query->result();
+			$tag_id = $tag_id_array[0]->tag_id;
+			$event_tag_data['event_id'] = $event_id;
+			$event_tag_data['tag_id'] = $tag_id;
+			$event_tag_success = $this->db->insert('event_tag', $event_tag_data);
+			
+			// organization_event
+			if (is_numeric($group_data['org_id'])) {
+				$group_data['event_id'] = $event_id;
+				$group_success = $this->db->insert('organization_event', $group_data);
+			} else {
+				$group_success = true;
+			}
+			
+			// return true only if all inserts were successful
+			return ($event_success &&
+				$event_location_success &&
+				$event_tag_success &&
+				$group_success);
+		} else {
+			return false;
+		}
+	}
 
 	// Get lattitude and longitude from address
 	function getGeo($address) {
@@ -243,11 +317,25 @@ class Event_model extends CI_Model {
 
 	// delete event by event id
 	function delete_event($event_id) {
-		$this->db->delete('event', array('event_id' => $event_id));
-		$this->db->delete('event_bulletin', array('event_id' => $event_id));
-		$this->db->delete('event_owner', array('event_id' => $event_id));
-		$this->db->delete('event_location', array('event_id' => $event_id));
-		$this->db->delete('event_tag', array('event_id' => $event_id));
+		$data = $this->db->query('SELECT bulletin_id FROM event_bulletin WHERE event_id='.$event_id.'');
+		$bulletinIDs = $data->result();
+		// Delete all bulletins with this event_id
+		foreach ($bulletinIDs as &$value) {
+			$this->db->where('bulletin_id', $value->bulletin_id);
+			$this->db->delete('bulletin');
+		}
+		$this->db->where('event_id', $event_id);
+		$this->db->delete('event');
+		$this->db->where('event_id', $event_id);
+        $this->db->delete('event_bulletin');
+		$this->db->where('event_id', $event_id);
+		$this->db->delete('event_location');
+		$this->db->where('event_id', $event_id);
+        $this->db->delete('event_owner');
+		$this->db->where('event_id', $event_id);
+		$this->db->delete('event_tag');
+		$this->db->where('event_id', $event_id);
+		$this->db->delete('organization_event');
 	}
 
 	//generate list of nearby event
