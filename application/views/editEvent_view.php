@@ -10,16 +10,49 @@
 			echo form_open_multipart("editEvent/index", $attributes);?>
 			<legend>Edit Event</legend>
 			<?php echo $this->session->flashdata('msg'); ?>
-			<div class="form-event">
-				<label for="eventName">Event Name</label>
-				<input class="form-control" name="eventName" id="eventName"placeholder="Event Name" type="text" value="<?php echo set_value('eventName', $oldEventData['event_title']); ?>" />
-				<span class="text-danger"><?php echo form_error('eventName'); ?></span>
+			
+			<div class="form-group row">
+				<div class="col-sm-6">
+					<label for="eventTitle">Title</label>
+					<input id="eventTitle" class="form-control" name="eventTitle" placeholder="Event Title" type="text" value="<?php echo set_value('eventTitle', $oldEventData['event_title']); ?>" />
+					<span id="eventTitle_error" class="text-danger"><?php echo form_error('eventTitle'); ?></span>
+				</div>
+				<div class="col-sm-6">
+					<label> Hosted by
+					<h5><?php echo $uname; ?>.</h5></label>
+				</div>
 			</div>
-			<div class="form-event">
-				<label for="name">Event Zip Code</label>
-				<input class="form-control" name="zip" id="eventZip" placeholder="Event Zip Code" type="text" value="<?php echo set_value('zip', $oldEventData['zipcode']); ?>" />
-				<span class="text-danger"><?php echo form_error('zip'); ?></span>
+			<div class="form-group" id="has-error">
+				<label for="address-input">Address</label>
+				<input id="address-input" type="text" class="form-control" placeholder="Address" required>
+				<span id="eventAddress_error" class="text-danger"></span>
+				<input type="hidden" id="address1" name="address1" value="" />
+				<input type="hidden" id="zip" name="zipcode" value="" />
 			</div>
+			<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-6CzpsxPQPdiOV_3M0QhATgjyTqO7JQE&libraries=places&callback=initAutoComplete" async defer></script>
+			<div class="form-group row">
+				<div class="col-sm-6">
+					<label for="startTime">Event Start</label>
+					<div class="input-group date" id="startDate">
+						<input id="startTime" type="datetime" class="form-control" name="startTime" placeholder="Event Start" value="<?php echo set_value('startTime'); ?>" />
+						<span class="input-group-addon">
+							<span class="glyphicon glyphicon-calendar"></span>
+						</span>
+					</div>
+					<span id="startTime_error" class="text-danger"><?php echo form_error('startTime'); ?></span>
+				</div>
+				<div class="col-sm-6">
+					<label for="endTime">Event End</label>
+					<div class="input-group date" id="endDate">
+						<input id="endTime" type="datetime" class="form-control" name="endTime" placeholder="Event End" value="<?php echo set_value('endTime'); ?>" />
+						<span class="input-group-addon">
+							<span class="glyphicon glyphicon-calendar"></span>
+						</span>
+					</div>
+					<span id="endTime_error" class="text-danger"><?php echo form_error('endTime'); ?></span>
+				</div>
+			</div>
+			<div class="form-group">
 			<div class="form-event">
 				<label for="tag">Choose Tag</label>
 				<select class="form-control" name="tag" id="eventTag">
@@ -27,6 +60,17 @@
 					foreach($tag_list as $row) {
 						echo '<option>'.$row.'</option>';
 					}
+					?>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="eventGroup">Associate the Event with a Group</label>
+				<select id="eventGroup" class="form-control" name="eventGroup">
+					<?php
+					foreach($group_list as $row) {
+						echo '<option>'.$row.'</option>';
+					}
+					echo '<option>This event does not involve a group</option>';
 					?>
 				</select>
 			</div>
@@ -54,7 +98,29 @@
 	</div>
 </div>
 <!-- End Body -->
+<script>
+$(function () {
+    $('#startDate').datetimepicker({
+    startDate,
+    format: 'mm/dd/yyyy h:i',
+    minuteStep: 15,
+    autoclose: true,
+    });
 
+    $('#endDate').datetimepicker({
+    format: 'mm/dd/yyyy h:i',
+    minuteStep: 15,
+    autoclose: true
+    });
+
+    $("#startDate").on("dp.change",function (e) {
+        $('#endDate').data("DateTimePicker").setMinDate(e.date);
+    });
+    $("#endDate").on("dp.change",function (e) {
+        $('#startDate').data("DateTimePicker").setMaxDate(e.date);
+    });
+});
+</script>
 <!-- Footer -->
 <?php $this->load->view('template/footer.php'); ?>
 <!-- End Footer -->

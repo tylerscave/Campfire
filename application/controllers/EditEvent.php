@@ -51,6 +51,9 @@ class EditEvent extends CI_Controller {
 			$data['oldEventData'] = $this->event_model->get_event_by_id($event_id);
 			//dynamically populate the tag_list for the dropdown
 			$data['tag_list'] = $this->group_model->get_dropdown_list();
+			// get user information from session data to create basic profile
+			$details = $this->user_model->get_user_by_id($this->session->userdata('uid'));
+			$data['uname'] = $details[0]->user_fname . " " . substr($details[0]->user_lname, 0,1);
 			// update the session variables
 			$sess_data = array('event_id' => $event_id, 'oldPhoto' => $data['oldEventData']['event_picture']);
 			$this->session->set_userdata($sess_data);
@@ -59,23 +62,16 @@ class EditEvent extends CI_Controller {
 			redirect('home/index');
 		}
 
-		//dynamically populate the tag_list for the dropdown
-		$data['tag_list'] = $this->event_model->get_dropdown_list();
-		//new directory for images
-		$targetDir = './uploads/';
 		// set form validation rules
-		$this->form_validation->set_rules('eventName', 'Event Name', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[100]|xss_clean');
-		$this->form_validation->set_rules('eventName', 'Event Name', 'callback_badWord_check');
+		$this->form_validation->set_rules('eventTitle', 'Event Title', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[100]|callback_badWord_check|xss_clean');
 		$this->form_validation->set_rules('zip', 'Event Zip Code', 'trim|required|numeric|min_length[5]|max_length[5]|xss_clean');
-		$this->form_validation->set_rules('description', 'Event Description', 'required|max_length[200]|xss_clean');
-		$this->form_validation->set_rules('description', 'Event Description', 'callback_badWord_check');
+		$this->form_validation->set_rules('description', 'Event Description', 'required|max_length[200]|callback_badWord_check|xss_clean');
 		if (!empty($_FILES['imageUpload']['tmp_name'])) {
 			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'callback_ext_check');
 		}
 		
-		// submit the form and validate
+		// submit the form and validate, if it fails just load the view again
 		if ($this->form_validation->run() == FALSE) {
-			// if it fails just load the view again
 			$this->load->view('editEvent_view', $data);
 		} else {
 			//Upload a new image if it exists
@@ -135,16 +131,16 @@ class EditEvent extends CI_Controller {
 			//prepare to insert group details into organization table
 			$event_data = array(
 				'event_id' => $this->session->userdata('event_id'),
-				'event_title' => $this->input->post('eventName'),
+				'event_title' => $this->input->post('eventTitle'),
 				'event_description' => $this->input->post('description'),
 				'event_picture' => $simpleNewFileName,
 				'event_tag' => $this->input->post('tag')
 			);
 			//prepare to insert user location details into location table
 			$location_data = array(
-				'address_one' => '',
+				'address_one' => $this->input->post('address1'),
 				'address_two' => '',
-				'zipcode' => $this->input->post('zip')
+				'zipcode' => $this->input->post('zipcode')
 			);
 			//prepare to insert group tag details into tag table
 			$tag_data = array(
