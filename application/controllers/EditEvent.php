@@ -61,6 +61,11 @@ class EditEvent extends CI_Controller {
 				$group_list[$group->org_id] = $group->org_title;
 			}
 			$data['group_list'] = $group_list;
+			//get the stored associated group to set as default
+			$oldGroup = $this->event_model->get_group_by_event($event_id);
+			if(isset($oldGroup) && $oldGroup != NULL) {
+				$data['oldGroup'] = $oldGroup[0]->org_title;
+			}
 			// get user information from session data to create basic profile
 			$details = $this->user_model->get_user_by_id($this->session->userdata('uid'));
 			$data['uname'] = $details[0]->user_fname . " " . substr($details[0]->user_lname, 0,1);

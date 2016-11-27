@@ -375,5 +375,13 @@ class Event_model extends CI_Model {
 				WHERE event_id='.$event_id.'');
 		return $data->result();
 	}
+	
+	// get org_title by event ID
+	function get_group_by_event($event_id) {
+		$data = $this->db->query('SELECT org_title 
+				FROM organization JOIN organization_event ON(organization.org_id = organization_event.org_id)
+				WHERE event_id='.$event_id.'');
+		return $data->result();
+	}
 }
 

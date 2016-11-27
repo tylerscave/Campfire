@@ -58,7 +58,7 @@
 				<select class="form-control" name="tag" id="eventTag">
 					<?php
 					foreach($tag_list as $row) {
-						 echo "<option value=$row" .($row == $oldTag ? ' selected="selected"' : '') . ">$row</option>"; 
+						echo "<option value=$row" .($row == $oldTag ? ' selected="selected"' : '') . ">$row</option>"; 
 					}
 					?>
 				</select>
@@ -67,10 +67,17 @@
 				<label for="eventGroup">Associate the Event with a Group</label>
 				<select id="eventGroup" class="form-control" name="eventGroup">
 					<?php
-					foreach($group_list as $row) {
-						echo '<option>'.$row.'</option>';
+					if (isset($oldGroup) && $oldGroup != NULL) {
+						echo '<option>This event does not involve a group</option>';
+						foreach($group_list as $row) {
+							echo "<option value=$row" .($row == $oldGroup ? ' selected="selected"' : '') . ">$row</option>";
+						}
+					} else {
+						echo '<option>This event does not involve a group</option>';
+						foreach($group_list as $row) {
+							echo '<option>'.$row.'</option>';
+						}
 					}
-					echo '<option>This event does not involve a group</option>';
 					?>
 				</select>
 			</div>

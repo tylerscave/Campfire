@@ -66,10 +66,10 @@
 				<label for="eventGroup">Associate the Event with a Group</label>
 				<select id="eventGroup" class="form-control" name="eventGroup">
 					<?php
+					echo '<option>This event does not involve a group</option>';
 					foreach($group_list as $row) {
 						echo '<option>'.$row.'</option>';
 					}
-					echo '<option>This event does not involve a group</option>';
 					?>
 				</select>
 			</div>
