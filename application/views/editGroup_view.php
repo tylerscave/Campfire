@@ -25,7 +25,7 @@
 				<select class="form-control" name="tag" id="groupTag">
 					<?php
 					foreach($tag_list as $row) {
-						echo '<option>'.$row.'</option>';
+						echo "<option value=$row" .($row == $oldTag ? ' selected="selected"' : '') . ">$row</option>";
 					}
 					?>
 				</select>

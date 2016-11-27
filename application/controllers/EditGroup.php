@@ -50,6 +50,9 @@ class EditGroup extends CI_Controller {
 			$data['oldGroupData'] = $this->group_model->get_group_by_id($gID);
 			//dynamically populate the tag_list for the dropdown
 			$data['tag_list'] = $this->group_model->get_dropdown_list();
+			//get the stored tag to set as default
+			$oldTag = $this->group_model->get_tag_by_group($gID);
+			$data['oldTag'] = $oldTag[0]->tag_title;
 			// update the session variables
 			$sess_data = array('gID' => $gID, 'oldPhoto' => $data['oldGroupData']['org_picture']);
 			$this->session->set_userdata($sess_data);

@@ -368,6 +368,7 @@ class Event_model extends CI_Model {
 		return $data->result();
 	}
 	
+	// get tag_title by event ID
 	function get_tag_by_event($event_id) {
 		$data = $this->db->query('SELECT tag_title 
 				FROM tag JOIN event_tag ON(tag.tag_id = event_tag.tag_id)

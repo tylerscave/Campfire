@@ -343,4 +343,12 @@ class Group_model extends CI_Model {
 		$data = $this->db->query('SELECT org_id FROM owner WHERE user_id='.$uid.'');
 		return $data->result();
 	}
+	
+		// get tag_title by group ID
+	function get_tag_by_group($gID) {
+		$data = $this->db->query('SELECT tag_title 
+				FROM tag JOIN organization_tag ON(tag.tag_id = organization_tag.tag_id)
+				WHERE org_id='.$gID.'');
+		return $data->result();
+	}
 }
