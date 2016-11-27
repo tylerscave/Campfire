@@ -24,9 +24,10 @@ class CreateEvent extends CI_Controller {
 
 	function index($gID = NULL) {
 // currently not doing anything with gID until this page is linked to group page
-		// if returning from an error, get gID from flashdata
+		// if returning from an error, get gID from session data
 		if ($gID == NULL) {
-			$gID = $this->session->flashdata('gID');
+			//$gID = $this->session->userdata('event_gID');
+			print("there is no group ID available");
 		}
 
 		//new directory for images
@@ -42,6 +43,12 @@ class CreateEvent extends CI_Controller {
 			$group_list[$group->org_id] = $group->org_title;
 		}
 		$data['group_list'] = $group_list;
+		
+		if ($gID != NULL) {
+			//get the group that linked to this page
+			$groupTitle = $this->group_model->get_group_by_id($gID);
+			$data['linked_group'] = $groupTitle['org_title'];
+		}
 
 		//set last entered description to be displayed if error occurred
 		$data['description'] = $this->input->post('description');
@@ -49,6 +56,9 @@ class CreateEvent extends CI_Controller {
 		// get user information from session data to create basic profile
 		$details = $this->user_model->get_user_by_id($this->session->userdata('uid'));
 		$data['uname'] = $details[0]->user_fname . " " . substr($details[0]->user_lname, 0,1);
+		
+		// set session variable in case error happens to retain event_gID
+		//$this->session->set_userdata('event_gID', $gID);
 
 		//set form validations
 		$this->form_validation->set_rules('eventTitle', 'Event Title', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[100]|callback_badWord_check|xss_clean');

@@ -109,7 +109,7 @@
 								<div class="col-md-8 col-md-offset-2"><h5 class="panel-title">Event List</h5></div>
 								<div class="col-md-2">
 								<?php if ($status == 'owner') {
-									echo '<button id="createEventButton" class="btn btn-info btn-sm pull-right">Create Event</button>';
+									echo '<a class="btn btn-info btn-sm pull-right" id="createEventButton" href="'.base_url().'index.php/createEvent/index/'.$info['org_id'].'">Create Event</a>';
 								}?>
 									
 								</div>
