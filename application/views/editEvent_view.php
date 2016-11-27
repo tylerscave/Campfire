@@ -6,7 +6,7 @@
 <div class="container custom-body">
 	<div class="row">
 		<div class="col-md-4 col-md-offset-4 well">
-			<?php $attributes = array("name" => "editeventform");
+			<?php $attributes = array("name" => "editeventform", 'onsubmit' => 'return validateAddress()');
 			echo form_open_multipart("editEvent/index", $attributes);?>
 			<legend>Edit Event</legend>
 			<?php echo $this->session->flashdata('msg'); ?>
@@ -34,7 +34,7 @@
 				<div class="col-sm-6">
 					<label for="startTime">Event Start</label>
 					<div class="input-group date" id="startDate">
-						<input id="startTime" type="datetime" class="form-control" name="startTime" placeholder="Event Start" value="<?php echo set_value('startTime'); ?>" />
+						<input id="startTime" type="datetime" class="form-control" name="startTime" placeholder="Event Start" value="<?php echo set_value('startTime', $oldEventData['event_begin_datetime']); ?>" />
 						<span class="input-group-addon">
 							<span class="glyphicon glyphicon-calendar"></span>
 						</span>
@@ -44,7 +44,7 @@
 				<div class="col-sm-6">
 					<label for="endTime">Event End</label>
 					<div class="input-group date" id="endDate">
-						<input id="endTime" type="datetime" class="form-control" name="endTime" placeholder="Event End" value="<?php echo set_value('endTime'); ?>" />
+						<input id="endTime" type="datetime" class="form-control" name="endTime" placeholder="Event End" value="<?php echo set_value('endTime', $oldEventData['event_end_datetime']); ?>" />
 						<span class="input-group-addon">
 							<span class="glyphicon glyphicon-calendar"></span>
 						</span>
@@ -58,7 +58,8 @@
 				<select class="form-control" name="tag" id="eventTag">
 					<?php
 					foreach($tag_list as $row) {
-						echo '<option>'.$row.'</option>';
+						//echo '<option>'.$row.'</option>';
+						 echo "<option value=$row" .($row == $oldTag ? ' selected="selected"' : '') . ">$row</option>"; 
 					}
 					?>
 				</select>

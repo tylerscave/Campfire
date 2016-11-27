@@ -147,34 +147,37 @@ class Event_model extends CI_Model {
 		}
 		// Check that we have a valid location before updating db
 		if ($location_success) {
-			// insert values into organization
-			$event_success = $this->db->insert('event', $event_data);
-			// Get the event ID and add it to the owner_data array
-			$event_id = $this->db->insert_id();
+			// Get the event ID for this event
+			$event_id = $event_data['event_id'];
+
+			// update the event table with current data
+			$this->db->where('event_id',$event_id);
+			$event_success = $this->db->update('event',$event_data);
 
 			//event_location
-			$event_location['event_id'] = $event_id;
-			$event_location['location_id'] = $location_id;
-			$event_location_success = $this->db->insert('event_location',$event_location);
+			$event_location_success = $this->db->query('UPDATE event_location
+								SET location_id = '.$location_id.'
+								WHERE event_id = "'.$event_id.'"');
 
 			// Get the tag ID
 			$this->db->like('tag_title', $tag_data['tag_title']);
 			$query = $this->db->get('tag');
 			$tag_id_array = $query->result();
 			$tag_id = $tag_id_array[0]->tag_id;
-			$event_tag_data['event_id'] = $event_id;
-			$event_tag_data['tag_id'] = $tag_id;
-			$event_tag_success = $this->db->insert('event_tag', $event_tag_data);
+			$event_tag_success = $this->db->query('UPDATE event_tag
+								SET tag_id = '.$tag_id.'
+								WHERE event_id = "'.$event_id.'"');
 			
 			// organization_event
 			if (is_numeric($group_data['org_id'])) {
-				$group_data['event_id'] = $event_id;
-				$group_success = $this->db->insert('organization_event', $group_data);
+				$group_success = $this->db->query('UPDATE organization_event
+								SET org_id = '.$group_data['org_id'].'
+								WHERE event_id = "'.$event_id.'"');
 			} else {
 				$group_success = true;
 			}
 			
-			// return true only if all inserts were successful
+			// return true only if all updates were successful
 			return ($event_success &&
 				$event_location_success &&
 				$event_tag_success &&
@@ -362,6 +365,13 @@ class Event_model extends CI_Model {
 	// gets all event_id's for events owned by this user
 	function get_owned_by_uid($uid) {
 		$data = $this->db->query('SELECT event_id FROM event_owner WHERE owner_id='.$uid.'');
+		return $data->result();
+	}
+	
+	function get_tag_by_event($event_id) {
+		$data = $this->db->query('SELECT tag_title 
+				FROM tag JOIN event_tag ON(tag.tag_id = event_tag.tag_id)
+				WHERE event_id='.$event_id.'');
 		return $data->result();
 	}
 }

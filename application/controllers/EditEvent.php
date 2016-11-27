@@ -51,6 +51,16 @@ class EditEvent extends CI_Controller {
 			$data['oldEventData'] = $this->event_model->get_event_by_id($event_id);
 			//dynamically populate the tag_list for the dropdown
 			$data['tag_list'] = $this->group_model->get_dropdown_list();
+			//get the stored tag to set as default
+			$oldTag = $this->event_model->get_tag_by_event($event_id);
+			$data['oldTag'] = $oldTag[0]->tag_title;
+			//dynamically populate a list of groups owned by this user in the dropdown list
+			$groupsOwned = $this->group_model->get_groups($this->session->userdata('uid'), "owner");
+			$group_list = array();
+			foreach ($groupsOwned as $group) {
+				$group_list[$group->org_id] = $group->org_title;
+			}
+			$data['group_list'] = $group_list;
 			// get user information from session data to create basic profile
 			$details = $this->user_model->get_user_by_id($this->session->userdata('uid'));
 			$data['uname'] = $details[0]->user_fname . " " . substr($details[0]->user_lname, 0,1);
@@ -138,6 +148,7 @@ class EditEvent extends CI_Controller {
 
 			//prepare to insert group details into event table
 			$event_data = array(
+				'event_id' => $this->session->userdata('event_id'),
 				'event_title' => $this->input->post('eventTitle'),
 				'event_description' => $this->input->post('description'),
 				'event_begin_datetime' => $startDateTime,
@@ -193,6 +204,17 @@ class EditEvent extends CI_Controller {
 			return FALSE;
 		} else {
 			return TRUE;
+		}
+	}
+	
+	//DONE
+	function date_check($input) {
+		$date_regex = "/^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}[ ]([0-9]|0[0-9]|1?[0-9]|2[0-3]):[0-5]?[0-9]+$/";
+		if (preg_match($date_regex, $input)) {
+			return TRUE;
+		} else {
+			$this->form_validation->set_message('date_check', 'Invalid date or time, please try again.');
+			return FALSE;
 		}
 	}
 	
