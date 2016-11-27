@@ -14,6 +14,7 @@ class EditEvent extends CI_Controller {
 		$this->load->library(array('session', 'form_validation'));
 		$this->load->database();
 		$this->load->model('user_model');
+		$this->load->model('group_model');
 		$this->load->model('event_model');
 		if (!$this->session->userdata('login')) {
 			redirect('home/index');
@@ -21,18 +22,21 @@ class EditEvent extends CI_Controller {
 	}
 
 	function index($event_id = NULL) {
-		$eventsOwned = $this->event_model->get_event_by_id($this->session->userdata('event_id'));
-		$owned = FALSE;
-		// if there was an error on last edit, recapture group id
+		//new directory for images
+		$targetDir = './uploads/';
+		// if there was an error on last edit, recapture event id
 		if ($event_id == NULL) {
-			$event_id = $this->session->flashdata('event_id');
+			$event_id = $this->session->userdata('event_id');
 		}
-		// if the group was successfully edited redirect after delay to show success
+		// if the event was successfully edited redirect after delay to show success
 		if ($this->session->flashdata('editSuccess')) {
 			header("refresh:5; url=".base_url()."/index.php/event/display/".$event_id);
 		}
 		if ($event_id != NULL) {
-			// Check if user is owner of this group
+			// find all events owned by this member 
+			$eventsOwned = $this->event_model->get_owned_by_uid($this->session->userdata('uid'));
+			$owned = FALSE;
+			// Check if user is owner of this event
 			foreach ($eventsOwned as &$value) {
 				if ($event_id == $value->event_id) {
 					$owned = TRUE;
@@ -43,13 +47,16 @@ class EditEvent extends CI_Controller {
 			if (!$owned) {
 				redirect('home/index');
 			}
-			// Get the old group data before update
+			// Get the old group data before update and add to $data
 			$data['oldEventData'] = $this->event_model->get_event_by_id($event_id);
+			//dynamically populate the tag_list for the dropdown
+			$data['tag_list'] = $this->group_model->get_dropdown_list();
+			// update the session variables
 			$sess_data = array('event_id' => $event_id, 'oldPhoto' => $data['oldEventData']['event_picture']);
 			$this->session->set_userdata($sess_data);
-		} else {
-			$data['oldEventData']['event_title'] = "";
-			$data['oldEventData']['zipcode'] = "";
+		} else { 
+			// something went wrong and cannot get gID -> so get out of here
+			redirect('home/index');
 		}
 
 		//dynamically populate the tag_list for the dropdown
@@ -125,8 +132,6 @@ class EditEvent extends CI_Controller {
 				//If no new image is selected, keep the old one
 				$simpleNewFileName = $this->session->userdata('oldPhoto');
 			}
-			// unset the session variable
-			$this->session->unset_userdata('oldPhoto');
 			//prepare to insert group details into organization table
 			$event_data = array(
 				'event_id' => $this->session->userdata('event_id'),
@@ -151,19 +156,15 @@ class EditEvent extends CI_Controller {
 			);
 			
 			// Set error/success messages
-			if ($this->event_model->update_event($event_data, $location_data, $tag_data)) {
-				// success!!!
+			if ($this->event_model->update_event($event_data, $location_data, $tag_data)) { // success!!!
 				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Your Event has been successfully updated with the new information! You will be redirected shortly.</div>');
 				$this->session->set_flashdata('editSuccess', true);
 				redirect('editEvent/index');
-			} else {
-				// error
+			} else { // error
 				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error. Please try again later!!!</div>');
 				redirect('editEvent/index');
 			}
 		}
-		// Set flash data to recapture event id on next page load
-		$this->session->set_flashdata('event_id', $this->session->userdata('event_id'));
 	}
 	
     //DONE

@@ -270,22 +270,11 @@ class Event_model extends CI_Model {
 
 		return $query->result_array();
 	}
+	
+	// gets all event_id's for events owned by this user
+	function get_owned_by_uid($uid) {
+		$data = $this->db->query('SELECT event_id FROM event_owner WHERE owner_id='.$uid.'');
+		return $data->result();
+	}
 }
 
-// insert values into location and get the location ID
-			//get geocode
-			//address preperation
-				// $addr =
-				// $location_data['address_one'] . " " .
-				// $location_data['address_two'] . " ".
-				// $location_data['city'] . " ".
-				// $location_data['state'] . " ".
-				// $location_data['zipcode'];
-				// print_r($addr);
-
-			// $geo_success = $this->db->query('UPDATE location
-			//  					 	SET city = "'.$location_data['city'].
-			//  					 	'", state = "'.$location_data['state'].
-			//  					 	'", geolat = '.$geocode['lat'].
-			//  					 	'geolng = '. $geocode['lng'].
-			// 						'WHERE location_id = '.$location_id.'');
