@@ -34,7 +34,7 @@
 				<div class="col-sm-6">
 					<label for="startTime">Event Start</label>
 					<div class="input-group date" id="startDate">
-						<input id="startTime" type="datetime" class="form-control" name="startTime" placeholder="Event Start" value="<?php echo set_value('startTime', $oldEventData['event_begin_datetime']); ?>" />
+						<input id="startTime" type="datetime" class="form-control" name="startTime" placeholder="Event Start" value="<?php echo set_value('startTime', date('m/d/Y H:i', strtotime($oldEventData['event_begin_datetime']))); ?>" />
 						<span class="input-group-addon">
 							<span class="glyphicon glyphicon-calendar"></span>
 						</span>
@@ -44,7 +44,7 @@
 				<div class="col-sm-6">
 					<label for="endTime">Event End</label>
 					<div class="input-group date" id="endDate">
-						<input id="endTime" type="datetime" class="form-control" name="endTime" placeholder="Event End" value="<?php echo set_value('endTime', $oldEventData['event_end_datetime']); ?>" />
+						<input id="endTime" type="datetime" class="form-control" name="endTime" placeholder="Event End" value="<?php echo set_value('endTime', date('m/d/Y H:i', strtotime($oldEventData['event_end_datetime']))); ?>" />
 						<span class="input-group-addon">
 							<span class="glyphicon glyphicon-calendar"></span>
 						</span>
