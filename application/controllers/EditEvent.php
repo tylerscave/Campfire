@@ -79,8 +79,8 @@ class EditEvent extends CI_Controller {
 
 		// set form validation rules
 		$this->form_validation->set_rules('eventTitle', 'Event Title', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[100]|callback_badWord_check|xss_clean');
-		$this->form_validation->set_rules('startTime', 'Event Start', 'trim|required|callback_date_check|xss_clean');
-		$this->form_validation->set_rules('endTime', 'Event End', 'trim|required|callback_date_check|xss_clean');
+		$this->form_validation->set_rules('startTime', 'Event Start', 'trim|required|callback_date_check|callback_date_start_check|xss_clean');
+		$this->form_validation->set_rules('endTime', 'Event End', 'trim|required|callback_date_check|callback_date_end_check|xss_clean');
 		$this->form_validation->set_rules('description', 'Event Description', 'trim|required|max_length[1000]|callback_badWord_check|xss_clean');
 		if (!empty($_FILES['imageUpload']['tmp_name'])) {
 			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'callback_ext_check');
@@ -186,8 +186,7 @@ class EditEvent extends CI_Controller {
 			}
 		}
 	}
-	
-    //DONE
+
 	function ext_check() {
 		$filename = $_FILES['imageUpload']['name'];
 		$ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
@@ -198,8 +197,7 @@ class EditEvent extends CI_Controller {
 			return FALSE;
 		}
 	}
-	
-    //DONE
+
 	function badWord_check($input) {
 		$fh = fopen(base_url().'assets/text_input/badWords.txt', 'r') or die($php_errormsg);
 		$line = fgets($fh);
@@ -211,8 +209,7 @@ class EditEvent extends CI_Controller {
 			return TRUE;
 		}
 	}
-	
-	//DONE
+
 	function date_check($input) {
 		$date_regex = "/^(0[1-9]|1[0-2])\/(0[1-9]|1\d|2\d|3[01])\/(19|20)\d{2}[ ]([0-9]|0[0-9]|1?[0-9]|2[0-3]):[0-5]?[0-9]+$/";
 		if (preg_match($date_regex, $input)) {
@@ -222,8 +219,30 @@ class EditEvent extends CI_Controller {
 			return FALSE;
 		}
 	}
-	
-    //DONE
+
+	function date_start_check($input) {
+		$currentDate = date('Y-m-d H:i');
+		$currentDate = date('Y-m-d H:i', strtotime($currentDate));
+		$startDate = date('Y-m-d H:i', strtotime($input));
+		if ($currentDate <= $startDate) {
+			return TRUE;
+		} else {
+			$this->form_validation->set_message('date_start_check', 'Selected date and time must be later than current date and time.');
+			return FALSE;
+		}
+	}
+
+	function date_end_check($input) {
+		$startDate = date('Y-m-d H:i', strtotime($this->input->post('startTime')));
+		$endDate = date('Y-m-d H:i', strtotime($input));
+		if ($startDate < $endDate) {
+			return TRUE;
+		} else {
+			$this->form_validation->set_message('date_end_check', 'Selected date and time must be later than Event Start date and time.');
+			return FALSE;
+		}
+	}
+
 	function removeImage($fileName) {
 		$path = './uploads/'.$fileName;
 		if(unlink($path)) {
@@ -232,8 +251,7 @@ class EditEvent extends CI_Controller {
 			return FALSE;
 		}
 	}
-	
-    //DONE
+
 	function deleteEvent($event_id) {
 		//Delete the image from the uploads folder
 		$data['oldEventData'] = $this->event_model->get_event_by_id($event_id);
