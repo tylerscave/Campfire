@@ -23,16 +23,9 @@ class CreateEvent extends CI_Controller {
 	}
 
 	function index($gID = NULL) {
-// currently not doing anything with gID until this page is linked to group page
-		// if returning from an error, get gID from session data
-		if ($gID == NULL) {
-			//$gID = $this->session->userdata('event_gID');
-			print("there is no group ID available");
-		}
-
 		//new directory for images
 		$targetDir = './uploads/';
-		
+
 		//dynamically populate the tag_list for the dropdown
 		$data['tag_list'] = $this->group_model->get_dropdown_list();
 
@@ -56,14 +49,11 @@ class CreateEvent extends CI_Controller {
 		// get user information from session data to create basic profile
 		$details = $this->user_model->get_user_by_id($this->session->userdata('uid'));
 		$data['uname'] = $details[0]->user_fname . " " . substr($details[0]->user_lname, 0,1);
-		
-		// set session variable in case error happens to retain event_gID
-		//$this->session->set_userdata('event_gID', $gID);
 
 		//set form validations
 		$this->form_validation->set_rules('eventTitle', 'Event Title', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[100]|callback_badWord_check|xss_clean');
-		$this->form_validation->set_rules('startTime', 'Event Start', 'trim|required|callback_date_check|xss_clean');
-		$this->form_validation->set_rules('endTime', 'Event End', 'trim|required|callback_date_check|xss_clean');
+		$this->form_validation->set_rules('startTime', 'Event Start', 'trim|required|callback_date_check|callback_date_start_check|xss_clean');
+		$this->form_validation->set_rules('endTime', 'Event End', 'trim|required|callback_date_check|callback_date_end_check|xss_clean');
 		$this->form_validation->set_rules('description', 'Event Description', 'trim|required|max_length[1000]|callback_badWord_check|xss_clean');
 		if (empty($_FILES['imageUpload']['tmp_name'])) {
 			$this->form_validation->set_rules('imageUpload', 'Upload and Image', 'required');
@@ -202,6 +192,29 @@ class CreateEvent extends CI_Controller {
 			return TRUE;
 		} else {
 			$this->form_validation->set_message('date_check', 'Invalid date or time, please try again.');
+			return FALSE;
+		}
+	}
+	
+	function date_start_check($input) {
+		$currentDate = date('Y-m-d H:i');
+		$currentDate = date('Y-m-d H:i', strtotime($currentDate));
+		$startDate = date('Y-m-d H:i', strtotime($input));
+		if ($currentDate <= $startDate) {
+			return TRUE;
+		} else {
+			$this->form_validation->set_message('date_start_check', 'Selected date and time must be later than current date and time.');
+			return FALSE;
+		}
+	}
+	
+	function date_end_check($input) {
+		$startDate = date('Y-m-d H:i', strtotime($this->input->post('startTime')));
+		$endDate = date('Y-m-d H:i', strtotime($input));
+		if ($startDate < $endDate) {
+			return TRUE;
+		} else {
+			$this->form_validation->set_message('date_end_check', 'Selected date and time must be later than Event Start date and time.');
 			return FALSE;
 		}
 	}
