@@ -49,7 +49,6 @@ class CreateEvent extends CI_Controller {
 		// get user information from session data to create basic profile
 		$details = $this->user_model->get_user_by_id($this->session->userdata('uid'));
 		$data['uname'] = $details[0]->user_fname . " " . substr($details[0]->user_lname, 0,1);
-		$data['uemail'] = $details[0]->user_email;
 
 		//set form validations
 		$this->form_validation->set_rules('eventTitle', 'Event Title', 'trim|required|regex_match[#^[a-zA-Z0-9 \'-]+$#]|min_length[1]|max_length[100]|callback_badWord_check|xss_clean');
