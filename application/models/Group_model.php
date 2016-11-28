@@ -174,6 +174,23 @@ class Group_model extends CI_Model {
 		}
 		return NULL;
 	}
+	
+	//Get all events of a group
+	function get_group_events($gID) {
+		$query = $this->db->query('SELECT event_id, event_picture, event_title, event_description, event_begin_datetime, event_end_datetime
+										FROM event
+										WHERE event_id IN (SELECT event_id
+										                        FROM organization_event
+										                        WHERE org_id = '.$gID.')
+										AND event_begin_datetime >= NOW()
+										ORDER BY event_begin_datetime ASC');
+		$group_events = array();
+		foreach ($query->result_array() as $row) {
+			$group_events[] = array('event_id' => $row['event_id'],'event_title' => $row['event_title'], 'event_begin_datetime' => $row['event_begin_datetime'],
+					'event_end_datetime' =>$row['event_end_datetime'], 'event_picture' => $row['event_picture'], 'event_description' => $row['event_description']);
+		}
+		return $group_events;
+	}
 
 	// get first and last name of members in a group
 	function get_group_members($group_id) {
@@ -351,4 +368,6 @@ class Group_model extends CI_Model {
 				WHERE org_id='.$gID.'');
 		return $data->result();
 	}
+	
+
 }

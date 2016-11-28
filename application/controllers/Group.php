@@ -90,6 +90,7 @@ class Group extends CI_Controller {
 			$arr['gID'] = $gID;
 			$data['info'] = $this->group_model->get_group_by_id($gID);
 			$data['members'] = $this->group_model->get_group_members($gID);
+			$data['events'] = $this->group_model->get_group_events($gID);
 			$data['bulletins'] = $this->group_model->get_bulletins($gID);
 
 			$member_status = 'nonmember';
@@ -123,7 +124,6 @@ class Group extends CI_Controller {
 		// submit the form and validate
 		if ($this->form_validation->run() == FALSE) {
 			// if it fails just load the view again
-			//$this->load->view('group_view', $data);
 		} else {
 
 			$bulletin_data = array();

@@ -67,13 +67,21 @@
 						</div>
 					</div>
 				</div>
-				<div class="row">
+				<div class="row top-buffer">
 					<div class="panel panel-default">
 						<table class="table table-responsive">
-							<?php 
+							<?php
+								$t = strtotime($info['event_begin_datetime']);
+								$e = strtotime($info['event_end_datetime']);
+
 								echo '<tr class="row">';
 								echo '<td> Location: </td><td colspan="3">'.$info['address_one'].' '.$info['address_two'].'&nbsp;&nbsp;&nbsp;&nbsp;'
     									.$info['city'].', '.$info['state'].'&nbsp;&nbsp;&nbsp;&nbsp;'.$info['zipcode'].'</td>';
+								echo '</tr>';
+								echo '<tr class="row">';
+								echo '<td> Start Time: </td><td colspan="">'.date('l, F d, Y H:i A', $t).'</td>';
+								echo '<td> End Time: </td><td colspan="">'.date('l, F d, Y H:i A', $e).'</td>';
+									
 								echo '</tr>';
 								echo '<tr class="row">';
 								echo '<td colspan="4"><div id="map-canvas" style="width:98%;height:200px;margin:10px;"></div></td>';
@@ -88,8 +96,9 @@
 								<div class="panel-heading">
 									<div class="row">
 										<div class="col-md-10 col-md-offset-1"><h5 class="panel-title">Attendees (<?php echo count($members)?>)</h5></div>
+										<div class="col-md-1"></div>
 										<div class="col-md-1">
-											<button  type="button" class="btn btn-default" data-toggle="collapse" data-target="#member-table"  
+											<button  type="button" class="btn btn-default btn-sm" data-toggle="collapse" data-target="#member-table"  
 													aria-expanded="false" aria-controls="member-table">
 										  		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 											</button>
@@ -127,21 +136,26 @@
 						<div class="panel-heading">
 							<div class="row">
 								<div class="col-md-8 col-md-offset-2"><h5 class="panel-title">Bulletin Board</h5></div>
-								<div class="col-md-2">
+								<div class="col-md-1">
 								<?php if ($status == 'owner') {
 									echo '<button id="bulletinButton" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#bulletinModal">Add Message</button>';
 								}?>
-									
+								</div>
+								<div class="col-md-1">
+									<button  type="button" class="btn btn-default btn-sm" data-toggle="collapse" data-target="#bulletin-table">
+							  			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+									</button>
 								</div>
 							</div>
 						</div>
-						<div class="panel-body">
+						<div class="panel-body collapse" id="bulletin-table">
 							<table class="table table-responsive text-left">
 							<?php 
 								foreach ($bulletins as $row) {
+									$t = strtotime($row['bulletin_datetime']);
 									echo '<tr class="row">';
 									echo '<td class="col-md-2">'.$row['user_fname'].' '.substr($row['user_lname'], 0,1).'.</td>';
-									echo '<td class="col-md-2">'.$row['bulletin_datetime'].'.</td>';
+									echo '<td class="col-md-2">'.date('n/j/Y H:i A', $t).'</td>';
 									echo '<td class="col-md-8"><p style="font-size: 14px;">'.$row['bulletin_message'].'</p></td>';
 									echo '</tr>';
 								}
@@ -150,6 +164,7 @@
 						</div>
 					</div>
 				</div>
+				<?php echo $this->session->flashdata('msg'); ?>
 			</div>
 		</div>
 	</div>
