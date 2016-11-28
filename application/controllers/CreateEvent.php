@@ -145,6 +145,7 @@ class CreateEvent extends CI_Controller {
 			$group_data = array(
 				'org_id' => array_search($this->input->post('eventGroup'), $group_list)
 			);
+			print_r($group_data);
 
 			//prepare to insert owner id into owner table
 			$eventowner_data = array(

@@ -133,7 +133,7 @@ class Group extends CI_Controller {
  
 			if ($this->group_model->insert_group_bulletin($bulletin_data)) {
 				// success!!!
-				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Bulletin Message successfully added!</div>');
+				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Bulletin Message successfully added!</div>');
 				
 				redirect('group/display/'.$gID);
 			} else {
