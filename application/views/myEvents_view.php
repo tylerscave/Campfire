@@ -4,9 +4,10 @@
 
 <!-- Body -->
 <div class="container custom-body">
-	<div class="row" style="padding-top:50px">
-	<div class="container">
-		<ul class="nav nav-pills">
+	<div class="row">
+	<div style="padding-top:20px"></div>
+	<div class="container" style="width:40%">
+		<ul class="nav nav-pills nav-justified">
 			<li class="active"><a data-toggle="tab" href="#owned_events">Owned</a></li>
 			<li><a data-toggle="tab" href="#joined_events">Joined</a></li>
 		</ul>
@@ -14,7 +15,8 @@
 	<div class="container-fluid">
 		<div style="padding-top:20px"></div>
 		<div class="col-md-12 well" id="event_layout">
-			<div class="col-md-10">
+			<div class="col-md-1 col-sm-1 col-lg-1 well"></div>
+			<div class="col-md-10 col-sm-10 col-lg-10 well">
 				<div class="tab-content">
 					<div id="owned_events" class="tab-pane fade in active">
 						<?php
@@ -43,6 +45,7 @@
 					</div>
 				</div>		
 			</div>
+			<div class="col-md-1 col-sm-1 col-lg-1 well"></div>
 	    </div>
 	</div>
 </div>
