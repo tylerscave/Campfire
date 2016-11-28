@@ -81,8 +81,7 @@ class Event extends CI_Controller {
 		
 			if ($this->event_model->insert_event_bulletin($bulletin_data)) {
 				// success!!!
-				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Bulletin Message successfully added!</div>');
-		
+				$this->session->set_flashdata('msg','<div class="alert alert-success text-center">Bulletin Message successfully added!</div>');
 				redirect('event/display/'.$eventID);
 			} else {
 				$this->session->set_flashdata('msg','<div class="alert alert-danger text-center">Oops! Error. Please try again later!!!</div>');

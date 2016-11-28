@@ -69,7 +69,7 @@
 					if (isset($linked_group) && $linked_group != NULL) {
 						echo '<option>This event does not involve a group</option>';
 						foreach($group_list as $row) {
-							echo "<option value=$row" .($row == $linked_group ? ' selected="selected"' : '') . ">$row</option>";
+							echo "<option value=\"$row\"" .($row == $linked_group ? ' selected="selected"' : '').">$row</option>";
 						}
 					} else {
 						echo '<option>This event does not involve a group</option>';

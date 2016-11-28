@@ -70,9 +70,10 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<div class="row">
-								<div class="col-md-10 col-md-offset-1"><h5 class="panel-title">Members (<?php echo count($members)?>)</h5></div>
+								<div class="col-md-8 col-md-offset-2"><h5 class="panel-title">Members (<?php echo count($members)?>)</h5></div>
+								<div class="col-md-1"></div>
 								<div class="col-md-1">
-									<button  type="button" class="btn btn-default" data-toggle="collapse" data-target="#member-table">
+									<button  type="button" class="btn btn-default btn-sm" data-toggle="collapse" data-target="#member-table">
 							  			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
 									</button>
 								</div>
@@ -106,18 +107,30 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<div class="row">
-								<div class="col-md-8 col-md-offset-2"><h5 class="panel-title">Event List</h5></div>
-								<div class="col-md-2">
+								<div class="col-md-8 col-md-offset-2"><h5 class="panel-title">Bulletin Board</h5></div>
+								<div class="col-md-1">
 								<?php if ($status == 'owner') {
-									echo '<a class="btn btn-info btn-sm pull-right" id="createEventButton" href="'.base_url().'index.php/createEvent/index/'.$info['org_id'].'">Create Event</a>';
+									echo '<button id="bulletinButton" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#bulletinModal">Add Message</button>';
 								}?>
-									
+								</div>
+								<div class="col-md-1">
+									<button  type="button" class="btn btn-default pull-right btn-sm" data-toggle="collapse" data-target="#bulletin-table">
+							  			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+									</button>
 								</div>
 							</div>
 						</div>
-						<div class="panel-body">
+						<div class="panel-body collapse" id="bulletin-table">
 							<table class="table table-responsive">
 							<?php 
+								foreach ($bulletins as $row) {
+									$t = strtotime($row['bulletin_datetime']);
+									echo '<tr class="row">';
+									echo '<td class="col-md-2">'.$row['user_fname'].' '.substr($row['user_lname'], 0,1).'.</td>';
+									echo '<td class="col-md-2">'.date('n/j/Y H:i A', $t).'</td>';
+									echo '<td class="col-md-8"><p style="font-size: 14px;">'.$row['bulletin_message'].'</p></td>';
+									echo '</tr>';
+								}
 							?>
 							</table>
 						</div>
@@ -127,23 +140,32 @@
 					<div class="panel panel-default">
 						<div class="panel-heading">
 							<div class="row">
-								<div class="col-md-8 col-md-offset-2"><h5 class="panel-title">Bulletin Board</h5></div>
-								<div class="col-md-2">
+								<div class="col-md-8 col-md-offset-2"><h5 class="panel-title">Event List</h5></div>
+								<div class="col-md-1">
 								<?php if ($status == 'owner') {
-									echo '<button id="bulletinButton" class="btn btn-info btn-sm pull-right" data-toggle="modal" data-target="#bulletinModal">Add Message</button>';
-								}?>
-									
+									echo '<a class="btn btn-info btn-sm pull-right" id="createEventButton" href="'.base_url().'index.php/createEvent/index/'.$info['org_id'].'">Create Event</a>';
+								}?>									
+								</div>
+								<div class="col-md-1">
+									<button  type="button" class="btn btn-default pull-right btn-sm" data-toggle="collapse" data-target="#event-table">
+							  			<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+									</button>
 								</div>
 							</div>
 						</div>
-						<div class="panel-body">
-							<table class="table table-responsive">
+						<div class="panel-body collapse in" id="event-table">
+							<table id="event-table" class="table table-responsive">
 							<?php 
-								foreach ($bulletins as $row) {
+								foreach ($events as $row) {
 									echo '<tr class="row">';
-									echo '<td class="col-md-2">'.$row['user_fname'].' '.substr($row['user_lname'], 0,1).'.</td>';
-									echo '<td class="col-md-2">'.$row['bulletin_datetime'].'.</td>';
-									echo '<td class="col-md-8"><p style="font-size: 14px;">'.$row['bulletin_message'].'</p></td>';
+									echo '<td class="col-md-2"><a href="'.base_url().'index.php/Event/display/'.$row['event_id'].'" class="thumbnail">
+										      <img src="'.base_url().'uploads/'.$row['event_picture'].'" alt="...">
+										    </a></td>';
+									echo '<td class="col-md-10"><p><h5><strong>'.$row['event_title'].'</strong></h5></p>';
+									$t = strtotime($row['event_begin_datetime']);
+									$e = strtotime($row['event_end_datetime']);
+									echo '<p><h6>'.date('l, F d, Y H:i A', $t).'</h6></p>';
+									echo '<p><h6>'.$row['event_description'].'</h6></p></td>';
 									echo '</tr>';
 								}
 							?>
@@ -151,6 +173,7 @@
 						</div>
 					</div>
 				</div>
+				<?php echo $this->session->flashdata('msg'); ?>
 			</div>
 		</div>
 	</div>
