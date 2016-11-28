@@ -169,12 +169,20 @@ class Event_model extends CI_Model {
 								WHERE event_id = "'.$event_id.'"');
 			
 			// organization_event
-			if (is_numeric($group_data['org_id'])) {
-				$group_success = $this->db->query('UPDATE organization_event
-								SET org_id = '.$group_data['org_id'].'
-								WHERE event_id = "'.$event_id.'"');
+			$this->db->where('event_id', $event_id);
+			$org_event_query = $this->db->get('organization_event');
+			if ($org_event_query->num_rows() == 0 && is_numeric($group_data['org_id'])) {
+				$group_success = $this->db->insert('organization_event', $group_data);
 			} else {
-				$group_success = true;
+				if (is_numeric($group_data['org_id'])) {
+					$group_success = $this->db->query('UPDATE organization_event
+									SET org_id = '.$group_data['org_id'].'
+									WHERE event_id = "'.$event_id.'"');
+				} else {
+					$this->db->where('event_id', $event_id);
+					$this->db->delete('organization_event');
+					$group_success = true;
+				}
 			}
 			
 			// return true only if all updates were successful
