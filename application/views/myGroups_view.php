@@ -5,8 +5,9 @@
 <!-- Body -->
 <div class="container custom-body">
 	<div class="row">
-	<div class="container" style="padding-top:50px">
-		<ul class="nav nav-pills">
+	<div style="padding-top:20px"></div>
+	<div class="container" style="width:40%">
+		<ul class="nav nav-pills nav-justified">
 		<li id="owned_groupsTab" class="active"><a data-toggle="tab" href="#owned_groups">Owned</a></li>
 		<li id="joined_groupsTab"><a data-toggle="tab" href="#joined_groups">Joined</a></li>
 		</ul>
@@ -14,7 +15,8 @@
 	<div class="container-fluid">
 		<div style="padding-top:20px"></div>
 		<div class="col-md-12 well" id="group_view_layout">
-			<div class="col-md-10">
+			<div class="col-md-1 col-sm-1 col-lg-1 well"></div>
+			<div class="col-md-10 col-sm-10 col-lg-10 well">
 				<div class="tab-content">
 					<div id="owned_groups" class="tab-pane fade in active">
 						<?php
@@ -44,6 +46,7 @@
 					</div>
 				</div>
 			</div>
+			<div class="col-md-1 col-sm-1 col-lg-1 well"></div>
 	    </div>
 	</div>
 	</div>
