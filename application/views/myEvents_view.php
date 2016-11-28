@@ -55,16 +55,19 @@
 <?php
 
 function make_tiles($set, $size, $events)
-{
+{	
 	if ($set == "owned")
 	{
 		for ($x = 0; $x < $size; $x++) {
+			$truncatedDesc = strlen($events[$x]->event_description) > 18 ? substr($events[$x]->event_description, 0, 18).'...' : $events[$x]->event_description."<br><br>";
+			$truncatedTitle = strlen($events[$x]->event_title) > 50 ? substr($events[$x]->event_title, 0, 50).'...' : $events[$x]->event_title;
+	
 			echo "<div class='col-md-3 card'>";
 			echo "<a id='".$events[$x]->event_id."' href='".base_url()."index.php/Event/display/".$events[$x]->event_id."'><img class='img-responsive center-cropped' src='";
 			echo base_url()."uploads/".$events[$x]->event_picture."' alt='".$events[$x]->event_title."'></a>";
 			echo "<div class='card-block'>";
-			echo"<h4 class='card-title' id='card-title'>".$events[$x]->event_title."</h4>";
-			echo "<p class='card-text'>".$events[$x]->event_description."</p>";
+			echo"<h4 class='card-title' id='card-title'>".$truncatedTitle."</h4>";
+			echo "<p class='card-text'>".$truncatedDesc."</p>";
 			echo "<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Event/display/".$events[$x]->event_id."'>See More</a>
 			</div></div>";
 		}
@@ -72,12 +75,15 @@ function make_tiles($set, $size, $events)
 	else if ($set == "membered")
 	{
 		for ($x = 0; $x < $size; $x++) {
+			$truncatedDesc = strlen($events[$x]->event_description) > 18 ? substr($events[$x]->event_description, 0, 18).'...' : $events[$x]->event_description."<br><br>";
+			$truncatedTitle = strlen($events[$x]->event_title) > 50 ? substr($events[$x]->event_title, 0, 50).'...' : $events[$x]->event_title;
+	
 			echo "<div class='col-md-3 card'>";
 			echo "<a id='".$events[$x]->event_id."' href='".base_url()."index.php/Event/display/".$events[$x]->event_id."'><img class='img-responsive center-cropped' src='";
 			echo base_url()."uploads/".$events[$x]->event_picture."' alt='".$events[$x]->event_title."'></a>";
 			echo "<div class='card-block'>";
-			echo"<h4 class='card-title' id='card-title'>".$events[$x]->event_title."</h4>";
-			echo "<p class='card-text'>".$events[$x]->event_description."</p>";
+			echo"<h4 class='card-title' id='card-title'>".$truncatedTitle."</h4>";
+			echo "<p class='card-text'>".$truncatedDesc."</p>";
 			echo "<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Event/display/".$events[$x]->event_id."'>See More</a>
 			</div></div>";
 		}

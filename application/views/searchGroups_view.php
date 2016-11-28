@@ -34,6 +34,12 @@
 									$extra = 'class="form-control" id="select-tag" method="POST"';
 									echo form_dropdown('tag', $options, 'large', $extra);?>
 								</div>
+								<div class="form-group">
+								  <label for="select-tag">Sort:</label>
+									<?php	$options = array('None' => 'None', 'Name'=> 'Name (a-z)','Size' => 'Group Size');
+									$extra = 'class="form-control" id="select-tag" method="POST"';
+									echo form_dropdown('tag', $options, 'large', $extra);?>
+								</div>
 							</div>
 							<div class="col-md-10 col-sm-10 col-lg-10 well">
 								<div class="card-group">
@@ -71,8 +77,8 @@ function displayTiles($groups){
 		$max = count($groups); //in case of out of range error
 	}
 	for ($x = $index; $x < $max; $x++) {
-		$truncatedDesc = strlen($groups[$x]['org_description']) > 50 ? substr($groups[$x]['org_description'], 0, 50).'...' : $groups[$x]['org_description']."<br><br>";
-		$truncatedTitle = strlen($groups[$x]['org_title']) > 18 ? substr($groups[$x]['org_title'], 0, 18).'...' : $groups[$x]['org_title'];
+		$truncatedDesc = strlen($groups[$x]['org_description']) > 18 ? substr($groups[$x]['org_description'], 0, 18).'...' : $groups[$x]['org_description']."<br><br>";
+		$truncatedTitle = strlen($groups[$x]['org_title']) > 50 ? substr($groups[$x]['org_title'], 0, 50).'...' : $groups[$x]['org_title'];
 		echo "<div class='col-md-3 card filter ".$groups[$x]['tag_title']."'>";
 		echo "<a id='".$groups[$x]['org_id']."' href='".base_url()."index.php/Group/display/".$groups[$x]['org_id']."'><img class='img-responsive center-cropped' src='";
 		echo base_url()."uploads/".$groups[$x]['org_picture']."' alt='".$groups[$x]['org_title']."'></a>";

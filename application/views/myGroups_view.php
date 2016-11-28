@@ -57,15 +57,19 @@
 
 function make_tiles($set, $size, $groups)
 {
+	
 	if ($set == "owned")
 	{
 		for ($x = 0; $x < $size; $x++) {
+			$truncatedDesc = strlen($groups[$x]->org_description) > 18 ? substr($groups[$x]->org_description, 0, 18).'...' : $groups[$x]->org_description."<br><br>";
+			$truncatedTitle = strlen($groups[$x]->org_title) > 50 ? substr($groups[$x]->org_title, 0, 50).'...' : $groups[$x]->org_title;
+			
 			echo "<div class='col-md-3 card'>";
 			echo "<a id='".$groups[$x]->org_id."' href='".base_url()."index.php/Group/display/".$groups[$x]->org_id."'><img class='img-responsive center-cropped' src='";
 			echo base_url()."uploads/".$groups[$x]->org_picture."' alt='".$groups[$x]->org_title."'></a>";
 			echo "<div class='card-block'>";
-			echo"<h4 class='card-title' id='card-title'>".$groups[$x]->org_title."</h4>";
-			echo "<p class='card-text'>".$groups[$x]->org_description."</p>
+			echo"<h4 class='card-title' id='card-title'>".$truncatedTitle."</h4>";
+			echo "<p class='card-text'>".$truncatedDesc."</p>
 			<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Group/display/".$groups[$x]->org_id."'>See More</a>
 			</div></div>";
 		}
@@ -73,12 +77,15 @@ function make_tiles($set, $size, $groups)
 	else if ($set == "membered")
 	{
 		for ($x = 0; $x < $size; $x++) {
+			$truncatedDesc = strlen($groups[$x]->org_description) > 18 ? substr($groups[$x]->org_description, 0, 18).'...' : $groups[$x]->org_description."<br><br>";
+			$truncatedTitle = strlen($groups[$x]->org_title) > 50 ? substr($groups[$x]->org_title, 0, 50).'...' : $groups[$x]->org_title;
+			
 			echo "<div class='col-md-3 card'>";
 			echo "<a id='".$groups[$x]->org_id."' href='".base_url()."index.php/Group/display/".$groups[$x]->org_id."'><img class='img-responsive center-cropped' src='";
 			echo base_url()."uploads/".$groups[$x]->org_picture."' alt='".$groups[$x]->org_title."'></a>";
 			echo "<div class='card-block'>";
-			echo"<h4 class='card-title' id='card-title'>".$groups[$x]->org_title."</h4>";
-			echo "<p class='card-text'>".$groups[$x]->org_description."</p>
+			echo"<h4 class='card-title' id='card-title'>".$truncatedTitle."</h4>";
+			echo "<p class='card-text'>".$truncatedDesc."</p>
 			<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Group/display/".$groups[$x]->org_id."'>See More</a>
 			</div></div>";
 		}
