@@ -172,7 +172,8 @@ class EditEvent extends CI_Controller {
 			);
 			//prepare to insert group details into  table
 			$group_data = array(
-				'org_id' => array_search($this->input->post('eventGroup'), $group_list)
+				'org_id' => array_search($this->input->post('eventGroup'), $group_list),
+				'event_id' => $this->session->userdata('event_id')
 			);
 			
 			// Set error/success messages
