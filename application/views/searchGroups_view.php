@@ -34,12 +34,6 @@
 									$extra = 'class="form-control" id="select-tag" method="POST"';
 									echo form_dropdown('tag', $options, 'large', $extra);?>
 								</div>
-								<div class="form-group">
-								  <label for="select-tag">Sort:</label>
-									<?php	$options = array('None' => 'None', 'Name'=> 'Name (a-z)','Size' => 'Group Size');
-									$extra = 'class="form-control" id="select-tag" method="POST"';
-									echo form_dropdown('tag', $options, 'large', $extra);?>
-								</div>
 							</div>
 							<div class="col-md-10 col-sm-10 col-lg-10 well">
 								<div class="card-group">

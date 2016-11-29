@@ -35,11 +35,6 @@
 				<input id = 'confirm' class="form-control" name="cpassword" placeholder="Confirm Password" type="password" />
 				<span id = 'confirm_error' class="text-danger"><?php echo form_error('cpassword'); ?></span>
 			</div>
-
-            <div class="form-group">
-                <input id = 'recieve_email'  type="checkbox" name="emailCheckBox" value="yes"> It's ok to send me (very ocassional) emails about the Campfire.<br>
-            </div>
-
 			<div class="form-group">
 				<button id = 'bSignup' name="submit" type="submit" class="btn btn-info">Signup</button>
 				<button id = 'bClear'  name="cancel" type="reset" class="btn btn-info">Clear</button>
