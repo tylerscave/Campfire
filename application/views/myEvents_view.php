@@ -62,12 +62,12 @@ function make_tiles($set, $size, $events)
 			$truncatedDesc = strlen($events[$x]->event_description) > 17 ? substr($events[$x]->event_description, 0, 17).'...' : $events[$x]->event_description."<br><br>";
 			$truncatedTitle = strlen($events[$x]->event_title) > 26 ? substr($events[$x]->event_title, 0, 26).'...' : $events[$x]->event_title;
 			echo "<div class='col-md-3 card'>";
-			echo "<a id='".$events[$x]->event_id."' href='".base_url()."index.php/Group/display/".$events[$x]->event_id."'><img class='img-responsive' src='";
+			echo "<a id='".$events[$x]->event_id."' href='".base_url()."index.php/Event/display/".$events[$x]->event_id."'><img class='img-responsive' src='";
 			echo base_url()."uploads/".$events[$x]->event_picture."' alt='".$events[$x]->event_title."'></a>";
 			echo "<div class='card-block'>";
 			echo "<h5 data-toggle='tooltip' data-placement='top' title='".$events[$x]->event_title."' class='card-title' id='card-title' >".$truncatedTitle."</h5>";
 			echo "<p  data-toggle='tooltip' data-placement='top' title='".$events[$x]->event_description."' class='card-text'>".$truncatedDesc."</p>
-			<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Group/display/".$events[$x]->event_id."'>See More</a>
+			<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Event/display/".$events[$x]->event_id."'>See More</a>
 			<p class='card-text'><small class='text-muted'></small></p></div></div>";
 		}
 	}
@@ -77,12 +77,12 @@ function make_tiles($set, $size, $events)
 			$truncatedDesc = strlen($events[$x]->event_description) > 17 ? substr($events[$x]->event_description, 0, 17).'...' : $events[$x]->event_description."<br><br>";
 			$truncatedTitle = strlen($events[$x]->event_title) > 26 ? substr($events[$x]->event_title, 0, 26).'...' : $events[$x]->event_title;
 			echo "<div class='col-md-3 card'>";
-			echo "<a id='".$events[$x]->event_id."' href='".base_url()."index.php/Group/display/".$events[$x]->event_id."'><img class='img-responsive' src='";
+			echo "<a id='".$events[$x]->event_id."' href='".base_url()."index.php/Event/display/".$events[$x]->event_id."'><img class='img-responsive' src='";
 			echo base_url()."uploads/".$events[$x]->event_picture."' alt='".$events[$x]->event_title."'></a>";
 			echo "<div class='card-block'>";
 			echo "<h5 data-toggle='tooltip' data-placement='top' title='".$events[$x]->event_title."' class='card-title' id='card-title' >".$truncatedTitle."</h5>";
 			echo "<p  data-toggle='tooltip' data-placement='top' title='".$events[$x]->event_description."' class='card-text'>".$truncatedDesc."</p>
-			<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Group/display/".$events[$x]->event_id."'>See More</a>
+			<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Event/display/".$events[$x]->event_id."'>See More</a>
 			<p class='card-text'><small class='text-muted'></small></p></div></div>";
 		}
 	}
