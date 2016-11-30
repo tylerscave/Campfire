@@ -11,7 +11,7 @@
             <h4>Connect with others by simply searching for events or groups</h4>
             <hr>
             <a id = 'search_events' href="<?php echo base_url(); ?>index.php/event/search" class="btn btn-primary btn-xl">Search Events</a> &nbsp;
-            <a id = 'search_groups' href="<?php echo base_url(); ?>index.php/group/search" class="btn btn-primary btn-xl page-scroll">Search Groups</a>
+            <a id = 'search_groups' href="<?php echo base_url(); ?>index.php/group/search" class="btn btn-primary btn-xl">Search Groups</a>
         </div>
     </div>
     <video autoplay="" loop="" class="fillWidth fadeIn wow collapse in" data-wow-delay="0.5s" poster="<?php echo base_url("assets/img/Campfire.png"); ?>" id="video-background">
@@ -19,44 +19,44 @@
     </video>
 </header>
 
-<section id="about">
+<section id="about" class="bg-primary">
 <div class="container">
 	<div class="row">
-		<div class="col-md-4">
-			<h4>Scrum Team</h4>
+		<div class="col-md-4 wow fadeInLeft">
+			<h4>Development Team</h4>
 			<img src="<?php echo base_url("assets/img/devteam.JPG"); ?>" class="img-rounded"  width="304" height="236">
 		</div>
 		<div class="col-md-8">
-			<h2>Welcome To Campfire!!!</h2>
-			<p>
+			<h2 class="wow fadeInUp">About Us</h2>
+			<p class="wow fadeInUp">
 				Our team believes in bringing people together who have similar interests. </br>
 				We also want those people to have an opportunity to get involved in </br>
 				activities based on those similar interests. This is what we believe a </br>
 				campfire is all about. Campfire allows anyone, whether you are a user or </br>
 				not, to view events happening in your area. </br>
 			</p>
-			<h3>
+			<h3 class="wow fadeInRight">
 				Registered User
 			</h3>
-			<p>
+			<p  class="wow fadeInRight">
 				1. Create and join any number of groups based on your interests </br>
 				2. View any events in your area </br>
 				3. View any events in an area you search by zipcode or city,state </br>
 				4. Create events </br>
 				5. Manage group-specific events </br>
 			</p>
-			<h3>
+			<h3  class="wow fadeInRight">
 				Guest
 			</h3>
-			<p>
+			<p  class="wow fadeInRight">
 				1. View any events in your area </br>
 				2. View any events in the area you search for by zip code or city, state </br>
 				3. Create events </br>
 			</p>
-			<h3>
+			<h3  class="wow fadeInDown">
 				Contact Us
 			</h3>
-			<p>
+			<p  class="wow fadeInDown">
 				Any questions? suggestions? Contact us at <a href = "http://www.gmail.com">teamcampfirellc@gmail.com</a>.
 			</p>
 		</div>
@@ -96,8 +96,8 @@
                     </div>
                     <div class="col-md-4 col-md-offset-4">
                         <label></label>
-<!--                        <button type="button" data-toggle="modal" data-target="#alertModal" class="btn btn-primary btn-block btn-lg">Send <i class="ion-android-arrow-forward"></i></button>-->
-                        <input type="submit" name="submit" value="Submit"/>
+<!--                        <button type="button" data-toggle="modal" data-target="#alertModal" class="btn btn-warning btn-block btn-lg">Send <i class="ion-android-arrow-forward"></i></button>-->
+                        <input type="submit" class=" btn btn-warning btn-xl wow fadeInDown" name="submit" value="Submit"/>
                     </div>
                 </form>
 
@@ -107,52 +107,7 @@
     </div>
 </section>
 
-<div id="galleryModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-body">
-        <img src="//placehold.it/1200x700/222?text=..." id="galleryImage" class="img-responsive" />
-        <p>
-            <br/>
-            <button class="btn btn-primary btn-lg center-block" data-dismiss="modal" aria-hidden="true">Close <i class="ion-android-close"></i></button>
-        </p>
-      </div>
-    </div>
-    </div>
-</div>
-<div id="aboutModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-body">
-        <h2 class="text-center">Landing Zero Theme</h2>
-        <h5 class="text-center">
-            A free, responsive landing page theme built by BootstrapZero.
-        </h5>
-        <p class="text-justify">
-            This is a single-page Bootstrap template with a sleek dark/grey color scheme, accent color and smooth scrolling.
-            There are vertical content sections with subtle animations that are activated when scrolled into view using the jQuery WOW plugin. There is also a gallery with modals
-            that work nicely to showcase your work portfolio. Other features include a contact form, email subscribe form, multi-column footer. Uses Questrial Google Font and Ionicons.
-        </p>
-        <p class="text-center"><a href="http://www.bootstrapzero.com">Download at BootstrapZero</a></p>
-        <br/>
-        <button class="btn btn-primary btn-lg center-block" data-dismiss="modal" aria-hidden="true"> OK </button>
-      </div>
-    </div>
-    </div>
-</div>
-<div id="alertModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      <div class="modal-body">
-        <h2 class="text-center">Message Sent!</h2>
-        <p class="text-center">Someone from the team will respond back soon.</p>
 
-        <br/>
-        <button class="btn btn-primary btn-lg center-block" data-dismiss="modal" aria-hidden="true">OK</i></button>
-      </div>
-    </div>
-    </div>
-</div>
 <!-- End Body -->
 <script>
 $(".page-scroll").on("click", function(event) {
@@ -175,9 +130,6 @@ $('.navbar-collapse ul li a').click(function() {
     $('.navbar-toggle:visible').click();
 });
 
-$('#galleryModal').on('show.bs.modal', function (e) {
-   $('#galleryImage').attr("src",$(e.relatedTarget).data("src"));
-});
 </script>
 
 <!-- Footer -->

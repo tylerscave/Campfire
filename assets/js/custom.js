@@ -19,7 +19,7 @@ function initMap() {
         lng: position.coords.longitude
     };
     map.setCenter(pos);
-    map.setZoom(13);
+    map.setZoom(11);
     $.ajax({
         type: "POST",
         url: "http://localhost/Campfire/Event/search_nearby",
@@ -50,7 +50,7 @@ function initMap() {
       map.fitBounds(place.geometry.viewport);
     } else {
       map.setCenter(place.geometry.location);
-      map.setZoom(18);
+      map.setZoom(11);
     }
 
     $.ajax({

@@ -26,7 +26,7 @@
                       <input type="text" class="form-control" title="No spam, we promise!" placeholder="Tell us your email">
                     </div>
                     <div class="form-group">
-                      <button class="btn btn-primary" data-toggle="modal" data-target="#alertModal" type="button">Subscribe for updates</button>
+                      <button class="btn btn-warning" data-toggle="modal" data-target="#alertModal" type="button">Subscribe for updates</button>
                     </div>
                 </form>
             </div>
