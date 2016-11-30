@@ -12,11 +12,12 @@
 		<li id="joined_groupsTab"><a data-toggle="tab" href="#joined_groups">Joined</a></li>
 		</ul>
 	</div>
-	<div class="container-fluid">
+	<div class="col-md-10 col-md-offset-1 well" id="view_groups">
 		<div style="padding-top:20px"></div>
 		<div class="col-md-12 well" id="group_view_layout">
 			<div class="col-md-1 col-sm-1 col-lg-1 well"></div>
 			<div class="col-md-10 col-sm-10 col-lg-10 well">
+				<div class="card-group">
 				<div class="tab-content">
 					<div id="owned_groups" class="tab-pane fade in active">
 						<?php
@@ -44,6 +45,7 @@
 							}
 						?>
 					</div>
+					</div>
 				</div>
 			</div>
 			<div class="col-md-1 col-sm-1 col-lg-1 well"></div>
@@ -63,15 +65,14 @@ function make_tiles($set, $size, $groups)
 		for ($x = 0; $x < $size; $x++) {
 			$truncatedDesc = strlen($groups[$x]->org_description) > 18 ? substr($groups[$x]->org_description, 0, 18).'...' : $groups[$x]->org_description."<br><br>";
 			$truncatedTitle = strlen($groups[$x]->org_title) > 50 ? substr($groups[$x]->org_title, 0, 50).'...' : $groups[$x]->org_title;
-			
 			echo "<div class='col-md-3 card'>";
-			echo "<a id='".$groups[$x]->org_id."' href='".base_url()."index.php/Group/display/".$groups[$x]->org_id."'><img class='img-responsive center-cropped' src='";
+			echo "<a id='".$groups[$x]->org_id."' href='".base_url()."index.php/Group/display/".$groups[$x]->org_id."'><img class='img-responsive' src='";
 			echo base_url()."uploads/".$groups[$x]->org_picture."' alt='".$groups[$x]->org_title."'></a>";
 			echo "<div class='card-block'>";
-			echo"<h4 class='card-title' id='card-title'>".$truncatedTitle."</h4>";
-			echo "<p class='card-text'>".$truncatedDesc."</p>
+			echo "<h5 data-toggle='tooltip' data-placement='top' title='".$groups[$x]->org_title."' class='card-title' id='card-title' >".$truncatedTitle."</h5>";
+			echo "<p  data-toggle='tooltip' data-placement='top' title='".$groups[$x]->org_description."' class='card-text'>".$truncatedDesc."</p>
 			<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Group/display/".$groups[$x]->org_id."'>See More</a>
-			</div></div>";
+			<p class='card-text'><small class='text-muted'></small></p></div></div>";
 		}
 	}
 	else if ($set == "membered")
@@ -79,15 +80,14 @@ function make_tiles($set, $size, $groups)
 		for ($x = 0; $x < $size; $x++) {
 			$truncatedDesc = strlen($groups[$x]->org_description) > 18 ? substr($groups[$x]->org_description, 0, 18).'...' : $groups[$x]->org_description."<br><br>";
 			$truncatedTitle = strlen($groups[$x]->org_title) > 50 ? substr($groups[$x]->org_title, 0, 50).'...' : $groups[$x]->org_title;
-			
 			echo "<div class='col-md-3 card'>";
-			echo "<a id='".$groups[$x]->org_id."' href='".base_url()."index.php/Group/display/".$groups[$x]->org_id."'><img class='img-responsive center-cropped' src='";
+			echo "<a id='".$groups[$x]->org_id."' href='".base_url()."index.php/Group/display/".$groups[$x]->org_id."'><img class='img-responsive' src='";
 			echo base_url()."uploads/".$groups[$x]->org_picture."' alt='".$groups[$x]->org_title."'></a>";
 			echo "<div class='card-block'>";
-			echo"<h4 class='card-title' id='card-title'>".$truncatedTitle."</h4>";
-			echo "<p class='card-text'>".$truncatedDesc."</p>
+			echo "<h5 data-toggle='tooltip' data-placement='top' title='".$groups[$x]->org_title."' class='card-title' id='card-title' >".$truncatedTitle."</h5>";
+			echo "<p  data-toggle='tooltip' data-placement='top' title='".$groups[$x]->org_description."' class='card-text'>".$truncatedDesc."</p>
 			<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Group/display/".$groups[$x]->org_id."'>See More</a>
-			</div></div>";
+			<p class='card-text'><small class='text-muted'></small></p></div></div>";
 		}
 	}
 	else{

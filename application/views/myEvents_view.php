@@ -12,7 +12,7 @@
 			<li><a data-toggle="tab" href="#joined_events">Joined</a></li>
 		</ul>
 	</div>
-	<div class="container-fluid">
+	<div class="col-md-10 col-md-offset-1 well" id="view_events">
 		<div style="padding-top:20px"></div>
 		<div class="col-md-12 well" id="event_layout">
 			<div class="col-md-1 col-sm-1 col-lg-1 well"></div>
@@ -61,15 +61,14 @@ function make_tiles($set, $size, $events)
 		for ($x = 0; $x < $size; $x++) {
 			$truncatedDesc = strlen($events[$x]->event_description) > 18 ? substr($events[$x]->event_description, 0, 18).'...' : $events[$x]->event_description."<br><br>";
 			$truncatedTitle = strlen($events[$x]->event_title) > 50 ? substr($events[$x]->event_title, 0, 50).'...' : $events[$x]->event_title;
-	
 			echo "<div class='col-md-3 card'>";
-			echo "<a id='".$events[$x]->event_id."' href='".base_url()."index.php/Event/display/".$events[$x]->event_id."'><img class='img-responsive center-cropped' src='";
+			echo "<a id='".$events[$x]->event_id."' href='".base_url()."index.php/Group/display/".$events[$x]->event_id."'><img class='img-responsive' src='";
 			echo base_url()."uploads/".$events[$x]->event_picture."' alt='".$events[$x]->event_title."'></a>";
 			echo "<div class='card-block'>";
-			echo"<h4 class='card-title' id='card-title'>".$truncatedTitle."</h4>";
-			echo "<p class='card-text'>".$truncatedDesc."</p>";
-			echo "<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Event/display/".$events[$x]->event_id."'>See More</a>
-			</div></div>";
+			echo "<h5 data-toggle='tooltip' data-placement='top' title='".$events[$x]->event_title."' class='card-title' id='card-title' >".$truncatedTitle."</h5>";
+			echo "<p  data-toggle='tooltip' data-placement='top' title='".$events[$x]->event_description."' class='card-text'>".$truncatedDesc."</p>
+			<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Group/display/".$events[$x]->event_id."'>See More</a>
+			<p class='card-text'><small class='text-muted'></small></p></div></div>";
 		}
 	}
 	else if ($set == "membered")
@@ -77,15 +76,14 @@ function make_tiles($set, $size, $events)
 		for ($x = 0; $x < $size; $x++) {
 			$truncatedDesc = strlen($events[$x]->event_description) > 18 ? substr($events[$x]->event_description, 0, 18).'...' : $events[$x]->event_description."<br><br>";
 			$truncatedTitle = strlen($events[$x]->event_title) > 50 ? substr($events[$x]->event_title, 0, 50).'...' : $events[$x]->event_title;
-	
 			echo "<div class='col-md-3 card'>";
-			echo "<a id='".$events[$x]->event_id."' href='".base_url()."index.php/Event/display/".$events[$x]->event_id."'><img class='img-responsive center-cropped' src='";
+			echo "<a id='".$events[$x]->event_id."' href='".base_url()."index.php/Group/display/".$events[$x]->event_id."'><img class='img-responsive' src='";
 			echo base_url()."uploads/".$events[$x]->event_picture."' alt='".$events[$x]->event_title."'></a>";
 			echo "<div class='card-block'>";
-			echo"<h4 class='card-title' id='card-title'>".$truncatedTitle."</h4>";
-			echo "<p class='card-text'>".$truncatedDesc."</p>";
-			echo "<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Event/display/".$events[$x]->event_id."'>See More</a>
-			</div></div>";
+			echo "<h5 data-toggle='tooltip' data-placement='top' title='".$events[$x]->event_title."' class='card-title' id='card-title' >".$truncatedTitle."</h5>";
+			echo "<p  data-toggle='tooltip' data-placement='top' title='".$events[$x]->event_description."' class='card-text'>".$truncatedDesc."</p>
+			<a class='btn btn-primary waves-effect waves-light' href='".base_url()."index.php/Group/display/".$events[$x]->event_id."'>See More</a>
+			<p class='card-text'><small class='text-muted'></small></p></div></div>";
 		}
 	}
 	else{
