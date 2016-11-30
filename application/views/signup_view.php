@@ -36,8 +36,8 @@
 				<span id = 'confirm_error' class="text-danger"><?php echo form_error('cpassword'); ?></span>
 			</div>
 			<div class="form-group">
-				<button id = 'bSignup' name="submit" type="submit" class="btn btn-info">Signup</button>
-				<button id = 'bClear'  name="cancel" type="reset" class="btn btn-info">Clear</button>
+				<button id = 'bSignup' name="submit" type="submit" class="btn btn-primary">Signup</button>
+				<button id = 'bClear'  name="cancel" type="reset" class="btn btn-default">Clear</button>
 			</div>
 			<?php echo form_close(); ?>
 		</div>

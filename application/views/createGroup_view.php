@@ -40,8 +40,8 @@
 				<span id="groupimage_error" class="text-danger"><?php echo form_error('imageUpload'); ?></span>
 			</div>
 			<div class="form-group">
-				<button id="bSubmit" name="submit" type="submit" class="btn btn-info">Create Group</button>
-				<button id="bCancel" type="button" class="btn btn-info" onclick="location.href='<?php echo base_url();?>index.php/home/index'">Cancel</button>
+				<button id="bSubmit" name="submit" type="submit" class="btn btn-primary">Create Group</button>
+				<button id="bCancel" type="button" class="btn btn-default" onclick="location.href='<?php echo base_url();?>index.php/home/index'">Cancel</button>
 			</div>
 			<?php echo form_close(); ?>
 			<?php echo $this->session->flashdata('msg'); ?>

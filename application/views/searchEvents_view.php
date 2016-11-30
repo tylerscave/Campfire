@@ -10,9 +10,9 @@
           <div class="nav nav-justified navbar-nav">
               <form class="navbar-form navbar-search" role="search">
                   <div class="input-group">
-                      <input id="pac-input" type="text" class="form-control" placeholder="City, State, or Zip">
+                      <input id="pac-input" type="search" class="form-control" placeholder="City, State, or Zip">
                       <div>
-                        <label for="select-tag">Filter:</label>
+                        <label id="filter-label" for="select-tag">Filter:</label>
                         <select id="select-tag">
                           <option id="all-opt" data-filter="All">All</option>
                           <option id="movies-opt" data-filter="Movies">Movies</option>
@@ -26,7 +26,6 @@
               </form>
           </div>
       </nav>
-
 
 
   <div id="map"></div>

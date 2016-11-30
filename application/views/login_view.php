@@ -20,8 +20,8 @@
 				<span id = 'password_error' class="text-danger"><?php echo form_error('password'); ?></span>
 			</div>
 			<div class="form-group">
-				<button id = 'bSubmit' name="submit" type="submit" class="btn btn-info">Login</button>
-				<button id = 'bReset' name="cancel" type="reset" class="btn btn-info">Clear</button>
+				<button id = 'bSubmit' name="submit" type="submit" class="btn btn-primary">Login</button>
+				<button id = 'bReset' name="cancel" type="reset" class="btn btn-default">Clear</button>
 			</div>
 		<?php echo form_close(); ?>
 		<?php echo $this->session->flashdata('msg'); ?>

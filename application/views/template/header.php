@@ -44,7 +44,7 @@
 	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
 
 </head>
-<body data-spy="scroll" data-target=".navbar" data-offset="80">
+<body data-spy="scroll" data-target=".navbar" data-offset="70">
 
   <?php
   //Due to a flickering issue on page load, authenticated navbar and normal navbar would be stored in seprate files

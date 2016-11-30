@@ -36,8 +36,8 @@
 					<span class="text-danger"><?php echo form_error('cpassword'); ?></span>
 				</div>
 				<div class="form-group">
-					<button name="update" type="submit" value="update" class="btn btn-info">Update</button>
-					<button name="cancel" type="button" class="btn btn-info" onclick="location.href='<?php echo base_url();?>index.php/home'">Cancel</button>
+					<button name="update" type="submit" value="update" class="btn btn-primary">Update</button>
+					<button name="cancel" type="button" class="btn btn-default" onclick="location.href='<?php echo base_url();?>index.php/home'">Cancel</button>
 					<button name="delete" type="button" value="delete" class="btn btn-danger pull-right" onclick="confirmDelete()">Delete Account</button>
 					<?php echo form_close(); ?>
 				</div>
