@@ -59,8 +59,8 @@ function make_tiles($set, $size, $events)
 	if ($set == "owned")
 	{
 		for ($x = 0; $x < $size; $x++) {
-			$truncatedDesc = strlen($events[$x]->event_description) > 18 ? substr($events[$x]->event_description, 0, 18).'...' : $events[$x]->event_description."<br><br>";
-			$truncatedTitle = strlen($events[$x]->event_title) > 50 ? substr($events[$x]->event_title, 0, 50).'...' : $events[$x]->event_title;
+			$truncatedDesc = strlen($events[$x]->event_description) > 17 ? substr($events[$x]->event_description, 0, 17).'...' : $events[$x]->event_description."<br><br>";
+			$truncatedTitle = strlen($events[$x]->event_title) > 26 ? substr($events[$x]->event_title, 0, 26).'...' : $events[$x]->event_title;
 			echo "<div class='col-md-3 card'>";
 			echo "<a id='".$events[$x]->event_id."' href='".base_url()."index.php/Group/display/".$events[$x]->event_id."'><img class='img-responsive' src='";
 			echo base_url()."uploads/".$events[$x]->event_picture."' alt='".$events[$x]->event_title."'></a>";
@@ -74,8 +74,8 @@ function make_tiles($set, $size, $events)
 	else if ($set == "membered")
 	{
 		for ($x = 0; $x < $size; $x++) {
-			$truncatedDesc = strlen($events[$x]->event_description) > 18 ? substr($events[$x]->event_description, 0, 18).'...' : $events[$x]->event_description."<br><br>";
-			$truncatedTitle = strlen($events[$x]->event_title) > 50 ? substr($events[$x]->event_title, 0, 50).'...' : $events[$x]->event_title;
+			$truncatedDesc = strlen($events[$x]->event_description) > 17 ? substr($events[$x]->event_description, 0, 17).'...' : $events[$x]->event_description."<br><br>";
+			$truncatedTitle = strlen($events[$x]->event_title) > 26 ? substr($events[$x]->event_title, 0, 26).'...' : $events[$x]->event_title;
 			echo "<div class='col-md-3 card'>";
 			echo "<a id='".$events[$x]->event_id."' href='".base_url()."index.php/Group/display/".$events[$x]->event_id."'><img class='img-responsive' src='";
 			echo base_url()."uploads/".$events[$x]->event_picture."' alt='".$events[$x]->event_title."'></a>";

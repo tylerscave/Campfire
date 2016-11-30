@@ -63,8 +63,8 @@ function make_tiles($set, $size, $groups)
 	if ($set == "owned")
 	{
 		for ($x = 0; $x < $size; $x++) {
-			$truncatedDesc = strlen($groups[$x]->org_description) > 18 ? substr($groups[$x]->org_description, 0, 18).'...' : $groups[$x]->org_description."<br><br>";
-			$truncatedTitle = strlen($groups[$x]->org_title) > 50 ? substr($groups[$x]->org_title, 0, 50).'...' : $groups[$x]->org_title;
+			$truncatedDesc = strlen($groups[$x]->org_description) > 17 ? substr($groups[$x]->org_description, 0, 17).'...' : $groups[$x]->org_description."<br><br>";
+			$truncatedTitle = strlen($groups[$x]->org_title) > 26 ? substr($groups[$x]->org_title, 0, 26).'...' : $groups[$x]->org_title;
 			echo "<div class='col-md-3 card'>";
 			echo "<a id='".$groups[$x]->org_id."' href='".base_url()."index.php/Group/display/".$groups[$x]->org_id."'><img class='img-responsive' src='";
 			echo base_url()."uploads/".$groups[$x]->org_picture."' alt='".$groups[$x]->org_title."'></a>";
@@ -78,8 +78,8 @@ function make_tiles($set, $size, $groups)
 	else if ($set == "membered")
 	{
 		for ($x = 0; $x < $size; $x++) {
-			$truncatedDesc = strlen($groups[$x]->org_description) > 18 ? substr($groups[$x]->org_description, 0, 18).'...' : $groups[$x]->org_description."<br><br>";
-			$truncatedTitle = strlen($groups[$x]->org_title) > 50 ? substr($groups[$x]->org_title, 0, 50).'...' : $groups[$x]->org_title;
+			$truncatedDesc = strlen($groups[$x]->org_description) > 17 ? substr($groups[$x]->org_description, 0, 17).'...' : $groups[$x]->org_description."<br><br>";
+			$truncatedTitle = strlen($groups[$x]->org_title) > 26 ? substr($groups[$x]->org_title, 0, 26).'...' : $groups[$x]->org_title;
 			echo "<div class='col-md-3 card'>";
 			echo "<a id='".$groups[$x]->org_id."' href='".base_url()."index.php/Group/display/".$groups[$x]->org_id."'><img class='img-responsive' src='";
 			echo base_url()."uploads/".$groups[$x]->org_picture."' alt='".$groups[$x]->org_title."'></a>";
